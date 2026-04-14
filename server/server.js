@@ -19,15 +19,39 @@ let orders = [];
 // ======================
 app.post("/api/login", (req, res) => {
   const { username, password } = req.body;
-  if (username === "admin" && password === "123") {
-    res.json({ success: true, user: { name: "Aung Kyaw Hein", role: "admin" } });
-  } else if (username === "cashier" && password === "123") {
-    res.json({ success: true, user: { name: "Koko", role: "cashier" } });
-  } else {
-    res.status(401).json({ success: false, message: "Username/Password မှားနေပါသည်။" });
-  }
-});
 
+  const users = {
+    admin: {
+      name: "Aung Kyaw Hein",
+      role: "admin",
+    },
+    cashier: {
+      name: "Koko",
+      role: "cashier",
+    },
+    kitchen: {
+      name: "Chef John",
+      role: "kitchen",
+    },
+    waiter: {
+      name: "Waiter A",
+      role: "waiter",
+    },
+  };
+
+  // simple password rule (now all = 123 for testing)
+  if (users[username] && password === "123") {
+    return res.json({
+      success: true,
+      user: users[username],
+    });
+  }
+
+  return res.status(401).json({
+    success: false,
+    message: "Username/Password မှားနေပါသည်",
+  });
+});
 // ======================
 // ORDER ROUTES
 // ======================

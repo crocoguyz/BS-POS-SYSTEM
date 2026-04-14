@@ -24,38 +24,65 @@
 
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./Login";
 import Admin from "./Admin";
 import Menu from "./Menu";
 import Kitchen from "./Kitchen";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
 
   const handleLogin = (userData) => {
     setUser(userData);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("user"); // 🔥 IMPORTANT
     setUser(null);
+  };
+
+  // 🔥 Protected Route
+  const ProtectedRoute = ({ children, roles }) => {
+    if (!user) return <Navigate to="/login" />;
+
+    if (!roles.includes(user.role)) {
+      // role redirect logic
+      if (user.role === "kitchen") return <Navigate to="/kitchen" />;
+      if (user.role === "waiter") return <Navigate to="/menu" />;
+      if (user.role === "kitchen") return <Navigate to="/kitchen" />;
+      if (user.role === "waiter") return <Navigate to="/menu" />;
+      return <Navigate to="/admin" />;
+    }
+
+    return children;
   };
 
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Menu />} />
-          <Route path="/kitchen" element={<Kitchen />} />
-          <Route 
-            path="/login" 
-            element={!user ? <Login onLogin={handleLogin} /> : <Navigate to="/admin" />} 
-          />
-          <Route 
-            path="/admin" 
-            element={user ? <Admin user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} 
-          />
-        </Routes>
-      </div>
+      <Routes>
+
+        {/* PUBLIC */}
+        <Route path="/login" element={
+          !user ? <Login onLogin={handleLogin} /> : <Navigate to="/admin" />
+        } />
+
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/kitchen" element={<Kitchen />} />
+
+        {/* ADMIN PANEL */}
+        <Route path="/admin" element={
+          <ProtectedRoute roles={["admin", "cashier"]}>
+            <Admin user={user} onLogout={handleLogout} />
+          </ProtectedRoute>
+        } />
+
+        {/* OPTIONAL EXTRA PAGES */}
+        <Route path="*" element={<Navigate to="/login" />} />
+
+      </Routes>
     </Router>
   );
 }

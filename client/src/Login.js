@@ -19,8 +19,9 @@ export default function Login({ onLogin }) {
       
       // Backend က success ဖြစ်တယ်ဆိုရင်
       if (response.data && response.data.success) {
-        onLogin(response.data.user); // User data ကို App.js ဆီ ပို့မယ်
-      } else {
+  localStorage.setItem("user", JSON.stringify(response.data.user)); // 🔥 SAVE USER
+  onLogin(response.data.user); // App.js ကို pass
+} else {
         setError("Username သို့မဟုတ် Password မှားနေပါသည်။");
       }
     } catch (err) {
