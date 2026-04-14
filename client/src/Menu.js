@@ -77,37 +77,6 @@ export default function Menu() {
   const confirmOrder = async () => {
     if (cart.length === 0) return alert("Please add items first!");
     
-    setLoading(true);
-    try {
-      const res = await axios.post(`${API_BASE}/order`, {
-        table: tableNumber,
-        type: orderType,
-        items: cart,
-        total: total,
-      });
-
-      if (res.data.success) {
-  socket.emit("newOrder", { 
-    id: res.data.order?.id || res.data.id || nextOrderId, // ID ကို သေချာပါအောင် ထည့်တာပါ
-    table: tableNumber, 
-    items: cart, 
-    type: orderType,
-    total: total,
-    status: "pending",
-    createdAt: new Date()
-  });
-
-        setCart([]);
-        setShowPopup(false);
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 3000);
-      }
-    } catch (err) { 
-      alert("Server Error! Check connection."); 
-    } finally {
-      setLoading(false);
-  }; // <--- ဒီနေရာမှာ လက်သည်းကွင်း တစ်ခုပဲ ရှိရပါမယ်
-    
     setLoading(true); // Loading စတင်မယ်
     try {
       const res = await axios.post(`${API_BASE}/order`, {
