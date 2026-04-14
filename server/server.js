@@ -147,27 +147,24 @@ server.listen(PORT, "0.0.0.0", () => {
 });
 
 app.post("/order/status", async (req, res) => {
-  const { id, status } = req.body;
-  console.log("Backend received ID:", id, "Status:", status);
-
   try {
-    // ID က 0001 ဖြစ်နေရင် database ထဲက "id": "0001" နဲ့ တူတာကို ရှာမယ်
-    // ID က MongoDB ID ဖြစ်နေရင် _id နဲ့ ရှာမယ်
+    const { id, status } = req.body;
+    
+    // Kitchen က ပို့လိုက်တဲ့ "0001" ကို string အနေနဲ့ database မှာ ရှာမယ်
     const updatedOrder = await Order.findOneAndUpdate(
-      { $or: [{ _id: id }, { id: id }] }, 
-      { status: status }, 
+      { id: String(id) }, // ID ကို String သေချာပြောင်းပြီး ရှာတာပါ
+      { $set: { status: status } },
       { new: true }
     );
 
-    if (!updatedOrder) {
-      console.log("❌ Order not found in database");
+    if (updatedOrder) {
+      // Database မှာ အောင်မြင်ရင် Socket နဲ့ Admin ဆီ လှမ်းအော်မယ်
+      io.emit("orderUpdate", updatedOrder); 
+      return res.json({ success: true });
+    } else {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
-
-    console.log("✅ Order updated successfully");
-    res.json({ success: true, order: updatedOrder });
   } catch (err) {
-    console.error("🔥 Server Error:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

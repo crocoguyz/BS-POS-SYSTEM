@@ -220,7 +220,7 @@ const getWaitingTime = (order) => {
                   </div>
                   <div className="m-footer">
                     <button onClick={() => updateStatus(order.id, "cooking")}>Cook</button>
-                    <button className="finish-btn" onClick={() => updateStatus(order.id || order._id, "done")} >Finish</button>
+                    <button className="finish" onClick={() => updateStatus(order._id || order.id, "done")}>Finish</button>
                   </div>
                 </div>
               );
