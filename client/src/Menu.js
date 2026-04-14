@@ -26,7 +26,7 @@ export const menuData = [
   { id: 17, name: "Fish Curry 6", price: 6000, cat: "Fish", img: "fish/Fish-6.jpg" },
 ];
 
-export default function Menu() {
+export default function Menu({ onLogout }) {
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [orderType, setOrderType] = useState("eat");
@@ -176,7 +176,7 @@ export default function Menu() {
 
             <div className="menu-header">
              <h2>Our Menu</h2>
-                  <button className="logout-btn-simple" onClick={handleLogout}>
+                  <button className="logout-btn-simple" onClick={onLogout}>
                         🚪 Logout </button>
             </div>
 

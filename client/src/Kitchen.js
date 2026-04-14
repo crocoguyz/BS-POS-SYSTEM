@@ -6,7 +6,7 @@ import "./kitchen.css";
 const API_BASE = "https://bs-pos-system.onrender.com";
 const socket = io(API_BASE);
 
-export default function Kitchen() {
+export default function Kitchen({ onLogout }) {
   const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState("all");
   const [newOrderNoti, setNewOrderNoti] = useState(null);
@@ -171,7 +171,7 @@ const getWaitingTime = (order) => {
         <div className="stats-row">
           <div className="revenue-chip">Daily Sales: <span>{totalRevenue.toLocaleString()} MMK</span></div>
           <div className="active-chip">Pending Orders: <span>{activeOrders.length}</span></div>
-          <button className="kitchen-logout-btn" onClick={handleLogout}>
+          <button className="kitchen-logout-btn" onClick={onLogout}>
       Logout
     </button>
         </div>
