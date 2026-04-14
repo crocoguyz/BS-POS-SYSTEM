@@ -27,7 +27,7 @@ export const menuData = [
 ];
 
 export default function Menu({ onLogout }) {
-  return (
+  //return (
     <div className="menu-container">
 
       {/* ✅ HEADER HERE (TOP OF PAGE) */}
@@ -44,7 +44,7 @@ export default function Menu({ onLogout }) {
       </div>
 
     </div>
-  );
+  ;
 }
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
