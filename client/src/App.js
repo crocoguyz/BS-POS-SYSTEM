@@ -25,20 +25,29 @@
 import React, { useState } from "react";
 import Login from "./Login";
 import Admin from "./Admin";
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
 
+  // Login အောင်မြင်တဲ့အခါ User Info သိမ်းမယ်
   const handleLogin = (userData) => {
-    setUser(userData); // Login အောင်ရင် User Data သိမ်းပြီး Admin Panel ပြမယ်
+    setUser(userData);
+  };
+
+  // Logout လုပ်တဲ့အခါ သုံးဖို့ (လိုအပ်ရင်)
+  const handleLogout = () => {
+    setUser(null);
   };
 
   return (
     <div className="App">
       {!user ? (
+        // User မရှိရင် Login Page ပြမယ်
         <Login onLogin={handleLogin} />
       ) : (
-        <Admin user={user} />
+        // User ရှိရင် Admin Panel ပြမယ် (Logout handle လုပ်ဖို့ function ပါ ထည့်ပေးထားတယ်)
+        <Admin user={user} onLogout={handleLogout} />
       )}
     </div>
   );

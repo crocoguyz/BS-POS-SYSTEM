@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./menu.css";
 
-const API_BASE = "http://192.168.100.175:5000";
+const API_BASE = "https://bs-pos-system.onrender.com";
 
 export const menuData = [
   { id: 1, name: "Lahpet Thoke", price: 2500, cat: "Breakfast", img: "breakfast/Lahpetthoke.jpg" },

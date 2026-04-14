@@ -1,20 +1,33 @@
 import React, { useState } from "react";
 import { Lock, User, LogIn } from "lucide-react";
+import axios from "axios"; // axios ကို သုံးမယ်
 import "./login.css";
 
 export default function Login({ onLogin }) {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // ယာယီစမ်းသပ်ရန် Logic (Backend ချိတ်ရင် axios နဲ့ ပြန်ပြင်ရပါမယ်)
-    if (credentials.username === "admin" && credentials.password === "123") {
-      onLogin({ name: "Dar Go", role: "admin" });
-    } else if (credentials.username === "cashier" && credentials.password === "123") {
-      onLogin({ name: "Koko", role: "cashier" });
-    } else {
-      setError("Username သို့မဟုတ် Password မှားနေပါသည်။");
+    setError("");
+    setLoading(true);
+
+    try {
+      // Render Backend Link သို့ data ပို့မယ်
+      const response = await axios.post("https://bs-pos-system.onrender.com/api/login", credentials);
+      
+      // Backend က success ဖြစ်တယ်ဆိုရင်
+      if (response.data && response.data.success) {
+        onLogin(response.data.user); // User data ကို App.js ဆီ ပို့မယ်
+      } else {
+        setError("Username သို့မဟုတ် Password မှားနေပါသည်။");
+      }
+    } catch (err) {
+      console.error("Login Error:", err);
+      setError("Server ချိတ်ဆက်မှု အဆင်မပြေပါ။ ခဏနေမှ ပြန်ကြိုးစားကြည့်ပါ။");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,9 +59,9 @@ export default function Login({ onLogin }) {
               required 
             />
           </div>
-          {error && <p className="error-text">{error}</p>}
-          <button type="submit" className="login-btn">
-            <LogIn size={18} /> Login
+          {error && <p className="error-text" style={{ color: 'red', fontSize: '14px', marginBottom: '10px' }}>{error}</p>}
+          <button type="submit" className="login-btn" disabled={loading}>
+            <LogIn size={18} /> {loading ? "ခဏစောင့်ပါ..." : "Login"}
           </button>
         </form>
       </div>

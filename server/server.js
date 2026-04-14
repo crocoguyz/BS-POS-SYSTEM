@@ -13,12 +13,28 @@ app.use(cors());
 app.use(express.json());
 
 // ======================
-// ORDER COUNTER LOGIC (ည ၁၂ နာရီကျော်ရင် Reset ဖြစ်ရန်)
+// LOGIN ROUTE (Bro တောင်းထားတဲ့ Login ပိုင်း)
+// ======================
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "123") {
+    res.json({ success: true, user: { name: "Aung Kyaw Hein", role: "admin" } });
+  } else if (username === "cashier" && password === "123") {
+    res.json({ success: true, user: { name: "Koko", role: "cashier" } });
+  } else {
+    res.status(401).json({ success: false, message: "Username သို့မဟုတ် Password မှားနေပါသည်။" });
+  }
+});
+
+// ======================
+// DATA STORAGE & COUNTER
 // ======================
 let orderCount = 0;
 let lastResetDate = new Date().toDateString();
+let orders = [];
+let completedOrders = [];
 
-// အပေါ်ဆုံးနားက orderCount အောက်မှာ ဒါလေး ထပ်ထည့်ပါ
+// Next Order ID ကြည့်ရန်
 app.get("/next-id", (req, res) => {
   const nextId = (orderCount + 1).toString().padStart(4, "0");
   res.json({ nextId });
@@ -28,81 +44,22 @@ app.get("/next-id", (req, res) => {
 // SOCKET SETUP
 // ======================
 const io = new Server(server, {
-  cors: {
-    origin: "*"
-  }
+  cors: { origin: "*" }
 });
 
-// ======================
-// DATA STORAGE
-// ======================
-let orders = [];
-let completedOrders = [];
-
-// ======================
-// SOCKET CONNECT
-// ======================
 io.on("connection", (socket) => {
   console.log("👨‍🍳 Kitchen connected");
 });
 
 // ======================
-// CREATE ORDER
+// CREATE ORDER (အရင် code ထဲက logic အကုန် ပြန်ပေါင်းပေးထားပါတယ်)
 // ======================
 app.post("/order", (req, res) => {
   try {
     const today = new Date().toDateString();
 
-    // ရက်စွဲပြောင်းသွားရင် (ည ၁၂ နာရီကျော်ရင်) နံပါတ်ပြန်စမယ်
+    // ည ၁၂ နာရီကျော်ရင် counter reset လုပ်မယ်
     if (today !== lastResetDate) {
-      orderCount = 0;
-      lastResetDate = today;
-      console.log("📅 New day started. Counter reset to #0001");
-    }
-
-    orderCount++;
-    const formattedId = orderCount.toString().padStart(4, "0"); // 0001, 0002...
-
-    const order = {
-      id: formattedId, // ORD-1234 အစား 0001 ကို သုံးလိုက်တာပါ
-      ...req.body,
-      status: "pending",
-      createdAt: new Date()
-    };
-
-    orders.push(order);
-
-    console.log(`🔥 NEW ORDER: #${formattedId} (Table: ${req.body.table})`);
-
-    // Kitchen ဆီကို live လှမ်းပို့မယ်
-    io.emit("newOrder", order);
-
-    res.json({
-      success: true,
-      orderId: formattedId, // Frontend Menu.js ဆီကို ID ပြန်ပို့ပေးလိုက်တာ
-      order: order
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ success: false });
-  }
-});
-
-// ======================
-// GET ALL ORDERS
-// ======================
-app.get("/orders", (req, res) => {
-  res.json(orders);
-});
-
-// ======================
-// UPDATE STATUS
-// ======================
-app.post("/order", (req, res) => {
-  try {
-    const today = new Date().toDateString();
-    if (lastResetDate !== today) {
       orderCount = 0;
       lastResetDate = today;
     }
@@ -116,14 +73,15 @@ app.post("/order", (req, res) => {
       items: req.body.items,
       total: req.body.total,
       status: "pending",
-      // --- ဒီနှစ်ကြောင်းကို ထပ်ထည့်ပေးလိုက်ပါ ---
       type: req.body.type || "eat", 
-      timestamp: req.body.timestamp || Date.now() 
+      timestamp: req.body.timestamp || Date.now(),
+      createdAt: new Date()
     };
 
     orders.push(order);
     console.log(`🔥 NEW ORDER: #${formattedId} (Type: ${order.type}, Table: ${order.table})`);
 
+    // Kitchen ဆီကို live လှမ်းပို့မယ်
     io.emit("newOrder", order);
 
     res.json({
@@ -137,24 +95,25 @@ app.post("/order", (req, res) => {
     res.status(500).json({ success: false });
   }
 });
-// ======================
-// REPORT
-// ======================
+
+// All Orders ဆွဲထုတ်ရန်
+app.get("/orders", (req, res) => {
+  res.json(orders);
+});
+
+// Report ထုတ်ရန်
 app.get("/report", (req, res) => {
   let totalSales = 0;
   completedOrders.forEach((o) => {
     totalSales += o.total;
   });
-
-  res.json({
-    totalSales,
-    completedOrders
-  });
+  res.json({ totalSales, completedOrders });
 });
 
 // ======================
-// START SERVER
+// START SERVER (Render အတွက် Port ပြင်ထားပါတယ်)
 // ======================
-server.listen(5000, "0.0.0.0", () => {
-  console.log("🔥 Server running on http://192.168.100.175:5000");
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🔥 Server running on port ${PORT}`);
 });
