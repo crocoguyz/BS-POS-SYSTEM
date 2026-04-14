@@ -3,7 +3,7 @@ import axios from "axios";
 import "./menu.css";
 import { io } from "socket.io-client";
 
-const API_BASE = "https://bs-pos-system.onrender.com";
+const API_BASE = "https://bs-pos-system-1.onrender.com";
 const socket = io(API_BASE);
 
 export const menuData = [
