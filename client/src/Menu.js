@@ -27,24 +27,7 @@ export const menuData = [
 ];
 
 export default function Menu({ onLogout }) {
-  //return (
-    <div className="menu-container">
-
-      {/* ✅ HEADER HERE (TOP OF PAGE) */}
-      <div className="menu-header">
-        <h2>Our Menu</h2>
-        <button className="logout-btn-simple" onClick={onLogout}>
-          🚪 Logout
-        </button>
-      </div>
-
-      {/* rest of your UI */}
-      <div className="category-tabs">
-        ...
-      </div>
-
-    </div>
-  ;
+;
 }
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -131,6 +114,13 @@ export default function Menu({ onLogout }) {
   return (
        
     <div className="menu-container">
+      <div className="menu-header">
+  <h2>Our Menu</h2>
+
+  <button className="logout-btn-simple" onClick={onLogout}>
+    🚪 Menu / Logout
+  </button>
+</div>
       <h1 className="title">Restaurant Menu</h1>
       <p className="info" style={{color: '#ff4757', fontWeight: 'bold'}}>Table {tableNumber}</p>
 
