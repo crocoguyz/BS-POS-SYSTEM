@@ -174,6 +174,12 @@ export default function Menu() {
               ))}
             </div>
 
+            <div className="menu-header">
+             <h2>Our Menu</h2>
+                  <button className="logout-btn-simple" onClick={handleLogout}>
+                        🚪 Logout </button>
+            </div>
+
             <div className="item-list-container">
               {cart.map(item => (
                 <div className="list-row" key={item.id}>

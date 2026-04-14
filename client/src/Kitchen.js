@@ -59,9 +59,9 @@ export default function Kitchen() {
     });
 
     // updateOrder event လာရင်လည်း အလုပ်လုပ်အောင် orderUpdate ဆီ ပြန်ပို့ပေးလိုက်တာပါ
-    socket.on("updateOrder", (data) => {
-      socket.emit("orderUpdate", data); 
-    });
+    // socket.on("updateOrder", (data) => {
+    //   socket.emit("orderUpdate", data); 
+    // });
 
     return () => {
       clearInterval(timerInterval);
@@ -171,6 +171,9 @@ const getWaitingTime = (order) => {
         <div className="stats-row">
           <div className="revenue-chip">Daily Sales: <span>{totalRevenue.toLocaleString()} MMK</span></div>
           <div className="active-chip">Pending Orders: <span>{activeOrders.length}</span></div>
+          <button className="kitchen-logout-btn" onClick={handleLogout}>
+      Logout
+    </button>
         </div>
 
         {getSummary().length > 0 && (
@@ -199,6 +202,7 @@ const getWaitingTime = (order) => {
     const wait = getWaitingTime(order); 
 
     return (
+    
       <div className={`modern-card ${order.status} ${wait.isLate ? 'warning' : ''}`} key={order.id}>
         <div className="m-card-header">
           <span className="m-order-id">#{order.id}</span>

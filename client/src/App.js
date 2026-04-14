@@ -1,27 +1,3 @@
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Menu from "./Menu";
-// import Kitchen from "./Kitchen";
-// import Admin from "./Admin"; // အခုနက ဆောက်ထားတဲ့ Admin.js
-
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         {/* စားသုံးသူတွေအတွက် Menu Page */}
-//         <Route path="/" element={<Menu />} />
-        
-//         {/* မီးဖိုချောင်အတွက် Kitchen Page */}
-//         <Route path="/kitchen" element={<Kitchen />} />
-        
-//         {/* Admin/Cashier အတွက် Admin Page */}
-//         <Route path="/admin" element={<Admin />} />
-//       </Routes>
-//     </Router>
-//   );
-// }
-
-// export default App;
-
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
@@ -32,13 +8,17 @@ import Kitchen from "./Kitchen";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // 🔥 FIX 1
 
-  // 🔥 LOAD USER AFTER REFRESH
+  // 🔥 restore session
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
+
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+
+    setLoading(false); // 🔥 wait finish
   }, []);
 
   const handleLogin = (userData) => {
@@ -51,14 +31,22 @@ function App() {
     setUser(null);
   };
 
-  // 🔥 PROTECTED ROUTE
+  // 🔥 WAIT UNTIL LOAD FINISH
+  if (loading) return <div>Loading...</div>;
+
+  // 🔥 CENTRAL REDIRECT
+  const getHome = () => {
+    if (!user) return "/login";
+    if (user.role === "kitchen") return "/kitchen";
+    if (user.role === "waiter") return "/menu";
+    return "/admin";
+  };
+
   const ProtectedRoute = ({ children, roles }) => {
     if (!user) return <Navigate to="/login" />;
 
     if (!roles.includes(user.role)) {
-      if (user.role === "kitchen") return <Navigate to="/kitchen" />;
-      if (user.role === "waiter") return <Navigate to="/menu" />;
-      return <Navigate to="/admin" />;
+      return <Navigate to={getHome()} />;
     }
 
     return children;
@@ -75,18 +63,12 @@ function App() {
             !user ? (
               <Login onLogin={handleLogin} />
             ) : (
-              <Navigate to={
-                user.role === "kitchen"
-                  ? "/kitchen"
-                  : user.role === "waiter"
-                  ? "/menu"
-                  : "/admin"
-              } />
+              <Navigate to={getHome()} />
             )
           }
         />
 
-        {/* MENU (waiter only) */}
+        {/* MENU */}
         <Route
           path="/menu"
           element={
@@ -106,7 +88,7 @@ function App() {
           }
         />
 
-        {/* ADMIN PANEL */}
+        {/* ADMIN */}
         <Route
           path="/admin"
           element={
@@ -116,8 +98,11 @@ function App() {
           }
         />
 
-        {/* DEFAULT */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        {/* ROOT */}
+        <Route path="/" element={<Navigate to={getHome()} />} />
+
+        {/* FALLBACK */}
+        <Route path="*" element={<Navigate to={getHome()} />} />
 
       </Routes>
     </Router>

@@ -293,3 +293,16 @@
   50% { opacity: 0.6; }
   100% { opacity: 1; }
 }
+.kitchen-logout-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ff2e2e;
+  border: 1px solid #ff2e2e;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.kitchen-logout-btn:hover {
+  background: #ff2e2e;
+  color: white;
+}
