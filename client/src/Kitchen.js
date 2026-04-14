@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
 
-const API_BASE = "http://192.168.100.175:5000";
+const API_BASE = "https://bs-pos-system-1.onrender.com";
 const socket = io(API_BASE);
 
 export default function Kitchen() {
@@ -24,10 +24,14 @@ export default function Kitchen() {
     socket.on("connect", () => setIsConnected(true));
     socket.on("disconnect", () => setIsConnected(false));
 
-    socket.on("newOrder", (order) => {
-      setOrders((prev) => [order, ...prev]);
-      showNotification(order);
-    });
+    socket.on("orderUpdate", (order) => {
+  setOrders((prev) => {
+    // အော်ဒါက list ထဲမှာ ရှိပြီးသားဆိုရင် ထပ်မထည့်အောင် စစ်တာပါ
+    if (prev.find(o => o.id === order.id)) return prev;
+    return [order, ...prev];
+  });
+  showNotification(order);
+});
 
     // --- FIX: Loop ဖြစ်တာကို ဒီနေရာမှာ တားလိုက်တာပါ ---
     socket.on("updateOrder", ({ id, status }) => {

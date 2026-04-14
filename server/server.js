@@ -48,7 +48,24 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("👨‍🍳 Kitchen connected");
+  console.log("🔌 New Connection established");
+
+  // ၁။ Menu.js က "newOrder" ဆိုပြီး ပို့လိုက်ရင် ဒါက လက်ခံမယ်
+  socket.on("newOrder", (orderData) => {
+    console.log("📦 New Order Received:", orderData);
+    
+    // ၂။ လက်ခံရရှိတဲ့ Order ကို Kitchen ရော Admin ရော အကုန်လုံးဆီ ပြန်ဖြန့်ပေးမယ်
+    io.emit("orderUpdate", orderData); 
+  });
+
+  // ၃။ Admin က ငွေရှင်းလိုက်ရင် Kitchen ကို အသိပေးဖို့
+  socket.on("updateOrder", (data) => {
+    io.emit("updateOrder", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("❌ User disconnected");
+  });
 });
 
 // ======================

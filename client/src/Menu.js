@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./menu.css";
+import { io } from "socket.io-client";
 
-const API_BASE = "https://bs-pos-system.onrender.com";
+const API_BASE = "https://bs-pos-system-1.onrender.com";
+const socket = io(API_BASE);
 
 export const menuData = [
   { id: 1, name: "Lahpet Thoke", price: 2500, cat: "Breakfast", img: "breakfast/Lahpetthoke.jpg" },
@@ -74,6 +76,36 @@ export default function Menu() {
 
   const confirmOrder = async () => {
     if (cart.length === 0) return alert("Please add items first!");
+    
+    setLoading(true);
+    try {
+      const res = await axios.post(`${API_BASE}/order`, {
+        table: tableNumber,
+        type: orderType,
+        items: cart,
+        total: total,
+      });
+
+      if (res.data.success) {
+        // Socket နဲ့ Kitchen ကို လှမ်းပြောခြင်း
+        socket.emit("newOrder", { 
+          id: res.data.orderId || nextOrderId, 
+          table: tableNumber, 
+          items: cart, 
+          type: orderType,
+          total: total
+        }); 
+
+        setCart([]);
+        setShowPopup(false);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
+      }
+    } catch (err) { 
+      alert("Server Error! Check connection."); 
+    } finally {
+      setLoading(false);
+  }; // <--- ဒီနေရာမှာ လက်သည်းကွင်း တစ်ခုပဲ ရှိရပါမယ်
     
     setLoading(true); // Loading စတင်မယ်
     try {
