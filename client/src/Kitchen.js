@@ -22,35 +22,45 @@ export default function Kitchen() {
       setCurrentTime(Date.now());
     }, 1000);
   
-    socket.on("connect", () => setIsConnected(true));
+    socket.on("connect", () => {
+      setIsConnected(true);
+      console.log("🟢 Socket Connected to Kitchen");
+    });
+
     socket.on("disconnect", () => setIsConnected(false));
 
-    // အော်ဒါအသစ်ရော Status Update ရော အကုန်လုံးကို ဒီတစ်ခုတည်းနဲ့ ကိုင်တွယ်မယ်
+    // အော်ဒါအသစ်ရော Status Update ရော ဖမ်းမယ့်နေရာ
     socket.on("orderUpdate", (data) => {
+      console.log("📩 Socket Data Received:", data); // Browser Console မှာ ဒါလေးပေါ်လားကြည့်ပါ
+
+      // data ထဲမှာ id မပါရင် ဘာမှမလုပ်ဘဲ ကျော်သွားမယ် (Error မတက်အောင်)
+      if (!data || (!data.id && !data._id)) return;
+
+      const orderId = data.id || data._id; // MongoDB ID နဲ့ Regular ID နှစ်မျိုးလုံးကို စစ်ပေးတာပါ
+
       setOrders((prev) => {
-        // ၁။ Admin က ငွေရှင်းလိုက်လို့ 'paid' ဖြစ်သွားရင် Kitchen ကနေ ဖယ်ထုတ်မယ်
+        // ၁။ ငွေရှင်းပြီးသားဆိုရင် ဖယ်မယ်
         if (data.status === "paid") {
-          return prev.filter(o => o.id !== data.id);
+          return prev.filter(o => (o.id || o._id) !== orderId);
         }
 
-        // ၂။ ရှိပြီးသား အော်ဒါဆိုရင် (Status Update ဖြစ်တာမျိုး - ဥပမာ Cook/Done/Paid)
-        const exists = prev.find(o => o.id === data.id);
+        // ၂။ ရှိပြီးသား အော်ဒါဆိုရင် Update လုပ်မယ်
+        const exists = prev.find(o => (o.id || o._id) === orderId);
         if (exists) {
-          return prev.map(o => (o.id === data.id ? { ...o, ...data } : o));
+          console.log("🔄 Updating existing order:", orderId);
+          return prev.map(o => (o.id || o._id) === orderId ? { ...o, ...data } : o);
         }
 
-        // ၃။ အော်ဒါအသစ်ဆိုရင် (New Order)
+        // ၃။ အော်ဒါအသစ်ဆိုရင် အပေါ်ဆုံးက ထည့်မယ်
+        console.log("🆕 Adding new order to list");
         showNotification(data);
         return [data, ...prev];
       });
     });
 
-    // အပိုဆောင်းအနေနဲ့ updateOrder နာမည်နဲ့လာရင်လည်း အလုပ်လုပ်အောင် ထားပေးထားမယ်
+    // updateOrder event လာရင်လည်း အလုပ်လုပ်အောင် orderUpdate ဆီ ပြန်ပို့ပေးလိုက်တာပါ
     socket.on("updateOrder", (data) => {
-      setOrders((prev) => {
-        if (data.status === "paid") return prev.filter(o => o.id !== data.id);
-        return prev.map(o => (o.id === data.id ? { ...o, ...data } : o));
-      });
+      socket.emit("orderUpdate", data); 
     });
 
     return () => {
@@ -85,10 +95,24 @@ export default function Kitchen() {
     return { mins, secs, isLate: mins >= 15 };
   };
 
-  const updateStatus = async (id, status) => {
-    await axios.post(`${API_BASE}/order/status`, { id, status });
-    // Status update ပြီးရင် Admin ဘက်ကိုလည်း socket ကနေ လှမ်းသိစေဖို့ signal လွှင့်မယ်
-    socket.emit("updateOrder", { id, status });
+ const updateStatus = async (id, status) => {
+    try {
+      // ၁။ Database ကို အရင်လှမ်းပြင်မယ်
+      const res = await axios.post(`${API_BASE}/order/status`, { id, status });
+      
+      if (res.data.success) {
+        // ၂။ Database မှာ အောင်မြင်ရင် ကျန်တဲ့ Admin/Kitchen တွေဆီ Socket နဲ့ လှမ်းပို့မယ်
+        socket.emit("updateOrder", { id, status });
+        
+        // ၃။ ကိုယ့် Screen မှာတင် ချက်ချင်းပြောင်းသွားအောင် လုပ်မယ် (Refresh မလိုအောင်)
+        setOrders((prev) => 
+          prev.map((o) => (o.id === id ? { ...o, status } : o))
+        );
+      }
+    } catch (err) {
+      console.error("Status update error:", err);
+      alert("Status ပြောင်းလို့မရပါဘူး။");
+    }
   };
 
   // Quantity Summary

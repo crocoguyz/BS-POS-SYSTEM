@@ -87,14 +87,15 @@ export default function Menu() {
       });
 
       if (res.data.success) {
-        // Socket နဲ့ Kitchen ကို လှမ်းပြောခြင်း
-        socket.emit("newOrder", { 
-          id: res.data.orderId || nextOrderId, 
-          table: tableNumber, 
-          items: cart, 
-          type: orderType,
-          total: total
-        }); 
+  socket.emit("newOrder", { 
+    id: res.data.order?.id || res.data.id || nextOrderId, // ID ကို သေချာပါအောင် ထည့်တာပါ
+    table: tableNumber, 
+    items: cart, 
+    type: orderType,
+    total: total,
+    status: "pending",
+    createdAt: new Date()
+  });
 
         setCart([]);
         setShowPopup(false);
