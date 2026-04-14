@@ -145,3 +145,25 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🔥 Server running on port ${PORT}`);
 });
+
+app.post("/order/status", async (req, res) => {
+  const { id, status } = req.body;
+  try {
+    // MongoDB ရဲ့ _id ကို ရှာပြီး status update လုပ်တာပါ
+    // တစ်ခါတလေ id က string ဖြစ်နေတတ်လို့ {_id: id} လို့ သုံးတာ ပိုသေချာပါတယ်
+    const updatedOrder = await Order.findOneAndUpdate(
+      { $or: [{ _id: id }, { id: id }] }, 
+      { status }, 
+      { new: true }
+    );
+
+    if (updatedOrder) {
+      res.json({ success: true, order: updatedOrder });
+    } else {
+      res.status(404).json({ success: false, message: "Order not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
