@@ -70,23 +70,22 @@ function App() {
 
         {/* MENU */}
         <Route
-          path="/menu"
-          element={
-            <ProtectedRoute roles={["waiter"]}>
-              <Menu />
-            </ProtectedRoute>
-          }
-        />
+  path="/menu"
+  element={
+    <ProtectedRoute roles={["waiter"]}>
+      <Menu onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
 
-        {/* KITCHEN */}
-        <Route
-          path="/kitchen"
-          element={
-            <ProtectedRoute roles={["kitchen"]}>
-              <Kitchen />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/kitchen"
+  element={
+    <ProtectedRoute roles={["kitchen"]}>
+      <Kitchen onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
 
         {/* ADMIN */}
         <Route
