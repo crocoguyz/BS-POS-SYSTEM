@@ -96,22 +96,27 @@ export default function Kitchen() {
   };
 
  const updateStatus = async (id, status) => {
+    // id ဆိုတာ MongoDB ရဲ့ _id ဖြစ်နေနိုင်သလို menuData ရဲ့ id လည်း ဖြစ်နေနိုင်လို့ နှစ်ခုလုံးကို handle လုပ်တာပါ
+    console.log("Updating Status for ID:", id); 
+
     try {
-      // ၁။ Database ကို အရင်လှမ်းပြင်မယ်
       const res = await axios.post(`${API_BASE}/order/status`, { id, status });
       
       if (res.data.success) {
-        // ၂။ Database မှာ အောင်မြင်ရင် ကျန်တဲ့ Admin/Kitchen တွေဆီ Socket နဲ့ လှမ်းပို့မယ်
+        // ၁။ Server ကနေတဆင့် Admin နဲ့ တခြား page တွေကို အချက်ပေးမယ်
         socket.emit("updateOrder", { id, status });
-        
-        // ၃။ ကိုယ့် Screen မှာတင် ချက်ချင်းပြောင်းသွားအောင် လုပ်မယ် (Refresh မလိုအောင်)
+
+        // ၂။ ကိုယ့် screen မှာတင် list ထဲကနေ တန်းပြောင်းသွားအောင် (သို့) ပျောက်သွားအောင် လုပ်မယ်
         setOrders((prev) => 
-          prev.map((o) => (o.id === id ? { ...o, status } : o))
+          prev.map((o) => {
+            const currentOrderId = o._id || o.id; // ID အမျိုးအစား နှစ်ခုလုံးကို စစ်တယ်
+            return currentOrderId === id ? { ...o, status } : o;
+          })
         );
       }
     } catch (err) {
-      console.error("Status update error:", err);
-      alert("Status ပြောင်းလို့မရပါဘူး။");
+      console.error("Update status error:", err);
+      alert("Status ပြောင်းလို့ မရပါဘူး Bro။ Console မှာ error တစ်ချက်စစ်ပေးပါ။");
     }
   };
 
