@@ -17,6 +17,7 @@ export default function Kitchen() {
   useEffect(() => {
     document.title = "Kitchen Dashboard";
     loadOrders();
+    
     const timerInterval = setInterval(() => {
       setCurrentTime(Date.now());
     }, 1000);
@@ -24,36 +25,40 @@ export default function Kitchen() {
     socket.on("connect", () => setIsConnected(true));
     socket.on("disconnect", () => setIsConnected(false));
 
-    socket.on("orderUpdate", (order) => {
-  setOrders((prev) => {
-    // အော်ဒါက list ထဲမှာ ရှိပြီးသားဆိုရင် ထပ်မထည့်အောင် စစ်တာပါ
-    if (prev.find(o => o.id === order.id)) return prev;
-    return [order, ...prev];
-  });
-  showNotification(order);
-});
-
-    // --- FIX: Loop ဖြစ်တာကို ဒီနေရာမှာ တားလိုက်တာပါ ---
-    socket.on("updateOrder", ({ id, status }) => {
+    // အော်ဒါအသစ်ရော Status Update ရော အကုန်လုံးကို ဒီတစ်ခုတည်းနဲ့ ကိုင်တွယ်မယ်
+    socket.on("orderUpdate", (data) => {
       setOrders((prev) => {
-        // အကယ်၍ status က 'paid' ဖြစ်သွားရင် Kitchen list ထဲကနေ လုံးဝဖယ်ထုတ်လိုက်မယ်
-        if (status === "paid") {
-          return prev.filter(o => o.id !== id);
+        // ၁။ Admin က ငွေရှင်းလိုက်လို့ 'paid' ဖြစ်သွားရင် Kitchen ကနေ ဖယ်ထုတ်မယ်
+        if (data.status === "paid") {
+          return prev.filter(o => o.id !== data.id);
         }
-        // တခြား status (cooking, done) ဆိုရင်တော့ list ထဲမှာ update လုပ်မယ်
-        return prev.map((o) => (o.id === id ? { ...o, status } : o));
+
+        // ၂။ ရှိပြီးသား အော်ဒါဆိုရင် (Status Update ဖြစ်တာမျိုး - ဥပမာ Cook/Done/Paid)
+        const exists = prev.find(o => o.id === data.id);
+        if (exists) {
+          return prev.map(o => (o.id === data.id ? { ...o, ...data } : o));
+        }
+
+        // ၃။ အော်ဒါအသစ်ဆိုရင် (New Order)
+        showNotification(data);
+        return [data, ...prev];
       });
     });
 
-    
+    // အပိုဆောင်းအနေနဲ့ updateOrder နာမည်နဲ့လာရင်လည်း အလုပ်လုပ်အောင် ထားပေးထားမယ်
+    socket.on("updateOrder", (data) => {
+      setOrders((prev) => {
+        if (data.status === "paid") return prev.filter(o => o.id !== data.id);
+        return prev.map(o => (o.id === data.id ? { ...o, ...data } : o));
+      });
+    });
 
     return () => {
       clearInterval(timerInterval);
       socket.off("connect");
       socket.off("disconnect");
-      socket.off("newOrder");
+      socket.off("orderUpdate");
       socket.off("updateOrder");
-      clearInterval(timerInterval);
     };
   }, []);
 

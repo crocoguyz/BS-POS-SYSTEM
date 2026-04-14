@@ -44,23 +44,34 @@ app.get("/next-id", (req, res) => {
 // SOCKET SETUP
 // ======================
 const io = new Server(server, {
-  cors: { origin: "*" }
+  cors: { 
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
 });
 
 io.on("connection", (socket) => {
-  console.log("🔌 New Connection established");
+  console.log("🔌 New Connection established:", socket.id);
 
-  // ၁။ Menu.js က "newOrder" ဆိုပြီး ပို့လိုက်ရင် ဒါက လက်ခံမယ်
+  // ၁။ Menu က အော်ဒါအသစ်ပို့လိုက်ရင် (Menu.js -> Server)
   socket.on("newOrder", (orderData) => {
     console.log("📦 New Order Received:", orderData);
     
-    // ၂။ လက်ခံရရှိတဲ့ Order ကို Kitchen ရော Admin ရော အကုန်လုံးဆီ ပြန်ဖြန့်ပေးမယ်
+    // Kitchen နဲ့ Admin ဆီကို Refresh မလိုဘဲ တန်းပေါ်လာအောင် ပို့ပေးမယ်
     io.emit("orderUpdate", orderData); 
   });
 
-  // ၃။ Admin က ငွေရှင်းလိုက်ရင် Kitchen ကို အသိပေးဖို့
+  // ၂။ Status ပြောင်းလဲမှုများကို ကိုင်တွယ်မယ် (Kitchen/Admin -> Server)
+  // ဥပမာ - Kitchen က Finish လုပ်တာ ဒါမှမဟုတ် Admin က Paid လုပ်တာ
   socket.on("updateOrder", (data) => {
-    io.emit("updateOrder", data);
+    console.log("🔄 Order Status Updated:", data);
+
+    // Kitchen.js မှာ socket.on("orderUpdate") နဲ့ စောင့်နေတာရှိရင် ဒါက အလုပ်လုပ်မယ်
+    io.emit("orderUpdate", data); 
+
+    // Admin.js မှာ socket.on("updateOrder") နဲ့ စောင့်နေတာရှိရင် ဒါက အလုပ်လုပ်မယ်
+    // နာမည် နှစ်မျိုးလုံးနဲ့ လွှတ်ပေးထားတာက ပိုသေချာပါတယ်
+    io.emit("updateOrder", data); 
   });
 
   socket.on("disconnect", () => {
