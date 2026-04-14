@@ -13,12 +13,13 @@ import {
   X,
   Edit,      
   Trash2,    
-  Plus,      // အသစ်ထည့်ရန်
-  Save       // အသစ်ထည့်ရန်
+  Plus,      
+  Save       
 } from "lucide-react"; 
 import "./admin.css";
 
-const API_BASE = "http://192.168.100.175:5000";
+// --- ၁။ API_BASE ကို Render Link သို့ ပြောင်းလိုက်ပါ ---
+const API_BASE = "https://bs-pos-system.onrender.com"; 
 const socket = io(API_BASE);
 
 function MenuEditTab({ menuItems, onUpdate }) {
@@ -35,11 +36,10 @@ function MenuEditTab({ menuItems, onUpdate }) {
     const updatedItems = items.map(item => item.id === id ? { ...item, ...editForm } : item);
     setItems(updatedItems);
     if (onUpdate) {
-      onUpdate(updatedItems); // ပင်မ Admin.js က state ကို လှမ်းပြင်ခိုင်းတာ
+      onUpdate(updatedItems);
     }
     setEditingId(null);
     alert("Menu Updated Locally!");
-    // ဒီမှာ Backend API ရှိရင် လှမ်းခေါ်လို့ရပါတယ်
   };
 
   return (
@@ -91,7 +91,8 @@ function MenuEditTab({ menuItems, onUpdate }) {
   );
 }
 
-export default function Admin() {
+// --- ၂။ Props ထဲမှာ user နဲ့ onLogout ကို လက်ခံထားပါတယ် ---
+export default function Admin({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -99,9 +100,8 @@ export default function Admin() {
   const [isStaffModalOpen, setIsStaffModalOpen] = useState(false);
   const [newStaff, setNewStaff] = useState({ name: "", role: "Waiter" });
 
-  // --- နာမည်ကို Dar Go လို့ ဒီမှာပါ တစ်ခါတည်း ပြင်လိုက်ပါပြီ ---
   const [staffList, setStaffList] = useState([
-    { id: 1, name: "Dar Go", role: "Admin", status: "Active" },
+    { id: 1, name: "Aung Kyaw Hein", role: "Admin", status: "Active" },
     { id: 2, name: "Koko", role: "Cashier", status: "Active" },
     { id: 3, name: "ZawZaw", role: "Waiter", status: "Active" },
     { id: 4, name: "Aye Aye", role: "Waiter", status: "Active" }
@@ -147,7 +147,6 @@ export default function Admin() {
 
   const handleAddStaff = () => {
     if (!newStaff.name) return alert("နာမည်ထည့်ပါ");
-    // Memory ထဲမှာပဲ ခဏသိမ်းထားတာဖြစ်လို့ Refresh လုပ်ရင် ပျောက်ပါမယ်
     setStaffList([...staffList, { ...newStaff, id: Date.now(), status: "Active" }]);
     setIsStaffModalOpen(false);
     setNewStaff({ name: "", role: "Waiter" });
@@ -168,7 +167,12 @@ export default function Admin() {
           <button className={activeTab === "history" ? "active" : ""} onClick={() => setActiveTab("history")}><History size={20} /> Sales History</button>
           <button className={activeTab === "staff" ? "active" : ""} onClick={() => setActiveTab("staff")}><Users size={20} /> Staff Management</button>
         </nav>
-        <div className="sidebar-footer"><button className="logout-btn"><LogOut size={18} /> Logout</button></div>
+        {/* --- ၃။ Logout button ကို App.js က onLogout နဲ့ ချိတ်လိုက်ပါပြီ --- */}
+        <div className="sidebar-footer">
+          <button className="logout-btn" onClick={onLogout}>
+            <LogOut size={18} /> Logout
+          </button>
+        </div>
       </aside>
 
       <main className="admin-main">
@@ -178,10 +182,13 @@ export default function Admin() {
             <button className={`refresh-icon-btn ${loading ? 'spinning' : ''}`} onClick={loadOrders}><RefreshCw size={18} /></button>
             <div className="user-profile-block">
               <div className="user-text">
-                <span className="user-name">Dar Go</span> {/* ဒီမှာ နာမည်ပြင်လိုက်ပြီ */}
-                <span className="user-role">Administrator</span>
+                {/* --- ၄။ Login ဝင်ထားတဲ့ user နာမည်ကို dynamic ပြပါမယ် --- */}
+                <span className="user-name">{user?.name || "Admin"}</span> 
+                <span className="user-role">{user?.role || "Administrator"}</span>
               </div>
-              <div className="avatar">DG</div>
+              <div className="avatar">
+                {user?.name ? user.name[0].toUpperCase() : "A"}
+              </div>
             </div>
           </div>
         </header>
@@ -243,16 +250,14 @@ export default function Admin() {
           )}
 
           {activeTab === "menu-edit" && (
-  <div className="menu-edit-view">
-    {/* currentMenu ရော setCurrentMenu ကိုပါ ပို့ပေးရပါမယ် */}
-    <MenuEditTab 
-      menuItems={currentMenu} 
-      setCurrentMenu={setCurrentMenu} 
-    /> 
-  </div>
-)}
+            <div className="menu-edit-view">
+              <MenuEditTab 
+                menuItems={currentMenu} 
+                onUpdate={setCurrentMenu} 
+              /> 
+            </div>
+          )}
           
-
           {activeTab === "staff" && (
             <div className="staff-view">
               <div className="staff-header"><h2>Staff Members</h2><button className="add-staff-btn" onClick={() => setIsStaffModalOpen(true)}>+ Add New Staff</button></div>
@@ -298,4 +303,3 @@ export default function Admin() {
     </div>
   );
 }
-
