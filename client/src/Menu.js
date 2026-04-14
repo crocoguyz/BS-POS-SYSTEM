@@ -147,7 +147,9 @@ export default function Menu() {
       {cart.length > 0 && (
         <div className="bottom-bar">
           <div>
-            <strong>{cart.length} Items</strong> | <span>{total} MMK</span>
+            <strong>
+  {cart.reduce((sum, item) => sum + item.qty, 0)} items ({cart.length} types)
+</strong> | <span>{total} MMK</span>
           </div>
           <button className="view-order-btn" onClick={handleOpenPopup}>View Order</button>
         </div>
