@@ -61,12 +61,20 @@ export default function Menu() {
   };
 
   const addToCart = (item) => {
-    setCart((prev) => {
-      const exist = prev.find((x) => x.id === item.id);
-      if (exist) return prev.map((x) => (x.id === item.id ? { ...x, qty: x.qty + 1 } : x));
-      return [...prev, { ...item, qty: 1 }];
-    });
-  };
+  setCart((prev) => {
+    const exist = prev.find((x) => String(x.id) === String(item.id));
+
+    if (exist) {
+      return prev.map((x) =>
+        String(x.id) === String(item.id)
+          ? { ...x, qty: x.qty + 1 }
+          : x
+      );
+    }
+
+    return [...prev, { ...item, qty: 1 }];
+  });
+};
 
   const updateQty = (id, delta) => {
     setCart((prev) => prev.map((x) => (x.id === id ? { ...x, qty: x.qty + delta } : x)).filter((x) => x.qty > 0));
