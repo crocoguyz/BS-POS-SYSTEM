@@ -23,33 +23,43 @@
 // export default App;
 
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
 import Admin from "./Admin";
-import "./App.css";
+import Menu from "./Menu";
+import Kitchen from "./Kitchen";
 
 function App() {
   const [user, setUser] = useState(null);
 
-  // Login အောင်မြင်တဲ့အခါ User Info သိမ်းမယ်
   const handleLogin = (userData) => {
     setUser(userData);
   };
 
-  // Logout လုပ်တဲ့အခါ သုံးဖို့ (လိုအပ်ရင်)
-  const handleLogout = () => {
-    setUser(null);
-  };
-
   return (
-    <div className="App">
-      {!user ? (
-        // User မရှိရင် Login Page ပြမယ်
-        <Login onLogin={handleLogin} />
-      ) : (
-        // User ရှိရင် Admin Panel ပြမယ် (Logout handle လုပ်ဖို့ function ပါ ထည့်ပေးထားတယ်)
-        <Admin user={user} onLogout={handleLogout} />
-      )}
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* ၁။ စားသုံးသူတွေအတွက် Menu Page (ဘယ်သူမဆို ကြည့်လို့ရမယ်) */}
+          <Route path="/" element={<Menu />} />
+          
+          {/* ၂။ မီးဖိုချောင်အတွက် Kitchen Page */}
+          <Route path="/kitchen" element={<Kitchen />} />
+
+          {/* ၃။ Login Page */}
+          <Route 
+            path="/login" 
+            element={!user ? <Login onLogin={handleLogin} /> : <Navigate to="/admin" />} 
+          />
+
+          {/* ၄။ Admin Panel (Login ဝင်ပြီးမှ ပေးဝင်မယ်) */}
+          <Route 
+            path="/admin" 
+            element={user ? <Admin user={user} /> : <Navigate to="/login" />} 
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
