@@ -9,7 +9,11 @@ const server = http.createServer(app);
 // ======================
 // MIDDLEWARE
 // ======================
-app.use(cors());
+app.use(cors({
+  origin: ["https://bs-pos-system-1.onrender.com", "http://localhost:3000"],
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(express.json());
 
 // ======================
@@ -44,8 +48,8 @@ app.get("/next-id", (req, res) => {
 // SOCKET SETUP
 // ======================
 const io = new Server(server, {
-  cors: { 
-    origin: "*",
+  cors: {
+    origin: "https://bs-pos-system-1.onrender.com",
     methods: ["GET", "POST"]
   }
 });
