@@ -148,22 +148,26 @@ server.listen(PORT, "0.0.0.0", () => {
 
 app.post("/order/status", async (req, res) => {
   const { id, status } = req.body;
+  console.log("Backend received ID:", id, "Status:", status);
+
   try {
-    // MongoDB ရဲ့ _id ကို ရှာပြီး status update လုပ်တာပါ
-    // တစ်ခါတလေ id က string ဖြစ်နေတတ်လို့ {_id: id} လို့ သုံးတာ ပိုသေချာပါတယ်
+    // ID က 0001 ဖြစ်နေရင် database ထဲက "id": "0001" နဲ့ တူတာကို ရှာမယ်
+    // ID က MongoDB ID ဖြစ်နေရင် _id နဲ့ ရှာမယ်
     const updatedOrder = await Order.findOneAndUpdate(
       { $or: [{ _id: id }, { id: id }] }, 
-      { status }, 
+      { status: status }, 
       { new: true }
     );
 
-    if (updatedOrder) {
-      res.json({ success: true, order: updatedOrder });
-    } else {
-      res.status(404).json({ success: false, message: "Order not found" });
+    if (!updatedOrder) {
+      console.log("❌ Order not found in database");
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
+
+    console.log("✅ Order updated successfully");
+    res.json({ success: true, order: updatedOrder });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    console.error("🔥 Server Error:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
