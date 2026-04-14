@@ -36,26 +36,23 @@ function App() {
     setUser(userData);
   };
 
+  const handleLogout = () => {
+    setUser(null);
+  };
+
   return (
     <Router>
       <div className="App">
         <Routes>
-          {/* ၁။ စားသုံးသူတွေအတွက် Menu Page (ဘယ်သူမဆို ကြည့်လို့ရမယ်) */}
           <Route path="/" element={<Menu />} />
-          
-          {/* ၂။ မီးဖိုချောင်အတွက် Kitchen Page */}
           <Route path="/kitchen" element={<Kitchen />} />
-
-          {/* ၃။ Login Page */}
           <Route 
             path="/login" 
             element={!user ? <Login onLogin={handleLogin} /> : <Navigate to="/admin" />} 
           />
-
-          {/* ၄။ Admin Panel (Login ဝင်ပြီးမှ ပေးဝင်မယ်) */}
           <Route 
             path="/admin" 
-            element={user ? <Admin user={user} /> : <Navigate to="/login" />} 
+            element={user ? <Admin user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} 
           />
         </Routes>
       </div>
