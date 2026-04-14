@@ -27,8 +27,7 @@ export const menuData = [
 ];
 
 export default function Menu({ onLogout }) {
-;
-}
+
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [orderType, setOrderType] = useState("eat");
@@ -36,18 +35,18 @@ export default function Menu({ onLogout }) {
   const [category, setCategory] = useState("All");
   const [tableNumber, setTableNumber] = useState("1");
   const [nextOrderId, setNextOrderId] = useState("");
-  
-  // အသစ်ထည့်ထားသော State များ
+
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     document.title = "Restaurant Menu";
+
     const getTableNum = () => {
-      const fullUrl = window.location.href;
-      const match = fullUrl.match(/table=(\d+)/);
+      const match = window.location.href.match(/table=(\d+)/);
       return match ? match[1] : "1";
     };
+
     setTableNumber(getTableNum());
   }, []);
 
@@ -87,32 +86,37 @@ export default function Menu({ onLogout }) {
   const confirmOrder = async () => {
     if (cart.length === 0) return alert("Please add items first!");
     
-    setLoading(true); // Loading စတင်မယ်
+    setLoading(true);
+
     try {
+      // Backend ကို ပို့တဲ့အခါ ID ပါအောင် (သို့မဟုတ်) Backend က ID ပြန်ထုတ်ပေးအောင် လုပ်တာပါ
       const res = await axios.post(`${API_BASE}/order`, {
         table: tableNumber,
         type: orderType,
         items: cart,
         total: total,
+        // ID မပါသေးရင် generate လုပ်ပြီး ထည့်ပေးလိုက်မယ်
+        orderId: nextOrderId || `ORD-${Date.now()}` 
       });
 
       if (res.data.success) {
         setCart([]);
         setShowPopup(false);
-        setShowSuccess(true); // Animation ပြမယ်
+        setShowSuccess(true);
         
-        // ၃ စက္ကန့်ကြာရင် ပိတ်မယ်
+        // Success ဖြစ်သွားရင် နောက်ထပ် order အတွက် ID အသစ် တစ်ခါတည်း ပြင်ထားမယ်
+        setNextOrderId(`ORD-${Date.now() + 1}`);
+
         setTimeout(() => setShowSuccess(false), 3000);
       }
-    } catch (err) { 
-      alert("Server Error! Check connection."); 
+    } catch (err) {
+      alert("Server Error! Check connection.");
     } finally {
-      setLoading(false); // Loading ရပ်မယ်
+      setLoading(false);
     }
-  };
+  }; // <--- confirmOrder ပိတ်တာ
 
   return (
-       
     <div className="menu-container">
       <div className="menu-header">
   <h2>Our Menu</h2>
@@ -214,4 +218,5 @@ export default function Menu({ onLogout }) {
         </div>
       )}
     </div>
-  );
+  )
+}
