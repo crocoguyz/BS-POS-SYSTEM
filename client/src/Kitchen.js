@@ -39,6 +39,9 @@ export default function Kitchen({ onLogout }) {
       const orderId = data.id || data._id; // MongoDB ID နဲ့ Regular ID နှစ်မျိုးလုံးကို စစ်ပေးတာပါ
 
       setOrders((prev) => {
+        if (data.status === "cancel") {
+          return prev.filter(o => (o.id || o._id) !== orderId);
+        }
         // ၁။ ငွေရှင်းပြီးသားဆိုရင် ဖယ်မယ်
         if (data.status === "paid") {
           return prev.filter(o => (o.id || o._id) !== orderId);
@@ -135,6 +138,7 @@ export default function Kitchen({ onLogout }) {
   const activeOrders = orders.filter((o) => 
     o.status !== "done" && 
     o.status !== "paid" && 
+    o.status !== "cancel" &&
     (tab === "all" ? true : o.type === tab)
   );
 
@@ -169,7 +173,6 @@ const getWaitingTime = (order) => {
       <header className="kitchen-central-header">
         <h1>KITCHEN DASHBOARD</h1>
         <div className="stats-row">
-          <div className="revenue-chip">Daily Sales: <span>{totalRevenue.toLocaleString()} MMK</span></div>
           <div className="active-chip">Pending Orders: <span>{activeOrders.length}</span></div>
           <button className="kitchen-logout-btn" onClick={onLogout}>
       Logout
@@ -223,7 +226,8 @@ const getWaitingTime = (order) => {
                     ))}
                   </div>
                   <div className="m-footer">
-                    <button onClick={() => updateStatus(order.id, "cooking")}>Cook</button>
+                    <button onClick={() => updateStatus(order.id, "cooking")}>Start Cooking</button>
+                    <buttom onClick={() => updateStatus(order._id || order.id, "cancel")}>Cancel Order</buttom>
                     <button className="finish" onClick={() => updateStatus(order._id || order.id, "done")}>Finish</button>
                   </div>
                 </div>

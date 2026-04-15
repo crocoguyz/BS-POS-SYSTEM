@@ -82,13 +82,32 @@ app.post("/order", (req, res) => {
 
 app.post("/order/status", (req, res) => {
   const { id, status } = req.body;
+
   const index = orders.findIndex(o => o.id === String(id));
-  
+
   if (index !== -1) {
+
+    // 🔴 CANCEL → DELETE ORDER
+    if (status === "cancel") {
+      const deletedOrder = orders[index];
+
+      // remove from array
+      orders.splice(index, 1);
+
+      // notify frontend
+      io.emit("orderUpdate", { ...deletedOrder, status: "cancel" });
+
+      return res.json({ success: true, message: "Order cancelled" });
+    }
+
+    // 🟢 NORMAL UPDATE
     orders[index].status = status;
-    io.emit("orderUpdate", orders[index]); // Admin/Kitchen သိအောင် အော်မယ်
+
+    io.emit("orderUpdate", orders[index]);
+
     return res.json({ success: true });
   }
+
   res.status(404).json({ success: false });
 });
 
