@@ -296,7 +296,7 @@
   50% { opacity: 0.6; }
   100% { opacity: 1; }
 }
-.kitchen-.logout-btn-simple {
+.kitchen-.logout-btn {
   background-color: #ff4d4d; /* Menu Page ပုံစံ အနီရောင် */
   color: white;
   border: none;

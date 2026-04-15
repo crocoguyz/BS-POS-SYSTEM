@@ -175,7 +175,7 @@ const getWaitingTime = (order) => {
         <div className="stats-row">
           <div className="active-chip">Pending Orders: <span>{activeOrders.length}</span></div>
           <button className="kitchen-logout-btn" onClick={onLogout}>
-      Logout
+      🚪 Logout
     </button>
         </div>
 
