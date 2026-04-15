@@ -35,6 +35,7 @@ export default function Menu({ onLogout }) {
   const [category, setCategory] = useState("All");
   const [tableNumber, setTableNumber] = useState("1");
   const [nextOrderId, setNextOrderId] = useState("");
+  const [currentOrderId, setCurrentOrderId] = useState("")
 
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
