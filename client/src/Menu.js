@@ -126,7 +126,6 @@ export default function Menu({ onLogout }) {
   </button>
 </div>
       <h1 className="title">Restaurant Menu</h1>
-      <p className="info" style={{color: '#ff4757', fontWeight: 'bold'}}>Table {tableNumber}</p>
 
       {/* Success Animation Modal */}
       {showSuccess && (
@@ -180,7 +179,29 @@ export default function Menu({ onLogout }) {
       {showPopup && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3 style={{margin: '0 0 10px 0'}}>Your Order #{nextOrderId} (Table {tableNumber})</h3>
+            <h3 style={{margin: '0 0 10px 0'}}>Your Order #{nextOrderId} </h3>
+
+            {orderType === "eat" && (
+    <div className="table-selector-box" style={{ marginBottom: '15px' }}>
+      <label style={{ color: '#fff', fontSize: '13px', display: 'block', marginBottom: '5px' }}>Select Table:</label>
+      <select 
+        value={tableNumber} 
+        onChange={(e) => setTableNumber(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '8px',
+          borderRadius: '5px',
+          background: '#1a1a1a',
+          color: '#fff',
+          border: '1px solid #7b3fe4'
+        }}
+      >
+        {[...Array(10)].map((_, i) => (
+          <option key={i+1} value={i+1}>Table {i+1}</option>
+        ))}
+      </select>
+    </div>
+  )}
             
             <div className="order-type-selector">
               {["eat", "takeaway", "delivery"].map(t => (
