@@ -93,27 +93,31 @@ export default function Menu({ onLogout }) {
 
   const confirmOrder = async () => {
     if (cart.length === 0) return alert("Please add items first!");
-    
     setLoading(true);
 
     try {
-      // Backend ကို ပို့တဲ့အခါ ID ပါအောင် (သို့မဟုတ်) Backend က ID ပြန်ထုတ်ပေးအောင် လုပ်တာပါ
       const res = await axios.post(`${API_BASE}/order`, {
         table: tableNumber,
         type: orderType,
         items: cart,
         total: total,
-        // ID မပါသေးရင် generate လုပ်ပြီး ထည့်ပေးလိုက်မယ်
-        orderId: nextOrderId || `ORD-${String(Date.now()).slice(-5)}`
+        orderId: nextOrderId // Popup မှာ မြင်နေရတဲ့ #000x ကို ပို့မယ်
       });
 
       if (res.data.success) {
+        // 🔥 ဒီအပိုင်းက အရေးကြီးဆုံးပဲ
+        // လက်ရှိတင်လိုက်တဲ့ ID ကို Success Modal မှာ ပြဖို့ သိမ်းထားမယ်
+        setCurrentOrderId(nextOrderId); 
+        
         setCart([]);
         setShowPopup(false);
         setShowSuccess(true);
         
-        // Success ဖြစ်သွားရင် နောက်ထပ် order အတွက် ID အသစ် တစ်ခါတည်း ပြင်ထားမယ်
-        setNextOrderId(`ORD-${Date.now() + 1}`);
+        // 🔥 ID ကို တစ်ခု တိုးပေးမယ့် Logic
+        // #0001 ထဲက 1 ကို ယူပြီး 1 ပေါင်းမယ်၊ ပြီးရင် #0002 ပြန်လုပ်မယ်
+        const currentNum = parseInt(nextOrderId.replace('#', '')) || 1;
+        const nextNum = `#${String(currentNum + 1).padStart(4, '0')}`;
+        setNextOrderId(nextNum); 
 
         setTimeout(() => setShowSuccess(false), 3000);
       }
@@ -122,7 +126,7 @@ export default function Menu({ onLogout }) {
     } finally {
       setLoading(false);
     }
-  }; // <--- confirmOrder ပိတ်တာ
+  };// <--- confirmOrder ပိတ်တာ
 
   return (
     <div className="menu-container">
@@ -144,15 +148,16 @@ export default function Menu({ onLogout }) {
 
       {/* Success Animation Modal */}
       {showSuccess && (
-        <div className="success-overlay">
-          <div className="success-card">
-            <div className="check-icon">✓</div>
-            <h2>Order Successful!</h2>
-            <p>Your Order ID: #{nextOrderId}</p>
-            <p>မီးဖိုချောင်သို့ Order ပို့ပြီးပါပြီ။</p>
-          </div>
-        </div>
-      )}
+  <div className="success-overlay">
+    <div className="success-card">
+      <div className="check-icon">✓</div>
+      <h2>Order Successful!</h2>
+      {/* ဒီနေရာမှာ currentOrderId ကို သုံးပါ */}
+      <p>Your Order ID: {currentOrderId}</p> 
+      <p>မီးဖိုချောင်သို့ Order ပို့ပြီးပါပြီ။</p>
+    </div>
+  </div>
+)}
 
       <input className="search-bar" placeholder="Search dishes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
