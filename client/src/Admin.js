@@ -178,19 +178,19 @@ export default function Admin({ user, onLogout }) {
           <h1>{activeTab.toUpperCase()}</h1>
           <div className="admin-user-info">
              <button className="logout-btn" onClick={onLogout}> <LogOut size={18} /> Logout </button>
-            <div className="user-profile-block">
-              <div className="user-text">
-                {/* --- ၄။ Login ဝင်ထားတဲ့ user နာမည်ကို dynamic ပြပါမယ် --- */}
-                <span className="admin-name">{user?.name || "Saw Wai Yan Htet"}</span>
-                <span className="user-name">{user?.name || "Admin"}</span> 
-                <span className="user-role">{user?.role || "Administrator"}</span>
-              </div>
-              <div className="avatar">
-                {user?.name ? user.name[0].toUpperCase() : "S"}
-              </div>
-            </div>
-          </div>
-        </header>
+           <div className="user-profile-block">
+      <div className="user-text">
+        {/* နာမည်ကို တစ်ကြောင်းပဲ ထားပါမယ် */}
+        <span className="user-name">Saw Wai Yan Htet</span> 
+        {/* ဒုတိယစာကြောင်းမှာ ရာထူး (ADMIN) ကိုပဲ ပြပါမယ် */}
+        <span className="user-role">ADMIN</span>
+      </div>
+      <div className="avatar">
+        S
+      </div>
+    </div>
+  </div>
+</header>
 
         <section className="admin-content">
           {activeTab === "dashboard" && (
