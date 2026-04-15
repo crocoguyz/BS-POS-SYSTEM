@@ -297,17 +297,27 @@
   100% { opacity: 1; }
 }
 .kitchen-.logout-btn-simple {
-  background: #ff4757;
+  background-color: #ff4d4d; /* Menu Page ပုံစံ အနီရောင် */
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 15px; /* Profile block နဲ့ ခွာထားဖို့ */
+  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.2);
 }
 
 .kitchen-logout-btn:hover {
-  background: #ff2e2e;
-  color: white;
+  background-color: #ff3333;
+  transform: scale(1.05); /* Hover လုပ်ရင် နည်းနည်း ကြီးလာမယ် */
+}
+
+.kitchen-logout-btn:active {
+  transform: scale(0.95);
 }
 
