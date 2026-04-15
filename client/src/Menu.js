@@ -51,12 +51,23 @@ export default function Menu({ onLogout }) {
     setTableNumber(getTableNum());
   }, []);
 
+const fetchLatestId = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/next-id`);
+        const rawId = res.data.nextId;
+        const shortId = rawId.includes('#') ? rawId : `#${String(rawId).slice(-4)}`;
+        setNextOrderId(shortId);
+      } catch (err) {
+        setNextOrderId("#0001");
+      }
+    };
+    fetchLatestId();
+  }, []);
+
   const handleOpenPopup = async () => {
     try {
+      // Popup ဖွင့်ခါနီးမှာ ID ကို တစ်ခါထပ်စစ်မယ် (Kitchen နဲ့ Sync ဖြစ်အောင်)
       const res = await axios.get(`${API_BASE}/next-id`);
-      
-      // Backend က ပေးတဲ့ ID ကို #0001 ပုံစံမျိုး ပြောင်းလဲသတ်မှတ်မယ်
-      // တကယ်လို့ backend က ID အရှည်ကြီး ပို့နေသေးရင်တောင် shortId ဖြစ်သွားအောင် ဖြတ်ယူမယ်
       const rawId = res.data.nextId;
       const shortId = rawId.includes('#') ? rawId : `#${String(rawId).slice(-4)}`;
       
@@ -64,8 +75,6 @@ export default function Menu({ onLogout }) {
       setShowPopup(true);
     } catch (err) {
       console.error("Next ID error");
-      // Error တက်ရင်လည်း ပုံသေ #0001 နဲ့ စပြပေးထားမယ်
-      setNextOrderId("#0001");
       setShowPopup(true);
     }
   };
