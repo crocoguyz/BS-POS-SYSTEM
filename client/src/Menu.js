@@ -96,7 +96,7 @@ export default function Menu({ onLogout }) {
         items: cart,
         total: total,
         // ID မပါသေးရင် generate လုပ်ပြီး ထည့်ပေးလိုက်မယ်
-        orderId: nextOrderId || `ORD-${Date.now()}` 
+        orderId: nextOrderId || `ORD-${String(Date.now()).slice(-5)}`
       });
 
       if (res.data.success) {
@@ -185,21 +185,27 @@ export default function Menu({ onLogout }) {
     <div className="table-selector-box" style={{ marginBottom: '15px' }}>
       <label style={{ color: '#fff', fontSize: '13px', display: 'block', marginBottom: '5px' }}>Select Table:</label>
       <select 
-        value={tableNumber} 
-        onChange={(e) => setTableNumber(e.target.value)}
-        style={{
-          width: '100%',
-          padding: '8px',
-          borderRadius: '5px',
-          background: '#1a1a1a',
-          color: '#fff',
-          border: '1px solid #7b3fe4'
-        }}
-      >
-        {[...Array(10)].map((_, i) => (
-          <option key={i+1} value={i+1}>Table {i+1}</option>
-        ))}
-      </select>
+  value={tableNumber} 
+  onChange={(e) => setTableNumber(e.target.value)}
+  style={{
+    width: '100%',
+    padding: '10px',
+    borderRadius: '8px',
+    background: '#2a2a2a', // နောက်ခံကို နည်းနည်း ပိုလင်းတဲ့ မီးခိုးရောင် သုံးမယ်
+    color: '#7b3fe4',     // စာသားအရောင်ကို မင်းကြိုက်တဲ့ Neon Purple ပြောင်းမယ်
+    border: '2px solid #7b3fe4', // အနားသတ်ကို Purple လုပ်မယ်
+    fontWeight: 'bold',
+    fontSize: '16px',
+    outline: 'none',
+    cursor: 'pointer'
+  }}
+>
+  {[...Array(10)].map((_, i) => (
+    <option key={i+1} value={i+1} style={{ background: '#2a2a2a', color: '#fff' }}>
+      Table {i+1}
+    </option>
+  ))}
+</select>
     </div>
   )}
             
