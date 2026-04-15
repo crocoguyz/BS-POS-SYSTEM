@@ -176,3 +176,26 @@ body {
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
+.logout-btn-simple {
+  background: #ff2e2e;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.table-select {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-select select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-weight: bold;
+}
