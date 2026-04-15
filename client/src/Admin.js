@@ -169,9 +169,7 @@ export default function Admin({ user, onLogout }) {
         </nav>
         {/* --- ၃။ Logout button ကို App.js က onLogout နဲ့ ချိတ်လိုက်ပါပြီ --- */}
         <div className="sidebar-footer">
-          <button className="logout-btn" onClick={onLogout}>
-            <LogOut size={18} /> Logout
-          </button>
+         
         </div>
       </aside>
 
@@ -179,11 +177,11 @@ export default function Admin({ user, onLogout }) {
         <header className="admin-header">
           <h1>{activeTab.toUpperCase()}</h1>
           <div className="admin-user-info">
-            <button className={`refresh-icon-btn ${loading ? 'spinning' : ''}`} onClick={loadOrders}><RefreshCw size={18} /></button>
+             <button className="logout-btn" onClick={onLogout}> <LogOut size={18} /> Logout </button>
             <div className="user-profile-block">
               <div className="user-text">
-              
-                <span className="user-name">Saw Wai Yan Htet</span>
+                {/* --- ၄။ Login ဝင်ထားတဲ့ user နာမည်ကို dynamic ပြပါမယ် --- */}
+                <span className="admin-name">{user?.name || "Saw Wai Yan Htet"}</span>
                 <span className="user-name">{user?.name || "Admin"}</span> 
                 <span className="user-role">{user?.role || "Administrator"}</span>
               </div>

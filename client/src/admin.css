@@ -32,16 +32,7 @@
 }
 .admin-nav button:hover, .admin-nav button.active { background: #3b82f6; color: white; }
 
-.logout-btn {
-  margin-top: auto; /* Menu တွေနဲ့ ဝေးရာ အောက်ဆုံးကို တွန်းပို့လိုက်တာ */
-  background: #ef4444; /* Red color for logout */
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-}
+
 
 /* Main Area */
 .admin-main { flex-grow: 1; padding: 30px; overflow-y: auto; }
@@ -63,13 +54,20 @@
 
 .avatar { width: 35px; height: 35px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
 
-.refresh-icon-btn {
-  background: #1e293b; border: 1px solid #334155; color: #94a3b8;
+.logout-btn {
+ 
+  background: #ef4444; /* Red color for logout */
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+
   width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
-.refresh-icon-btn:hover { background: #334155; color: white; }
-.spinning { animation: spin 1s linear infinite; }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.logout-btn:hover { background: #f1f4f7; color: black }
+
 
 /* Stats Cards */
 .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
