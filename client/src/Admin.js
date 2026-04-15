@@ -177,7 +177,10 @@ export default function Admin({ user, onLogout }) {
         <header className="admin-header">
           <h1>{activeTab.toUpperCase()}</h1>
           <div className="admin-user-info">
-             <button className="logout-btn" onClick={onLogout}> <LogOut size={18} /> Logout </button>
+             
+  <button className="menu-logout-style-btn" onClick={onLogout}>
+      🚪 Logout
+    </button>
            <div className="user-profile-block">
       <div className="user-text">
         {/* နာမည်ကို တစ်ကြောင်းပဲ ထားပါမယ် */}
