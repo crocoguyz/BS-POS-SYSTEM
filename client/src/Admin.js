@@ -182,12 +182,13 @@ export default function Admin({ user, onLogout }) {
             <button className={`refresh-icon-btn ${loading ? 'spinning' : ''}`} onClick={loadOrders}><RefreshCw size={18} /></button>
             <div className="user-profile-block">
               <div className="user-text">
-                {/* --- ၄။ Login ဝင်ထားတဲ့ user နာမည်ကို dynamic ပြပါမယ် --- */}
+              
+                <span className="user-name">Saw Wai Yan Htet</span>
                 <span className="user-name">{user?.name || "Admin"}</span> 
                 <span className="user-role">{user?.role || "Administrator"}</span>
               </div>
               <div className="avatar">
-                {user?.name ? user.name[0].toUpperCase() : "A"}
+                {user?.name ? user.name[0].toUpperCase() : "S"}
               </div>
             </div>
           </div>

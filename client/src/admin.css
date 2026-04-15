@@ -17,6 +17,8 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  /* 🔥 ဒါလေး ထပ်ဖြည့်ပေးပါ */
+  justify-content: space-between; 
 }
 
 .admin-logo h2 { font-size: 1.5rem; color: #3b82f6; margin-bottom: 40px; text-align: center; }
@@ -30,7 +32,16 @@
 }
 .admin-nav button:hover, .admin-nav button.active { background: #3b82f6; color: white; }
 
-.logout-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.logout-btn {
+  margin-top: auto; /* Menu တွေနဲ့ ဝေးရာ အောက်ဆုံးကို တွန်းပို့လိုက်တာ */
+  background: #ef4444; /* Red color for logout */
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
 /* Main Area */
 .admin-main { flex-grow: 1; padding: 30px; overflow-y: auto; }
