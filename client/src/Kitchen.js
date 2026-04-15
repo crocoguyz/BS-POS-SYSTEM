@@ -226,8 +226,8 @@ const getWaitingTime = (order) => {
                     ))}
                   </div>
                   <div className="m-footer">
-                    <button onClick={() => updateStatus(order.id, "cooking")}>Start Cooking</button>
-                    <buttom onClick={() => updateStatus(order._id || order.id, "cancel")}>Cancel Order</buttom>
+              <button onClick={() => updateStatus(order.id, "cooking")}>Start Cooking</button>
+        <button className="cancel" onClick={() => updateStatus(order._id || order.id, "cancel")}>Cancel Order</button>
                     <button className="finish" onClick={() => updateStatus(order._id || order.id, "done")}>Finish</button>
                   </div>
                 </div>
