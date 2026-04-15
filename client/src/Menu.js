@@ -47,26 +47,25 @@ export default function Menu({ onLogout }) {
       const match = window.location.href.match(/table=(\d+)/);
       return match ? match[1] : "1";
     };
-
     setTableNumber(getTableNum());
-  }, []);
 
-const fetchLatestId = async () => {
+    const fetchLatestId = async () => {
       try {
         const res = await axios.get(`${API_BASE}/next-id`);
         const rawId = res.data.nextId;
         const shortId = rawId.includes('#') ? rawId : `#${String(rawId).slice(-4)}`;
         setNextOrderId(shortId);
       } catch (err) {
+        console.error("Error fetching initial ID");
         setNextOrderId("#0001");
       }
     };
+
     fetchLatestId();
-  }, []);
+  }, []); // <--- ဒီနေရာမှာ ပိုနေတဲ့ကွင်း ရှိ၊ မရှိ သေချာကြည့်ပါ (Line 65)
 
   const handleOpenPopup = async () => {
     try {
-      // Popup ဖွင့်ခါနီးမှာ ID ကို တစ်ခါထပ်စစ်မယ် (Kitchen နဲ့ Sync ဖြစ်အောင်)
       const res = await axios.get(`${API_BASE}/next-id`);
       const rawId = res.data.nextId;
       const shortId = rawId.includes('#') ? rawId : `#${String(rawId).slice(-4)}`;
