@@ -54,17 +54,14 @@
 
 .avatar { width: 35px; height: 35px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
 
-.logout-btn {
- 
-  background: #ef4444; /* Red color for logout */
+.logout-btn-simple {
+  background: #ff4757;
   color: white;
-  padding: 12px;
-  border-radius: 8px;
   border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s;
-
-  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  font-weight: bold;
 }
 .logout-btn:hover { background: #f1f4f7; color: black }
 
