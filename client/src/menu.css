@@ -177,7 +177,7 @@ body {
   to { transform: scale(1); }
 }
 .logout-btn-simple {
-  background: #dd4747;
+  background: #ff4757;
   color: white;
   border: none;
   padding: 8px 15px;

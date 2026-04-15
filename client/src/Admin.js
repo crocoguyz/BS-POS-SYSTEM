@@ -101,7 +101,7 @@ export default function Admin({ user, onLogout }) {
   const [newStaff, setNewStaff] = useState({ name: "", role: "Waiter" });
 
   const [staffList, setStaffList] = useState([
-    { id: 1, name: "Aung Kyaw Hein", role: "Admin", status: "Active" },
+    { id: 1, name: "Saw Wai Yan Htet", role: "Admin", status: "Active" },
     { id: 2, name: "Koko", role: "Cashier", status: "Active" },
     { id: 3, name: "ZawZaw", role: "Waiter", status: "Active" },
     { id: 4, name: "Aye Aye", role: "Waiter", status: "Active" }

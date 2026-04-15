@@ -53,10 +53,18 @@ export default function Menu({ onLogout }) {
   const handleOpenPopup = async () => {
     try {
       const res = await axios.get(`${API_BASE}/next-id`);
-      setNextOrderId(res.data.nextId);
+      
+      // Backend က ပေးတဲ့ ID ကို #0001 ပုံစံမျိုး ပြောင်းလဲသတ်မှတ်မယ်
+      // တကယ်လို့ backend က ID အရှည်ကြီး ပို့နေသေးရင်တောင် shortId ဖြစ်သွားအောင် ဖြတ်ယူမယ်
+      const rawId = res.data.nextId;
+      const shortId = rawId.includes('#') ? rawId : `#${String(rawId).slice(-4)}`;
+      
+      setNextOrderId(shortId);
       setShowPopup(true);
     } catch (err) {
       console.error("Next ID error");
+      // Error တက်ရင်လည်း ပုံသေ #0001 နဲ့ စပြပေးထားမယ်
+      setNextOrderId("#0001");
       setShowPopup(true);
     }
   };
@@ -122,10 +130,17 @@ export default function Menu({ onLogout }) {
   <h2>Our Menu</h2>
 
   <button className="logout-btn-simple" onClick={onLogout}>
-    🚪 Menu / Logout
+    🚪 Logout
   </button>
 </div>
-      <h1 className="title">Restaurant Menu</h1>
+      <h1 className="title" style={{ 
+  fontSize: '2.8rem',      // စာသားကို အကြီးကြီးနဲ့ လန်းအောင်လုပ်တာ
+  marginBottom: '40px',    // Search bar နဲ့ ဝေးဝေးခွာထားမယ်
+  fontWeight: '800',
+  letterSpacing: '2px'
+}}>
+  RESTAURANT MENU
+</h1>
 
       {/* Success Animation Modal */}
       {showSuccess && (
@@ -191,9 +206,9 @@ export default function Menu({ onLogout }) {
     width: '100%',
     padding: '10px',
     borderRadius: '8px',
-    background: '#2a2a2a', // နောက်ခံကို နည်းနည်း ပိုလင်းတဲ့ မီးခိုးရောင် သုံးမယ်
-    color: '#7b3fe4',     // စာသားအရောင်ကို မင်းကြိုက်တဲ့ Neon Purple ပြောင်းမယ်
-    border: '2px solid #7b3fe4', // အနားသတ်ကို Purple လုပ်မယ်
+    background: '#f8f7f7', // နောက်ခံကို နည်းနည်း ပိုလင်းတဲ့ မီးခိုးရောင် သုံးမယ်
+    color: '#000000',     // စာသားအရောင်ကို မင်းကြိုက်တဲ့ Neon Purple ပြောင်းမယ်
+    border: '2px solid #ff4757', // အနားသတ်ကို Purple လုပ်မယ်
     fontWeight: 'bold',
     fontSize: '16px',
     outline: 'none',
