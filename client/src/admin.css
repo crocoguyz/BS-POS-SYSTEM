@@ -336,7 +336,7 @@ td {
 }
 
 /* Logout Button */
-.menu-logout-btn-simple {
+.menu-logout-style-btn {
    background: rgba(255, 71, 87, 0.15);
   backdrop-filter: blur(10px);
   color: white;
