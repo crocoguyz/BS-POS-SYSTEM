@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+/* App.css သို့မဟုတ် Admin.css ရဲ့ အောက်ဆုံးမှာ ထည့်ရန် */
+
+@media (max-width: 768px) {
+  /* Sidebar ကို ဖျောက်ပြီး Hamburger menu အတွက် ပြင်ဆင်ခြင်း */
+  .admin-sidebar {
+    width: 250px;
+    position: fixed;
+    left: -250px; /* အပြင်ကို ထုတ်ထားမယ် */
+    z-index: 1000;
+  }
+  
+  .admin-sidebar.active {
+    left: 0; /* JS ကနေ active class ထည့်ရင် ပေါ်လာမယ် */
+  }
+
+  /* Dashboard Cards တွေကို တစ်တန်းတည်းပြခြင်း */
+  .stats-grid, .staff-grid, .cashier-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Menu Grid ကို ဖုန်းမှာ ၂ ခုစီပြခြင်း */
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
