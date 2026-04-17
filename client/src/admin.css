@@ -164,12 +164,14 @@
 .checkout-btn:hover { box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
 
 /* Table Styling */
+table { width: 100%; border-collapse: collapse; }
 th { 
   background: rgba(255, 255, 255, 0.05); 
   color: var(--accent-cyan); 
   font-weight: bold;
 }
 td { border-bottom: 1px solid var(--glass-border); }
+.price-cell { font-weight: bold; color: #10b981; }
 
 /* Modal Styling (Popup) */
 .modal-overlay { 
