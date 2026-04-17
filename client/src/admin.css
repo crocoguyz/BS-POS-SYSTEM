@@ -1,149 +1,173 @@
+/* ===== GLOBAL & VARIABLES ===== */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --accent-blue: #4facfe;
+  --accent-cyan: #00f2fe;
+  --white: #f8fafc;
+  --navy-dark: #0f172a; /* Cyan ပေါ်မှာ သုံးမယ့် Navy Dark Color */
+}
+
 .admin-container {
   display: flex;
   min-height: 100vh;
-  background: #0f172a;
-  color: #f8fafc;
+  /* Login Background နဲ့ တစ်သားတည်း ဖြစ်စေရန် */
+  background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
+              url('bg-kitchen.png') no-repeat center center/cover;
+  background-attachment: fixed;
+  color: var(--white);
   font-family: 'Inter', sans-serif;
 }
 
-/* Sidebar */
+/* Sidebar (Glass Style) */
 .admin-sidebar {
   width: 260px;
-  background: #1e293b;
-  border-right: 1px solid #334155;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
   padding: 20px;
   position: sticky;
   top: 0;
   height: 100vh;
-  /* 🔥 ဒါလေး ထပ်ဖြည့်ပေးပါ */
-  justify-content: space-between; 
+  justify-content: space-between;
+  z-index: 10;
 }
 
-.admin-logo h2 { font-size: 1.5rem; color: #3b82f6; margin-bottom: 40px; text-align: center; }
-.admin-logo span { color: #f8fafc; }
+.admin-logo h2 { 
+  font-size: 1.5rem; 
+  background: linear-gradient(to right, var(--accent-blue), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 40px; 
+  text-align: center; 
+  font-weight: 800;
+}
 
-.admin-nav { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
 .admin-nav button {
-  background: transparent; border: none; color: #94a3b8; padding: 12px 15px;
-  border-radius: 8px; display: flex; align-items: center; gap: 12px;
-  cursor: pointer; transition: 0.3s; font-size: 0.95rem; font-weight: 500;
+  background: transparent; 
+  border: none; 
+  color: #94a3b8; 
+  padding: 12px 15px;
+  border-radius: 12px; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  cursor: pointer; 
+  transition: 0.3s; 
+  font-size: 0.95rem; 
+  font-weight: 600;
 }
-.admin-nav button:hover, .admin-nav button.active { background: #3b82f6; color: white; }
 
-
+/* ✅ ACTIVE NAV (Cyan Background + Navy Dark Text) */
+.admin-nav button:hover, .admin-nav button.active { 
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: var(--navy-dark); /* စာလုံးကို Navy Dark ပြောင်းလိုက်ပြီ */
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+}
 
 /* Main Area */
 .admin-main { flex-grow: 1; padding: 30px; overflow-y: auto; }
 
-/* Header Fixes */
-.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
-
-.admin-user-info { display: flex; align-items: center; gap: 15px; }
-
+/* User Profile Block (Glass) */
 .user-profile-block {
   display: flex; align-items: center; gap: 12px;
-  background: rgba(30, 41, 59, 0.6);
-  padding: 6px 16px; border-radius: 50px; border: 1px solid #334155;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  padding: 6px 16px; 
+  border-radius: 50px; 
+  border: 1px solid var(--glass-border);
 }
 
-.user-text { display: flex; flex-direction: column; text-align: right; line-height: 1.2; }
-.user-name { font-size: 0.9rem; font-weight: 600; color: #f8fafc; }
-.user-role { font-size: 0.7rem; color: #3b82f6; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+.user-role { color: var(--accent-cyan); }
 
-.avatar { width: 35px; height: 35px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
+.avatar { 
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); 
+  color: var(--navy-dark); /* Avatar ထဲကစာလုံးလည်း Navy Dark */
+}
 
+/* Stats Cards (Glass Cards) */
+.stat-card { 
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  padding: 25px; 
+  border-radius: 20px; 
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15); 
+  transition: 0.3s;
+}
+.stat-card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); }
 
+.stat-card.blue { border-left: 5px solid var(--accent-blue); }
+.stat-card.green { border-left: 5px solid #10b981; }
+.stat-card.amber { border-left: 5px solid #f59e0b; }
 
-/* Stats Cards */
-.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
-.stat-card { background: #1e293b; padding: 25px; border-radius: 16px; border-left: 5px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.stat-card.blue { border-left-color: #3b82f6; }
-.stat-card.green { border-left-color: #10b981; }
-.stat-card.amber { border-left-color: #f59e0b; }
-.stat-card h3 { color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-.stat-card p { font-size: 1.7rem; font-weight: 800; color: #f8fafc; }
+/* Bill Cards & History Tables */
+.bill-card, .history-card, .staff-card { 
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 20px; 
+  border: 1px solid var(--glass-border);
+  padding: 20px;
+}
 
-/* Cashier/Bill Cards */
-.cashier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-.bill-card { background: #1e293b; border-radius: 15px; padding: 20px; border: 1px solid #334155; }
-.bill-header { display: flex; justify-content: space-between; border-bottom: 1px dashed #334155; padding-bottom: 12px; margin-bottom: 15px; }
-.bill-id { font-weight: bold; color: #3b82f6; }
-.bill-table { background: #0f172a; padding: 3px 10px; border-radius: 6px; font-size: 0.85rem; color: #cbd5e1; }
-.bill-item-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; color: #94a3b8; }
-.bill-total { display: flex; justify-content: space-between; border-top: 1px solid #334155; padding-top: 12px; margin: 15px 0; }
-.total-price { font-size: 1.3rem; font-weight: bold; color: #10b981; }
-.bill-actions { display: flex; gap: 10px; }
-.bill-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-.print-btn { background: #475569; color: white; }
-.checkout-btn { background: #10b981; color: white; }
-.checkout-btn:hover { background: #059669; transform: translateY(-2px); }
+.bill-id { color: var(--accent-cyan); }
+.bill-table { background: rgba(0,0,0,0.2); }
+
+/* Buttons */
+.checkout-btn, .save-btn, .add-staff-btn { 
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: var(--navy-dark); /* Navy Dark Text */
+  font-weight: 800;
+  border: none;
+}
+.checkout-btn:hover { box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
 
 /* Table Styling */
-.history-card { background: #1e293b; border-radius: 15px; padding: 25px; border: 1px solid #334155; }
-.table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.total-sales-tag { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 8px 16px; border-radius: 50px; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.2); }
-table { width: 100%; border-collapse: collapse; }
-th { text-align: left; padding: 15px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; background: #0f172a; }
-td { padding: 15px; border-bottom: 1px solid #334155; font-size: 0.9rem; }
-.price-cell { font-weight: bold; color: #10b981; }
+th { 
+  background: rgba(255, 255, 255, 0.05); 
+  color: var(--accent-cyan); 
+  font-weight: bold;
+}
+td { border-bottom: 1px solid var(--glass-border); }
 
-/* Modal Styling */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-.staff-modal { background: #1e293b; width: 400px; padding: 30px; border-radius: 20px; border: 1px solid #334155; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.close-icon { cursor: pointer; color: #94a3b8; }
-.modal-body label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: #94a3b8; }
-.modal-body input, .modal-body select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; margin-bottom: 20px; outline: none; }
-.modal-body input:focus { border-color: #3b82f6; }
-.modal-actions { display: flex; gap: 12px; }
-.modal-actions button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
-.cancel-btn { background: #334155; color: white; }
-.save-btn { background: #3b82f6; color: white; }
-
-/* Staff Grid */
-.staff-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.add-staff-btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-.staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-.staff-card { background: #1e293b; padding: 25px; border-radius: 16px; text-align: center; border: 1px solid #334155; transition: 0.3s; }
-.staff-card:hover { border-color: #3b82f6; transform: translateY(-5px); }
-.staff-avatar { width: 64px; height: 64px; background: #334155; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem; color: #3b82f6; font-weight: bold; }
-.status-badge { font-size: 0.7rem; padding: 3px 12px; border-radius: 50px; text-transform: uppercase; font-weight: bold; }
-.status-badge.active { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-
-.input-group input {
-  width: 100%;
-  box-sizing: border-box; /* ဒါလေးထည့်လိုက်ရင် input က box ထဲမှာ အတိအကျ ဖြစ်သွားပါလိမ့်မယ် */
-  padding: 12px 12px 12px 40px;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 8px;
-  color: #fff;
-  outline: none;
+/* Modal Styling (Popup) */
+.modal-overlay { 
+  background: rgba(0,0,0,0.7); 
+  backdrop-filter: blur(8px); 
+}
+.staff-modal { 
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(30px);
+  border: 1px solid var(--glass-border);
+  border-radius: 25px;
+}
+.modal-body input, .modal-body select { 
+  background: rgba(0,0,0,0.2); 
+  border: 1px solid var(--glass-border); 
+  color: white; 
 }
 
+/* Logout Button */
 .menu-logout-style-btn {
-  background-color: #ff4d4d; /* Menu Page ပုံစံ အနီရောင် */
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  background: rgba(255, 71, 87, 0.2);
+  backdrop-filter: blur(10px);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  padding: 8px 18px;
+  border-radius: 10px;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-right: 15px; /* Profile block နဲ့ ခွာထားဖို့ */
-  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.2);
+  transition: 0.3s;
 }
 
 .menu-logout-style-btn:hover {
-  background-color: #ff3333;
-  transform: scale(1.05); /* Hover လုပ်ရင် နည်းနည်း ကြီးလာမယ် */
+  background: #ff4757;
+  color: white;
+  transform: scale(1.05);
 }
 
-.menu-logout-style-btn:active {
-  transform: scale(0.95);
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
