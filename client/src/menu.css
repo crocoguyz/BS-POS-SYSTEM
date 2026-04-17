@@ -144,7 +144,7 @@ body {
 
 /* ===== LOGOUT BUTTON (Matching Login Style) ===== */
 .logout-btn-simple {
-  background: #00f2fe;
+  background: rgba(255, 71, 87, 0.8);
   backdrop-filter: blur(10px);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -186,4 +186,115 @@ body {
   .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .title { font-size: 24px; }
   .card-info h4 { font-size: 14px; }
+}
+/* ===== MODAL / POPUP GLASS THEME (ADD THIS AT THE END) ===== */
+.modal-overlay {
+  position: fixed; 
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Background ကို မှောင်မှောင်လေးထားမှ Glass က ကြွမှာပါ */
+  display: flex; align-items: center; 
+  justify-content: center; z-index: 2000; 
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.12); /* Glass Effect */
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white; /* စာသားအားလုံး အဖြူရောင်ပြောင်း */
+  width: 90%; max-width: 380px;
+  padding: 30px; 
+  border-radius: 25px; 
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Order ID Title */
+.modal-content h3 {
+  text-align: center;
+  color: var(--accent-cyan);
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+/* Table Select Dropdown */
+.table-select {
+  margin: 15px 0;
+}
+.table-select select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  outline: none;
+  font-weight: 600;
+}
+.table-select select option { background: #1e293b; color: white; }
+
+/* Order Type Buttons (EAT, TAKEAWAY...) */
+.order-type-selector {
+  display: flex; gap: 8px; margin: 15px 0;
+}
+.order-type-selector button {
+  flex: 1; padding: 10px; border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc; cursor: pointer; transition: 0.3s;
+  font-weight: 600; font-size: 12px;
+}
+.order-type-selector button.active {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #000; /* Contrast ကောင်းအောင် စာလုံးကို အမည်းထားတာပါ */
+  border-color: transparent;
+}
+
+/* Item List Area */
+.item-list-container {
+  max-height: 250px; overflow-y: auto; margin-bottom: 20px;
+}
+.list-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.list-row b { color: #fff; font-size: 15px; }
+.list-row p { color: var(--accent-cyan); margin: 5px 0; font-weight: bold; }
+
+/* Quantity Controls */
+.qty-controls {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px; border-radius: 20px;
+}
+.qty-controls button { 
+  background: none; border: none; color: var(--accent-cyan); 
+  font-size: 20px; font-weight: bold; cursor: pointer;
+}
+
+/* Final Total Section */
+.final-total-row {
+  display: flex; justify-content: space-between;
+  margin-top: 15px; padding-top: 15px;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem; font-weight: 800; color: var(--accent-cyan);
+}
+
+/* Footer Buttons */
+.btn-confirm {
+  width: 100%; padding: 14px; margin-top: 15px; border-radius: 15px;
+  border: none; cursor: pointer; font-weight: 800; font-size: 16px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  color: #000; transition: 0.3s;
+}
+.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 242, 254, 0.3); }
+
+.btn-close {
+  width: 100%; background: none; border: none; color: #ff6b6b;
+  cursor: pointer; margin-top: 12px; font-weight: 600; font-size: 14px;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
