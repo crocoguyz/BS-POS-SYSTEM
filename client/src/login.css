@@ -7,8 +7,8 @@
   align-items: center;
 
   /* 🔥 IMAGE BACKGROUND (IMPORTANT) */
-  background: url("/bg-kitchen.png ") center/cover no-repeat;
-  font-family: 'Poppins', sans-serif;
+  /* background: url("/bg-kitchen.png ") center/cover no-repeat;
+  font-family: 'Poppins', sans-serif; */
 }
 
 /* 🔥 DARK GLASS OVERLAY */
