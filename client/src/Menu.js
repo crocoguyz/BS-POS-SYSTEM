@@ -222,7 +222,7 @@ export default function Menu({ onLogout }) {
     borderRadius: '8px',
     background: '#f8f7f7', // နောက်ခံကို နည်းနည်း ပိုလင်းတဲ့ မီးခိုးရောင် သုံးမယ်
     color: '#000000',     // စာသားအရောင်ကို မင်းကြိုက်တဲ့ Neon Purple ပြောင်းမယ်
-    border: '2px solid #ff4757', // အနားသတ်ကို Purple လုပ်မယ်
+    border: '2px solid #00f2fe', // အနားသတ်ကို Purple လုပ်မယ်
     fontWeight: 'bold',
     fontSize: '16px',
     outline: 'none',
@@ -249,7 +249,7 @@ export default function Menu({ onLogout }) {
                 <div className="list-row" key={item.id}>
                   <div>
                     <div style={{fontWeight: 'bold'}}>{item.name}</div>
-                    <div style={{fontSize: '13px', color: '#ef4444'}}>{item.price * item.qty} MMK</div>
+                    <div style={{fontSize: '13px', color: '#ffffff'}}>{item.price * item.qty} MMK</div>
                   </div>
                   <div className="qty-controls">
                     <button onClick={() => updateQty(item.id, -1)}>-</button>
@@ -262,7 +262,7 @@ export default function Menu({ onLogout }) {
 
             <div className="final-total-row">
               <span>Total:</span>
-              <span style={{color: '#ff4757'}}>{total} MMK</span>
+              <span style={{color: '#ffffff'}}>{total} MMK</span>
             </div>
 
             {/* Loading ပြထားသော Confirm Button */}
