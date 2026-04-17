@@ -1,18 +1,19 @@
 .main-title {
   font-size: 29px;
   font-weight: 700;
-  color: #000000;
-  margin-bottom: 0;
+  color: #181717;
+  margin-bottom: 2px;
 }
 
 .sub-title span {
   font-size: 26px;
   color: #5b6cff;
+   margin-bottom: 2px;
 }
 
 .tagline {
-  font-size: 14px;
-  color: #1a0b0b;
+  font-size: 19px;
+  color: #0f0707;
 }
 .login-container {
   display: flex;
