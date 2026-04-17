@@ -1,72 +1,102 @@
 .login-container {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #0f172a; /* Dark theme */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Deep Purple Blue Gradient */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Login Box ကို Glassmorphism style နည်းနည်းထည့်ထားပါတယ် */
 .login-box {
-  background: #1e293b;
+  background: #ffffff;
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 400px;
   text-align: center;
 }
 
 .login-logo h2 {
-  color: #fff;
   font-size: 2rem;
+  color: #333;
   margin-bottom: 5px;
 }
 
-.login-logo span { color: #3b82f6; }
+.login-logo h2 span {
+  color: #667eea; /* Primary Theme Color */
+  font-weight: bold;
+}
 
 .login-logo p {
-  color: #94a3b8;
+  color: #777;
   margin-bottom: 30px;
+  font-size: 0.9rem;
 }
 
 .input-group {
   position: relative;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .input-icon {
   position: absolute;
   left: 12px;
-  top: 12px;
-  color: #64748b;
+  color: #a0aec0;
 }
 
 .input-group input {
   width: 100%;
-  padding: 12px 12px 12px 40px;
-  background: #0f172a;
-  border: 1px solid #334155;
+  padding: 12px 12px 12px 42px;
+  border: 2px solid #edf2f7;
   border-radius: 8px;
-  color: #fff;
   outline: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
+.input-group input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Login Button */
 .login-btn {
   width: 100%;
   padding: 12px;
-  background: #3b82f6;
+  background-color: #667eea;
   color: white;
   border: none;
   border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   gap: 10px;
-  transition: 0.3s;
+  transition: background 0.3s ease;
 }
 
-.login-btn:hover { background: #2563eb; }
+.login-btn:hover {
+  background-color: #5a67d8;
+}
 
-.error-text { color: #ef4444; margin-bottom: 15px; font-size: 14px; }
+.login-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* Error Text */
+.error-text {
+  background-color: #fff5f5;
+  color: #c53030;
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 4px solid #c53030;
+  margin-bottom: 15px;
+  text-align: left;
+}
