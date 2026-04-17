@@ -161,14 +161,131 @@
 .bill-id { color: var(--accent-cyan); }
 .bill-table { background: rgba(0,0,0,0.2); }
 
-/* Buttons */
-.checkout-btn, .save-btn, .add-staff-btn { 
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-  color: var(--navy-dark); /* Navy Dark Text */
-  font-weight: 800;
-  border: none;
+/* Cashier / Order */
+/* ===== CASHIER VIEW LAYOUT ===== */
+.cashier-view {
+  padding: 10px;
 }
-.checkout-btn:hover { box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
+
+/* Bill Cards များကို Grid ပုံစံစီခြင်း */
+.cashier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+/* Bill Card အပြင်အဆင် */
+.bill-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.bill-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-cyan);
+}
+
+/* Bill Header (ID နဲ့ Table Number) */
+.bill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  margin-bottom: 15px;
+}
+
+.bill-id {
+  font-weight: 800;
+  color: var(--accent-cyan);
+  font-size: 1.1rem;
+}
+
+.bill-table {
+  background: rgba(0, 242, 254, 0.1);
+  color: var(--accent-cyan);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+/* Items List Section */
+.bill-items {
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+.bill-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Total Section */
+.bill-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+}
+
+.total-price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Action Buttons (Print & Checkout) */
+.bill-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.bill-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.print-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.print-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Checkout Button (Receive Payment) - Cyan Gradient */
+.bill-card .checkout-btn {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: #0f172a; /* Navy Dark Text */
+  font-weight: 800;
+}
+
+.bill-card .checkout-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+}
 
 /* Table Styling */
 table {
