@@ -1,3 +1,18 @@
+.main-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #222;
+}
+
+.sub-title span {
+  font-size: 26px;
+  color: #5b6cff;
+}
+
+.tagline {
+  font-size: 14px;
+  color: #777;
+}
 .login-container {
   display: flex;
   justify-content: center;

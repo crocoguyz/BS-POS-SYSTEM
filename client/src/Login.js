@@ -36,11 +36,10 @@ export default function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-box">
         <div className="login-logo">
-          <h1>RESTAURANT</h1>
-          <h2><span>POS</span></h2>
-
-          <p>Management System</p>
-        </div>
+  <h1 className="main-title">RESTAURANT</h1>
+  <h2 className="sub-title"><span>POS</span></h2>
+  <p className="tagline">Management System</p>
+</div>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <User size={20} className="input-icon" />
