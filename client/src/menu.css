@@ -144,7 +144,7 @@ body {
 
 /* ===== LOGOUT BUTTON (Matching Login Style) ===== */
 .logout-btn-simple {
-  background: rgba(255, 71, 87, 0.8);
+  background: #00f2fe;
   backdrop-filter: blur(10px);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
