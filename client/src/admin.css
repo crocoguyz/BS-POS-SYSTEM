@@ -71,14 +71,14 @@
 .admin-main { flex-grow: 1; padding: 30px; overflow-y: auto; }
 
 /* User Profile Block (Glass) */
-.user-info { 
+.admin-user-info { 
   display: flex;
   align-items: center; 
   gap: 15px; 
   margin-left: auto;
 }
 
-.user-header-right {
+.admin-header-right {
   display: flex;
   align-items: center;
   gap: 20px;
