@@ -107,20 +107,23 @@
 }
 
 .admin-user-info {
- .admin-user-info {
   display: flex;
-  flex-direction: column; /* အပေါ်အောက် စီဖို့ */
-  align-items: flex-end; /* ညာဘက်ကပ်ဖို့ */
-  gap: 8px;
-  margin-left: auto;
-}
-  /* margin-left: auto; မလိုတော့ဘူး justify-content က လုပ်ပေးသွားပြီ */
+  flex-direction: column; /* အပေါ်အောက်စီမယ် */
+  align-items: flex-end;    /* ညာဘက်ကို ကပ်ထုတ်မယ် */
+  gap: 10px;               /* Profile နဲ့ Logout ကြား အကွာအဝေး */
+  margin-left: auto;       /* Header ထဲမှာ ညာဘက်အစွန်ဆုံးရောက်ဖို့ */
 }
 
+/* Profile Block ကို အရင်အတိုင်း ထားပါမယ် */
 .user-profile-block {
-  display: flex; align-items: center; gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   background: rgba(30, 41, 59, 0.6);
-  padding: 6px 16px; border-radius: 50px; border: 1px solid #334155;
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid #334155;
+  backdrop-filter: blur(10px);
 }
 
 .user-text { display: flex; flex-direction: column; text-align: right; line-height: 1.2; }
@@ -334,15 +337,12 @@ td {
 
 /* Logout Button */
 .menu-logout-style-btn {
-  background: rgba(255, 71, 87, 0.2);
-  backdrop-filter: blur(10px);
-  color: #ff6b6b;
-  border: 1px solid rgba(255, 71, 87, 0.4);
-  padding: 8px 18px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
+  margin-right: 5px;       /* ညာဘက်ကို နည်းနည်း ထပ်တိုးချင်ရင် ဒါလေး ညှိပါ */
+  align-self: flex-end;    /* သူ့ချည်းပဲ ညာဘက်ကို အသေကပ်ခိုင်းတာ */
+  padding: 6px 18px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  /* background color နဲ့ တခြား style တွေက အရင်အတိုင်းပဲ ထားပါ */
 }
 
 .menu-logout-style-btn:hover {
