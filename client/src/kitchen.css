@@ -1,10 +1,43 @@
+/* ===== KITCHEN PAGE FULL THEME (GLASSMORPHISM) ===== */
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --accent-blue: #4facfe;
+  --accent-cyan: #00f2fe;
+  --white: #ffffff;
+  --danger: #ff4757;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+
 .kitchen-page {
-  background: #0f172a;
+  /* Background Login နဲ့ တူအောင် ထည့်ထားတယ် */
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+              url('bg-kitchen.png') no-repeat center center/cover;
+  background-attachment: fixed;
   color: white;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   padding: 20px;
   position: relative;
+  overflow-x: hidden;
+}
+
+/* Glass Blur Overlay */
+.kitchen-page::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 0;
+}
+
+/* Ensure all content sits above the overlay */
+.status-indicator, .kitchen-central-header, .summary-pills, .tab-group-center, .kitchen-split-view {
+  position: relative;
+  z-index: 1;
 }
 
 /* --- Stability Status Indicator --- */
@@ -16,15 +49,15 @@
   padding: 6px 14px;
   border-radius: 20px;
   font-weight: bold;
-  z-index: 100;
+  backdrop-filter: blur(10px);
 }
 .status-indicator.online { 
-  color: #10b981; 
+  color: var(--success); 
   background: rgba(16, 185, 129, 0.15); 
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 .status-indicator.offline { 
-  color: #ef4444; 
+  color: var(--danger); 
   background: rgba(239, 68, 68, 0.15); 
   border: 1px solid rgba(239, 68, 68, 0.3);
   animation: blink 1s infinite; 
@@ -42,7 +75,9 @@
   font-size: 2.2rem;
   letter-spacing: 2px;
   margin-bottom: 15px;
-  color: #f8fafc;
+  font-weight: 800;
+  color: var(--white);
+  text-transform: uppercase;
 }
 
 .stats-row {
@@ -53,16 +88,17 @@
 }
 
 .revenue-chip, .active-chip {
-  background: #1e293b;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
   padding: 8px 18px;
   border-radius: 50px;
-  border: 1px solid #334155;
+  border: 1px solid var(--glass-border);
   color: #94a3b8;
   font-size: 0.9rem;
 }
 
-.revenue-chip span { color: #10b981; font-weight: bold; }
-.active-chip span { color: #3b82f6; font-weight: bold; }
+.revenue-chip span { color: var(--success); font-weight: bold; }
+.active-chip span { color: var(--accent-blue); font-weight: bold; }
 
 /* --- Quantity Summary Pills --- */
 .summary-pills {
@@ -74,14 +110,16 @@
   max-width: 900px;
   margin-inline: auto;
   padding: 15px;
-  background: rgba(30, 41, 59, 0.5);
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
   border-radius: 12px;
+  border: 1px solid var(--glass-border);
 }
 
 .summary-pill {
   background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  color: #60a5fa;
+  border: 1px solid var(--glass-border);
+  color: var(--accent-cyan);
   padding: 6px 14px;
   border-radius: 8px;
   font-size: 14px;
@@ -94,23 +132,25 @@
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .tab-group-center button {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   color: #94a3b8;
   padding: 10px 22px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
+  backdrop-filter: blur(10px);
 }
 
 .tab-group-center button.active {
-  background: #3b82f6;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
   color: white;
-  border-color: #3b82f6;
+  border-color: transparent;
   box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
@@ -123,20 +163,22 @@
 }
 
 .column {
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
   border-radius: 15px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(51, 65, 85, 0.5);
+  border: 1px solid var(--glass-border);
 }
 
 .col-title {
   margin-bottom: 15px;
   font-size: 1.1rem;
-  border-bottom: 2px solid #334155;
+  border-bottom: 2px solid var(--glass-border);
   padding-bottom: 10px;
-  color: #cbd5e1;
+  color: var(--accent-cyan);
+  font-weight: bold;
 }
 
 .order-scroll-area {
@@ -147,22 +189,27 @@
 
 /* --- Order Cards --- */
 .modern-card {
-  background: #1e293b;
-  border-left: 5px solid #3b82f6;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-left: 5px solid var(--accent-blue);
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 15px;
   transition: transform 0.2s ease, background 0.3s ease;
 }
 
-.modern-card:hover { transform: translateY(-2px); }
-.modern-card.cooking { border-left-color: #f59e0b; }
-.modern-card.done { border-left-color: #10b981; opacity: 0.7; }
+.modern-card:hover { 
+  transform: translateY(-2px); 
+  background: rgba(255, 255, 255, 0.12);
+}
 
-/* Warning State for long waiting time */
+.modern-card.cooking { border-left-color: var(--warning); }
+.modern-card.done { border-left-color: var(--success); opacity: 0.6; }
+
 .modern-card.warning {
-  border-left: 5px solid #ef4444;
-  background: rgba(69, 10, 10, 0.2);
+  border-left: 5px solid var(--danger);
+  background: rgba(255, 71, 87, 0.1);
 }
 
 .m-card-header {
@@ -172,79 +219,10 @@
   margin-bottom: 12px;
 }
 
-.m-order-id { font-weight: bold; color: #3b82f6; font-size: 1.1rem; }
-.m-table { background: #334155; padding: 2px 10px; border-radius: 4px; font-size: 0.9rem; }
-.m-type { font-size: 10px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-.m-type.eat { background: #059669; }
-.m-type.takeaway { background: #7c3aed; }
-.m-type.delivery { background: #db2777; }
+.m-order-id { font-weight: bold; color: var(--accent-cyan); font-size: 1.1rem; }
+.m-table { background: var(--glass-bg); padding: 2px 10px; border-radius: 4px; font-size: 0.9rem; border: 1px solid var(--glass-border); }
 
-/* Timer Display */
-.wait-timer {
-  font-size: 13px;
-  color: #94a3b8;
-}
-.wait-timer.danger {
-  color: #fbbf24;
-  font-weight: bold;
-}
-
-.m-items { 
-  margin-bottom: 15px; 
-  border-top: 1px solid #334155; 
-  padding-top: 10px; 
-}
-.m-item-row { 
-  margin-bottom: 6px; 
-  font-size: 0.95rem; 
-}
-.m-item-row b { color: #3b82f6; margin-right: 5px; }
-
-.m-footer { display: flex; gap: 10px; }
-.m-footer button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  background: #475569;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-
-
-.m-footer button:hover { opacity: 0.9; }
-.m-footer button.finish { background: #10b981; }
-.m-footer button.cancel { background: #d40f20; }
-
-/* --- Notification Toast --- */
-.order-notification-toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: #10b981;
-  color: white;
-  padding: 16px 28px;
-  border-radius: 12px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-  z-index: 1000;
-  animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-weight: bold;
-}
-
-@keyframes slideIn {
-  from { transform: translateX(120%); }
-  to { transform: translateX(0); }
-}
-
-/* Scrollbar Styling */
-.order-scroll-area::-webkit-scrollbar { width: 6px; }
-.order-scroll-area::-webkit-scrollbar-track { background: transparent; }
-.order-scroll-area::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-
-/* Order Type Badges (Eat/Takeaway/Delivery) */
+/* Order Type Badges */
 .m-type {
   padding: 2px 10px;
   border-radius: 6px;
@@ -272,7 +250,7 @@
   border: 1px solid rgba(219, 39, 119, 0.4);
 }
 
-/* Timer Style */
+/* Timer Display */
 .wait-timer {
   font-size: 13px;
   color: #94a3b8;
@@ -284,9 +262,8 @@
   gap: 5px;
 }
 
-/* ၁၅ မိနစ်ကျော်သွားရင် အရောင်ပြောင်းရန် */
 .wait-timer.danger {
-  color: #fbbf24;
+  color: var(--warning);
   font-weight: bold;
   animation: pulse 2s infinite;
 }
@@ -296,10 +273,74 @@
   50% { opacity: 0.6; }
   100% { opacity: 1; }
 }
-.kitchen-.logout-btn {
-  background-color: #ff4d4d; /* Menu Page ပုံစံ အနီရောင် */
+
+.m-items { 
+  margin-bottom: 15px; 
+  border-top: 1px solid var(--glass-border); 
+  padding-top: 10px; 
+}
+.m-item-row { 
+  margin-bottom: 6px; 
+  font-size: 0.95rem; 
+}
+.m-item-row b { color: var(--accent-blue); margin-right: 5px; }
+
+/* Buttons */
+.m-footer { display: flex; gap: 10px; }
+.m-footer button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
   color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.m-footer button:hover { background: rgba(255,255,255,0.2); }
+.m-footer button.finish { 
+  background: linear-gradient(135deg, #10b981, #059669); 
   border: none;
+}
+.m-footer button.cancel { 
+  background: rgba(255, 71, 87, 0.2); 
+  border-color: rgba(255, 71, 87, 0.4);
+  color: #ff6b6b;
+}
+
+/* --- Notification Toast --- */
+.order-notification-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--success);
+  color: white;
+  padding: 16px 28px;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  z-index: 1000;
+  animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: bold;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(120%); }
+  to { transform: translateX(0); }
+}
+
+/* Scrollbar Styling */
+.order-scroll-area::-webkit-scrollbar { width: 6px; }
+.order-scroll-area::-webkit-scrollbar-track { background: transparent; }
+.order-scroll-area::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+
+/* Logout Button */
+.kitchen-logout-btn {
+  background: rgba(255, 71, 87, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 71, 87, 0.4);
   padding: 8px 16px;
   border-radius: 8px;
   font-weight: bold;
@@ -308,16 +349,19 @@
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-right: 15px; /* Profile block နဲ့ ခွာထားဖို့ */
-  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.2);
+  margin-right: 15px;
+  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.1);
 }
 
 .kitchen-logout-btn:hover {
-  background-color: #ff3333;
-  transform: scale(1.05); /* Hover လုပ်ရင် နည်းနည်း ကြီးလာမယ် */
+  background: var(--danger);
+  transform: scale(1.05);
 }
 
-.kitchen-logout-btn:active {
-  transform: scale(0.95);
+/* Responsive Fix */
+@media (max-width: 1024px) {
+  .kitchen-split-view {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
 }
-
