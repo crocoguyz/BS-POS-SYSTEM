@@ -21,18 +21,17 @@
 
 /* Sidebar (Glass Style) */
 .admin-sidebar {
-  width: 260px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid var(--glass-border);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  justify-content: space-between;
-  z-index: 10;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    justify-content: flex-start; /* Nav တွေကို အပေါ်ဘက်ကို စုတင်လိုက်တာပါ */
 }
 
 .admin-logo {
@@ -62,6 +61,13 @@
     margin-top: 8px;
     font-weight: 500;
     display: block; /* Management System ကို အောက်ဆုံးတန်း ပို့ဖို့ */
+}
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Tab တစ်ခုနဲ့တစ်ခုကြား အကွာအဝေး (အပေါ်အောက် ချဲလိုက်တာပါ) */
+    flex-grow: 0; /* အောက်ကို အရမ်းဆွဲမချအောင် 0 ထားပါတယ် */
+    margin-top: 10px; /* Logo နဲ့ နည်းနည်း ပိုခွာချင်ရင် */
 }
 
 .admin-nav button {
