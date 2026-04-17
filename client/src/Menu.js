@@ -140,7 +140,7 @@ export default function Menu({ onLogout }) {
   return (
     <div className="menu-container">
       <div className="menu-header">
-  <h2>Our Menu</h2>
+  
 
   <button className="logout-btn-simple" onClick={onLogout}>
     🚪 Logout

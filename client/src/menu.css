@@ -83,7 +83,7 @@ body {
 
 .category-tabs button.active { 
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-  color: white; 
+  color: rgb(24, 23, 23); 
   border-color: transparent;
   box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
 }
@@ -135,7 +135,7 @@ body {
   position: absolute; bottom: 12px; right: 12px;
   width: 35px; height: 35px; border-radius: 50%; border: none;
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-  color: white; font-size: 20px; cursor: pointer;
+  color: rgb(10, 10, 10); font-size: 20px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: 0.2s;
 }
@@ -144,20 +144,25 @@ body {
 
 /* ===== LOGOUT BUTTON (Matching Login Style) ===== */
 .logout-btn-simple {
-  background: rgba(255, 71, 87, 0.8);
+   background: rgba(255, 71, 87, 0.15);
   backdrop-filter: blur(10px);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 8px 18px;
-  border-radius: 10px;
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
+  transition: all 0.2s ease;
+  margin-right: 15px;
+  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.1);
 }
 
 .logout-btn-simple:hover {
-  background: #ff4757;
-  box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+  background: var(--danger);
+  transform: scale(1.05);
 }
 
 /* ===== FLOATING BOTTOM BAR ===== */
@@ -167,7 +172,7 @@ body {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(25px);
   border: 1px solid var(--glass-border);
-  color: white;
+  color: rgb(8, 8, 8);
   display: flex; justify-content: space-between; align-items: center;
   padding: 15px 25px; border-radius: 50px; 
   box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 999;
@@ -175,7 +180,7 @@ body {
 
 .view-order-btn {
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-  color: white; border: none; 
+  color: rgb(8, 8, 8); border: none; 
   padding: 10px 20px; border-radius: 25px; 
   font-weight: 700; cursor: pointer;
   box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
