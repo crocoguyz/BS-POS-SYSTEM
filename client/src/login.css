@@ -1,13 +1,18 @@
 /* ===== BACKGROUND ===== */
 .login-container {
-  position: relative;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* ၁။ Website တစ်ခုလုံးအတွက် နောက်ခံပုံ */
+    /* ပုံကို နည်းနည်းမှောင်သွားအောင် black overlay အုပ်ထားပါတယ် */
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                url('/bg-kitchen.png') no-repeat center center/cover;
+    background-attachment: fixed;
 }
+
 
 /* 🔥 DARK GLASS OVERLAY */
 .bg-overlay {
