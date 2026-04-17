@@ -52,6 +52,19 @@ function App() {
 
     return children;
   };
+  
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url(${process.env.PUBLIC_URL + "/bg-kitchen.png"})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* your routes / login */}
+    </div>
+  );
 
   return (
     <Router>
@@ -107,18 +120,7 @@ function App() {
       </Routes>
     </Router>
   );
-   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `url(${process.env.PUBLIC_URL + "/bg-kitchen.png"})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* your routes / login */}
-    </div>
-  );
+  
 }
 
 export default App;
