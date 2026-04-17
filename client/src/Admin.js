@@ -159,7 +159,7 @@ export default function Admin({ user, onLogout }) {
   return (
     <div className="admin-container">
       <aside className="admin-sidebar">
-        <div className="admin-logo"><h2>BS <span>POS</span></h2></div>
+        <div className="admin-logo"><h2>Restaurant<span>POS</span></h2></div>
         <nav className="admin-nav">
           <button className={activeTab === "dashboard" ? "active" : ""} onClick={() => setActiveTab("dashboard")}><LayoutDashboard size={20} /> Dashboard</button>
           <button className={activeTab === "cashier" ? "active" : ""} onClick={() => setActiveTab("cashier")}><ShoppingBag size={20} /> Cashier / Orders</button>
