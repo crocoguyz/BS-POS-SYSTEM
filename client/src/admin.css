@@ -35,14 +35,33 @@
   z-index: 10;
 }
 
-.admin-logo h2 { 
-  font-size: 1.5rem; 
-  background: linear-gradient(to right, var(--accent-blue), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 40px; 
-  text-align: center; 
-  font-weight: 800;
+.admin-logo {
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 30px; /* Logo နဲ့ Nav ကြား ခြားထားဖို့ */
+}
+
+.admin-logo h2 {
+    font-size: 1.4rem;
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    flex-direction: column; /* RESTAURANT နဲ့ POS ကို အပေါ်အောက် ထားဖို့ */
+}
+
+.admin-logo .sub-title {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    font-weight: 500;
+    display: block; /* Management System ကို အောက်ဆုံးတန်း ပို့ဖို့ */
 }
 
 .admin-nav button {
