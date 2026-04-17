@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Lock, User, LogIn } from "lucide-react";
 import axios from "axios"; // axios ကို သုံးမယ်
 import "./login.css";
-import bgImage from "/bg-kitchen.png";
+
 
 export default function Login({ onLogin }) {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
