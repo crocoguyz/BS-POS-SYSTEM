@@ -33,40 +33,49 @@ export default function Login({ onLogin }) {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="login-logo">
-  <h1 className="main-title">RESTAURANT</h1>
-  <h2 className="sub-title"><span>POS</span></h2>
-  <p className="tagline">Management System</p>
-</div>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <User size={20} className="input-icon" />
-            <input 
-              type="text" 
-              placeholder="Username" 
-              value={credentials.username}
-              onChange={(e) => setCredentials({...credentials, username: e.target.value})}
-              required 
-            />
-          </div>
-          <div className="input-group">
-            <Lock size={20} className="input-icon" />
-            <input 
-              type="password" 
-              placeholder="Password" 
-              value={credentials.password}
-              onChange={(e) => setCredentials({...credentials, password: e.target.value})}
-              required 
-            />
-          </div>
-          {error && <p className="error-text" style={{ color: 'red', fontSize: '14px', marginBottom: '10px' }}>{error}</p>}
-          <button type="submit" className="login-btn" disabled={loading}>
-            <LogIn size={18} /> {loading ? "ခဏစောင့်ပါ..." : "Login"}
-          </button>
-        </form>
+  <div className="login-container">
+    {/* 🔥 Background Overlay */}
+    <div className="bg-overlay"></div>
+
+    <div className="login-box">
+      <div className="login-logo">
+        <h1 className="main-title">Restaurant POS</h1>
+        <p className="tagline">Management System</p>
       </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="input-group">
+          <User size={20} className="input-icon" />
+          <input 
+            type="text" 
+            placeholder="Employee ID"
+            value={credentials.username}
+            onChange={(e) =>
+              setCredentials({ ...credentials, username: e.target.value })
+            }
+          />
+        </div>
+
+        <div className="input-group">
+          <Lock size={20} className="input-icon" />
+          <input 
+            type="password" 
+            placeholder="Password"
+            value={credentials.password}
+            onChange={(e) =>
+              setCredentials({ ...credentials, password: e.target.value })
+            }
+          />
+        </div>
+
+        {error && <p className="error-text">{error}</p>}
+
+        <button className="login-btn" disabled={loading}>
+          <LogIn size={18} />
+          {loading ? "Loading..." : "Log In"}
+        </button>
+      </form>
     </div>
-  );
+  </div>
+);
 }
