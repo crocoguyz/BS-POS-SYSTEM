@@ -6,8 +6,7 @@
   justify-content: center;
   align-items: center;
 
-  /* 🔥 IMAGE BACKGROUND (IMPORTANT) */
- /* background: url("/bg-kitchen.png") center/cover no-repeat;  */
+
 }
 
 /* 🔥 DARK GLASS OVERLAY */
@@ -126,8 +125,8 @@ body {
   margin: 0;
   padding: 0;
 
-  /* 🔥 FULL PAGE BACKGROUND */
-  background: url("/bg-kitchen.png") no-repeat center center fixed;
+  /* ✅ PRODUCTION SAFE */
+  background: url("%PUBLIC_URL%/bg-kitchen.png") no-repeat center center fixed;
   background-size: cover;
 
   font-family: 'Poppins', sans-serif;
