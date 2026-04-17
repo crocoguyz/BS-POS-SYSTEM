@@ -77,15 +77,13 @@
 
 .input-group input {
   width: 100%;
-  padding: 12px 12px 12px 20px;
-
+  padding: 12px 12px 12px 40px;
   border-radius: 10px;
   border: none;
-
   background: rgba(255,255,255,0.2);
   color: white;
-
   outline: none;
+  box-sizing: border-box;
 }
 
 .input-group input::placeholder {
