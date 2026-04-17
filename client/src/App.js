@@ -7,6 +7,18 @@ import Menu from "./Menu";
 import Kitchen from "./Kitchen";
 
 function App() {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url(${process.env.PUBLIC_URL + "/bg-kitchen.png"})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* your routes / login */}
+    </div>
+  );
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // 🔥 FIX 1
 
