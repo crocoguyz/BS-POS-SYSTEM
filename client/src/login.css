@@ -79,15 +79,15 @@
   width: 100%;
   padding: 12px 12px 12px 40px;
   border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Border လေး ထည့်ပါ */
+  background: rgba(255, 255, 255, 0.1); /* Background ကို မှိန်လိုက်ပါ */
   color: white;
   outline: none;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Padding ကြောင့် box ထွက်မလာအောင် */
 }
 
 .input-group input::placeholder {
-  color: #ddd;
+  color: rgba(255, 255, 255, 0.5); /* Placeholder ကို မှိန်မှိန်လေး ထားပါ */
 }
 
 /* ===== BUTTON ===== */
