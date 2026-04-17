@@ -7,7 +7,7 @@
   align-items: center;
 
   /* 🔥 IMAGE BACKGROUND (IMPORTANT) */
-  background: url("client/src/bg-kitchen.png ") center/cover no-repeat;
+  background: url("client/public/bg-kitchen.png ") center/cover no-repeat;
   font-family: 'Poppins', sans-serif;
 }
 
