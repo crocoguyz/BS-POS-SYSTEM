@@ -36,7 +36,8 @@ export default function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-box">
         <div className="login-logo">
-          <h2>RESTAURANT<span>POS</span></h2>
+          <h1>RESTAURANT</h1>
+            <h2></><span>POS</span><h2></>
           <p>Management System</p>
         </div>
         <form onSubmit={handleSubmit}>
