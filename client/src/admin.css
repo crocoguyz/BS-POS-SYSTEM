@@ -336,20 +336,28 @@ td {
 }
 
 /* Logout Button */
-.menu-logout-style-btn {
-  margin-right: 5px;       /* ညာဘက်ကို နည်းနည်း ထပ်တိုးချင်ရင် ဒါလေး ညှိပါ */
-  align-self: flex-end;    /* သူ့ချည်းပဲ ညာဘက်ကို အသေကပ်ခိုင်းတာ */
+.logout-btn-simple {
+   background: rgba(255, 71, 87, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 71, 87, 0.4);
   padding: 6px 18px;
-  font-size: 0.8rem;
   border-radius: 8px;
-  /* background color နဲ့ တခြား style တွေက အရင်အတိုင်းပဲ ထားပါ */
+  font-weight: bold;
+  display: flex;
+  align-self: flex-end;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 5px;
+  box-shadow: 0 4px 6px rgba(255, 77, 77, 0.1);
 }
 
 .menu-logout-style-btn:hover {
-  background: #ff4757;
-  color: white;
+ background: var(--danger);
   transform: scale(1.05);
 }
+
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
