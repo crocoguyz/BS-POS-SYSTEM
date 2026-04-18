@@ -6,25 +6,31 @@ import Admin from "./Admin";
 import Menu from "./Menu";
 import Kitchen from "./Kitchen";
 
-function App() {
- 
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // 🔥 FIX 1
+// ... (imports တွေက အတူတူပဲ)
 
-  // 🔥 restore session
+function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        localStorage.removeItem("user");
+      }
     }
-
-    setLoading(false); // 🔥 wait finish
+    setLoading(false);
   }, []);
 
   const handleLogin = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    // 💡 အရေးကြီး: userData က { success: true, user: { name, role } } လား
+    // ဒါမှမဟုတ် { name, role } တိုက်ရိုက်လားဆိုတာ သေချာအောင် စစ်ပါ
+    const actualUser = userData.user ? userData.user : userData;
+    
+    localStorage.setItem("user", JSON.stringify(actualUser));
+    setUser(actualUser);
   };
 
   const handleLogout = () => {
@@ -32,85 +38,76 @@ function App() {
     setUser(null);
   };
 
-  // 🔥 WAIT UNTIL LOAD FINISH
   if (loading) return <div>Loading...</div>;
 
-  // 🔥 CENTRAL REDIRECT
   const getHome = () => {
     if (!user) return "/login";
-    if (user.role === "kitchen") return "/kitchen";
-    if (user.role === "waiter") return "/menu";
-    if (user.role === "cashier") return "/admin";
-    if (user.role === "admin") return "/admin";
-return "/login";
+    
+    // 💡 စာလုံးအကြီးအသေး မမှားအောင် toLowerCase() သုံးပြီး စစ်တာ အကောင်းဆုံးပါ
+    const role = user.role.toLowerCase();
+
+    if (role === "kitchen") return "/kitchen";
+    if (role === "waiter") return "/menu";
+    if (role === "cashier" || role === "admin" || role === "owner") return "/admin";
+    
+    return "/login";
   };
 
   const ProtectedRoute = ({ children, roles }) => {
     if (!user) return <Navigate to="/login" />;
 
-    if (!roles.includes(user.role)) {
+    // 💡 Role စစ်တဲ့အခါမှာလည်း lowercase နဲ့ စစ်မယ်
+    const userRole = user.role.toLowerCase();
+    const allowedRoles = roles.map(r => r.toLowerCase());
+
+    if (!allowedRoles.includes(userRole)) {
       return <Navigate to={getHome()} />;
     }
 
     return children;
   };
-  
 
   return (
     <Router>
       <Routes>
-
-        {/* LOGIN */}
         <Route
           path="/login"
+          element={!user ? <Login onLogin={handleLogin} /> : <Navigate to={getHome()} />}
+        />
+
+        <Route
+          path="/menu"
           element={
-            !user ? (
-              <Login onLogin={handleLogin} />
-            ) : (
-              <Navigate to={getHome()} />
-            )
+            <ProtectedRoute roles={["waiter"]}>
+              <Menu onLogout={handleLogout} />
+            </ProtectedRoute>
           }
         />
 
-        {/* MENU */}
         <Route
-  path="/menu"
-  element={
-    <ProtectedRoute roles={["waiter"]}>
-      <Menu onLogout={handleLogout} />
-    </ProtectedRoute>
-  }
-/>
+          path="/kitchen"
+          element={
+            <ProtectedRoute roles={["kitchen"]}>
+              <Kitchen onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
 
-<Route
-  path="/kitchen"
-  element={
-    <ProtectedRoute roles={["kitchen"]}>
-      <Kitchen onLogout={handleLogout} />
-    </ProtectedRoute>
-  }
-/>
-
-        {/* ADMIN */}
         <Route
           path="/admin"
           element={
-            <ProtectedRoute roles={["admin", "cashier"]}>
+            // 💡 "owner" role ကိုပါ ထည့်ပေးထားမှ posadmin ဝင်လို့ရမှာပါ
+            <ProtectedRoute roles={["admin", "cashier", "owner"]}>
               <Admin user={user} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />
 
-        {/* ROOT */}
         <Route path="/" element={<Navigate to={getHome()} />} />
-
-        {/* FALLBACK */}
         <Route path="*" element={<Navigate to={getHome()} />} />
-
       </Routes>
     </Router>
   );
-  
 }
 
 export default App;

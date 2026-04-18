@@ -17,7 +17,7 @@ export default function Login({ onLogin }) {
     try {
       // Render Backend Link သို့ data ပို့မယ်
       const response = await axios.post(
-  "http://localhost:5000/login",
+  "http://localhost:5000/api/login",
   credentials
 );
       

@@ -16,11 +16,35 @@ mongoose.connect(mongoURI)
   // index.js ထဲမှာ ထည့်ရန်
 app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
-    // အခုလောလောဆယ် စမ်းဖို့အတွက်ပဲမို့ ပုံသေစစ်ထားတာ
-    if (username === "posadmin" && password === "apmaWBHxuf") {
-        res.json({ success: true, message: "Login successful!" });
-    } else {
+
+    try {
+        // 1. Database (Staff Collection) ထဲမှာ သွားရှာမယ်
+        const user = await Staff.findOne({ name: username, password: password });
+
+        if (user) {
+            // ဝန်ထမ်းနာမည်နဲ့ password မှန်ရင် ဝင်ခွင့်ပေးမယ်
+            return res.json({ 
+                success: true, 
+                message: "Login successful!", 
+                user: { name: user.name, role: user.role } 
+            });
+        } 
+
+        // 2. Database ထဲမှာ မရှိရင် Backup အနေနဲ့ posadmin နဲ့ စစ်မယ်
+        if (username === "posadmin" && password === "apmaWBHxuf") {
+            return res.json({ 
+                success: true, 
+                message: "Login successful!", 
+                user: { name: "System Admin", role: "Owner" } 
+            });
+        }
+
+        // 3. နှစ်ခုလုံး မဟုတ်ရင် မှားတယ်လို့ ပြောမယ်
         res.status(401).json({ success: false, message: "Username သို့မဟုတ် Password မှားနေသည်" });
+
+    } catch (err) {
+        console.error("Login Error:", err);
+        res.status(500).json({ success: false, message: "Server အမှားတစ်ခု ဖြစ်သွားသည်" });
     }
 });
 // ---------------------------------------------------------
