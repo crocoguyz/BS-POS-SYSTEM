@@ -16,12 +16,15 @@ export default function Login({ onLogin }) {
 
     try {
       // Render Backend Link သို့ data ပို့မယ်
-      const response = await axios.post("https://bs-pos-system.onrender.com/api/login", credentials);
+      const response = await axios.post(
+  "http://localhost:5000/login",
+  credentials
+);
       
       // Backend က success ဖြစ်တယ်ဆိုရင်
-      if (response.data && response.data.success) {
+      if (response.data && response.data.role) {
   localStorage.setItem("user", JSON.stringify(response.data.user)); // 🔥 SAVE USER
-  onLogin(response.data.user); // App.js ကို pass
+    onLogin(response.data); // App.js ကို pass
 } else {
         setError("Username သို့မဟုတ် Password မှားနေပါသည်။");
       }

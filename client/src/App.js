@@ -40,7 +40,9 @@ function App() {
     if (!user) return "/login";
     if (user.role === "kitchen") return "/kitchen";
     if (user.role === "waiter") return "/menu";
-    return "/admin";
+    if (user.role === "cashier") return "/admin";
+    if (user.role === "admin") return "/admin";
+return "/login";
   };
 
   const ProtectedRoute = ({ children, roles }) => {
