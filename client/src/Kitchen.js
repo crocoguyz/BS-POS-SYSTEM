@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
 
-const API_BASE = "https://bs-pos-system.onrender.com";
+const API_BASE = "http://localhost:5000";
 const socket = io(API_BASE);
 
 export default function Kitchen({ onLogout }) {

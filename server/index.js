@@ -13,6 +13,16 @@ mongoose.connect(mongoURI)
   .then(() => console.log("✅ MongoDB Connected (Orders & Staff Ready)"))
   .catch(err => console.log("❌ Mongo Error:", err));
 
+  // index.js ထဲမှာ ထည့်ရန်
+app.post("/api/login", async (req, res) => {
+    const { username, password } = req.body;
+    // အခုလောလောဆယ် စမ်းဖို့အတွက်ပဲမို့ ပုံသေစစ်ထားတာ
+    if (username === "posadmin" && password === "apmaWBHxuf") {
+        res.json({ success: true, message: "Login successful!" });
+    } else {
+        res.status(401).json({ success: false, message: "Username သို့မဟုတ် Password မှားနေသည်" });
+    }
+});
 // ---------------------------------------------------------
 // 🟢 1. STAFF MODEL & API
 // ---------------------------------------------------------

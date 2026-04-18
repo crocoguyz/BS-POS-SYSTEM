@@ -19,7 +19,7 @@ import {
 import "./admin.css";
 
 // --- ၁။ API_BASE ကို Render Link သို့ ပြောင်းလိုက်ပါ ---
-const API_BASE = "https://bs-pos-system.onrender.com"; 
+const API_BASE = "http://localhost:5000"; 
 const socket = io(API_BASE);
 
 function MenuEditTab({ menuItems, onUpdate }) {
