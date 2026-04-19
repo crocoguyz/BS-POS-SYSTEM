@@ -6,6 +6,7 @@ import Admin from "./Admin";
 import Menu from "./Menu";
 import Kitchen from "./Kitchen";
 
+
 // ... (imports တွေက အတူတူပဲ)
 
 function App() {
@@ -25,13 +26,28 @@ function App() {
   }, []);
 
   const handleLogin = (userData) => {
-    // 💡 အရေးကြီး: userData က { success: true, user: { name, role } } လား
-    // ဒါမှမဟုတ် { name, role } တိုက်ရိုက်လားဆိုတာ သေချာအောင် စစ်ပါ
+   
     const actualUser = userData.user ? userData.user : userData;
+
+    console.log("App.js received actualUser:", actualUser);
     
+  if (actualUser && actualUser.role) {
+
     localStorage.setItem("user", JSON.stringify(actualUser));
     setUser(actualUser);
+ const role = String(actualUser.role).toLowerCase();
+      if (role === "cashier" || role === "admin" || role === "owner") {
+        window.location.href = "/admin";
+      } else if (role === "waiter") {
+        window.location.href = "/menu";
+      } else if (role === "kitchen") {
+        window.location.href = "/kitchen";
+      }
+    } else {
+      alert("Error: User Role ပါမလာပါ။ Login Logic ကို ပြန်စစ်ပါ");
+    }
   };
+
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -45,6 +61,7 @@ function App() {
     
     // 💡 စာလုံးအကြီးအသေး မမှားအောင် toLowerCase() သုံးပြီး စစ်တာ အကောင်းဆုံးပါ
     const role = user.role.toLowerCase();
+    console.log("Current User Role:", role);
 
     if (role === "kitchen") return "/kitchen";
     if (role === "waiter") return "/menu";
@@ -54,18 +71,24 @@ function App() {
   };
 
   const ProtectedRoute = ({ children, roles }) => {
-    if (!user) return <Navigate to="/login" />;
+  const user = JSON.parse(localStorage.getItem("user"));
 
-    // 💡 Role စစ်တဲ့အခါမှာလည်း lowercase နဲ့ စစ်မယ်
-    const userRole = user.role.toLowerCase();
-    const allowedRoles = roles.map(r => r.toLowerCase());
+  // 1. User မရှိရင် login ကို ပြန်လွှတ်မယ်
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-    if (!allowedRoles.includes(userRole)) {
-      return <Navigate to={getHome()} />;
-    }
+  // 2. Role စစ်မယ် (roles array ထဲမှာ user.role ပါလား ကြည့်မယ်)
+  const userRole = user.role ? user.role.toLowerCase() : "";
+  const isAuthorized = roles.some(role => role.toLowerCase() === userRole);
 
-    return children;
-  };
+  if (!isAuthorized) {
+    // Role မကိုက်ရင် login ကို ပြန်ပို့မယ်
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
 
   return (
     <Router>
@@ -79,7 +102,7 @@ function App() {
           path="/menu"
           element={
             <ProtectedRoute roles={["waiter"]}>
-              <Menu onLogout={handleLogout} />
+              <Menu user={user} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />
@@ -88,7 +111,7 @@ function App() {
           path="/kitchen"
           element={
             <ProtectedRoute roles={["kitchen"]}>
-              <Kitchen onLogout={handleLogout} />
+              <Kitchen user={user} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         />
@@ -111,3 +134,4 @@ function App() {
 }
 
 export default App;
+

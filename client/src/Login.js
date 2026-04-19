@@ -9,28 +9,33 @@ export default function Login({ onLogin }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      // Render Backend Link သို့ data ပို့မယ်
-      const response = await axios.post(
-  "http://localhost:5000/api/login",
-  credentials
-);
+      const response = await axios.post("http://localhost:5000/api/login", credentials);
       
-      // Backend က success ဖြစ်တယ်ဆိုရင်
-      if (response.data && response.data.role) {
-  localStorage.setItem("user", JSON.stringify(response.data.user)); // 🔥 SAVE USER
-    onLogin(response.data); // App.js ကို pass
-} else {
+      console.log("Response from Backend:", response.data); // ဒါကို Console မှာ ကြည့်ပါ
+
+      // 🔥 ပြင်ရမယ့်နေရာ: response.data ထဲမှာ success ပါလာတာကို စစ်ရပါမယ်
+      if (response.data && response.data.success === true) {
+        const userData = response.data.user;
+
+        console.log("Saving User Data:", userData);
+        
+        // LocalStorage ထဲ သိမ်းမယ်
+        localStorage.setItem("user", JSON.stringify(userData)); 
+        
+        // App.js ကို လှမ်းပြောမယ်
+        onLogin(userData); 
+      } else {
         setError("Username သို့မဟုတ် Password မှားနေပါသည်။");
       }
     } catch (err) {
       console.error("Login Error:", err);
-      setError("Server ချိတ်ဆက်မှု အဆင်မပြေပါ။ ခဏနေမှ ပြန်ကြိုးစားကြည့်ပါ။");
+      setError("ချိတ်ဆက်မှု အဆင်မပြေပါ။");
     } finally {
       setLoading(false);
     }

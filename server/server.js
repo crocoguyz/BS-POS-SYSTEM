@@ -2,9 +2,12 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
+const orderRoutes = require("./routes/orders");
 
 const app = express();
 const server = http.createServer(app);
+
+const io = new Server(server, { cors: { origin: "*" } });
 
 // 1. CORS ကို အကုန်ဖွင့်ထားမယ်
 app.use(cors({ origin: "*", credentials: true }));
@@ -55,7 +58,31 @@ app.post("/api/login", (req, res) => {
 // ======================
 // ORDER ROUTES
 // ======================
-app.post("/order", (req, res) => {
+app.get("/api/orders/next-id", async (req, res) => {
+  try {
+    // 1. Database ထဲမှာ အနောက်ဆုံးသွင်းထားတဲ့ Order ကို ရှာမယ်
+    const lastOrder = await Order.findOne().sort({ createdAt: -1 });
+
+    let nextNumber = 1;
+
+    if (lastOrder && lastOrder.orderId) {
+      // 2. ရှိပြီးသား ID (#0002) ထဲက နံပါတ်ကိုပဲ ဆွဲထုတ်မယ်
+      const lastNumber = parseInt(lastOrder.orderId.replace("#", ""));
+      nextNumber = lastNumber + 1;
+    }
+
+    // 3. နံပါတ်သစ်ကို Format ပြန်လုပ်မယ် (e.g., #0003)
+    const formattedId = `#${nextNumber.toString().padStart(4, "0")}`;
+    
+    res.json({ nextId: formattedId });
+  } catch (err) {
+    console.error("Next ID Error:", err);
+    res.status(500).json({ nextId: "#0001" });
+  }
+});
+
+// 2. Order အသစ် သိမ်းတဲ့ API
+app.post("/api/orders", (req, res) => {
   const today = new Date().toDateString();
   if (today !== lastResetDate) {
     orderCount = 0;
@@ -63,7 +90,7 @@ app.post("/order", (req, res) => {
   }
 
   orderCount++;
-  const formattedId = orderCount.toString().padStart(4, "0");
+  const formattedId = `#${orderCount.toString().padStart(4, "0")}`;
 
   const order = {
     id: formattedId,
@@ -74,49 +101,37 @@ app.post("/order", (req, res) => {
 
   orders.push(order);
   
-  // အရေးကြီး: API ကနေပဲ io.emit လုပ်မယ်။ Socket ထဲမှာ ထပ်မလုပ်တော့ဘူး (Double ID မဖြစ်အောင်)
+  // ✅ Kitchen Dashboard ဆီ တန်းလွှင့်မယ်
   io.emit("orderUpdate", order); 
 
   res.json({ success: true, orderId: formattedId, order });
 });
 
-app.post("/order/status", (req, res) => {
+// 3. Status ပြောင်းတဲ့ API
+app.post("/api/orders/status", (req, res) => {
   const { id, status } = req.body;
-
   const index = orders.findIndex(o => o.id === String(id));
 
   if (index !== -1) {
-
-    // 🔴 CANCEL → DELETE ORDER
     if (status === "cancel") {
       const deletedOrder = orders[index];
-
-      // remove from array
       orders.splice(index, 1);
-
-      // notify frontend
       io.emit("orderUpdate", { ...deletedOrder, status: "cancel" });
-
       return res.json({ success: true, message: "Order cancelled" });
     }
-
-    // 🟢 NORMAL UPDATE
     orders[index].status = status;
-
     io.emit("orderUpdate", orders[index]);
-
     return res.json({ success: true });
   }
-
   res.status(404).json({ success: false });
 });
 
-app.get("/orders", (req, res) => res.json(orders));
+app.get("/api/orders", (req, res) => res.json(orders));
 
 // ======================
 // SOCKET SETUP
 // ======================
-const io = new Server(server, { cors: { origin: "*" } });
+
 
 io.on("connection", (socket) => {
   console.log("🔌 Connected:", socket.id);

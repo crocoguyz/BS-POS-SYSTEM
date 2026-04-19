@@ -42,8 +42,8 @@
 
 /* --- Stability Status Indicator --- */
 .status-indicator {
-  position: fixed;
-  top: 20px;
+  position: relative;
+  top: 10px;
   right: 20px;
   font-size: 12px;
   padding: 6px 14px;
@@ -341,7 +341,7 @@
   backdrop-filter: blur(10px);
   color: white;
   border: 1px solid rgba(255, 71, 87, 0.4);
-  padding: 8px 16px;
+  padding: 5px 15px;
   border-radius: 8px;
   font-weight: bold;
   display: flex;
@@ -364,4 +364,13 @@
     grid-template-columns: 1fr;
     height: auto;
   }
+}
+
+.kitchen-user-info {
+  border-left: 1px solid #444;
+  padding-left: 15px;
+}
+
+.kitchen-avatar {
+  box-shadow: 0 0 10px rgba(245, 87, 108, 0.4);
 }

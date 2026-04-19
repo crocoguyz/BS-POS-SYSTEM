@@ -562,3 +562,102 @@ td {
   color: #10b981; 
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Stat Cards */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 5px solid #00ffcc;
+}
+
+/* Mid Section (2 columns) */
+.chart-section, .top-items, .recent-orders, .quick-actions-card {
+  /* 💡 အဖြူရောင်အစား အမည်းရောင် (0,0,0) ကို 0.2 (20%) လောက် သုံးလိုက်ရင် နည်းနည်း ပိုမှောင်သွားမယ် */
+  background: rgba(39, 54, 66, 0.25) !important; 
+  
+  /* 💡 Blur ကို ၁၀ ကနေ ၁၅ သို့မဟုတ် ၂၀ အထိ တင်လိုက်ရင် ပိုနောက်သွားမယ် */
+  backdrop-filter: blur(15px) saturate(150%);
+  -webkit-backdrop-filter: blur(15px) saturate(150%);
+  
+  /* 💡 Border ကို အလင်းဖျော့ဖျော့လေးပဲ ပေးထားမယ် */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.mid-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Quick Actions Card အတွက် သီးသန့် */
+.quick-actions-card {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #00ffcc; /* ဒါက မင်းမူရင်းအတိုင်း ထားပေးထားတယ် */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+}
+
+/* Button တွေက အရမ်းမကပ်အောင် Gap ကို ၁၅ ပေးထားတယ် */
+.action-btns {
+  display: flex;
+  gap: 15px;
+}
+
+.action-btns button {
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.action-btns button:hover {
+  background: #00ffcc;
+  color: #000;
+  border-color: #00ffcc;
+  transform: translateY(-2px); /* Hover လုပ်ရင် နည်းနည်းလေး ကြွလာအောင် */
+}
+
+/* Recent Orders: အရင်အတိုင်း ဘယ်ညာခွာထားတယ် */
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.order-id {
+  color: rgba(0, 255, 204, 0.7); /* ID ကို နည်းနည်းလေး အရောင်လင်းပေးလိုက်တယ် */
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.order-price {
+  font-weight: bold;
+  color: #fff;
+}

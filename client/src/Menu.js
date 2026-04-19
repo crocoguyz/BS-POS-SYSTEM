@@ -3,8 +3,9 @@ import axios from "axios";
 import "./menu.css";
 import { io } from "socket.io-client";
 
-const API_BASE = "http://localhost:5000";
-const socket = io(API_BASE);
+const SERVER_URL = "http://localhost:5000";
+const API_BASE = "http://localhost:5000/api/orders";
+const socket = io(SERVER_URL);
 
 export const menuData = [
   { id: 1, name: "Lahpet Thoke", price: 2500, cat: "Breakfast", img: "breakfast/Lahpetthoke.jpg" },
@@ -26,7 +27,7 @@ export const menuData = [
   { id: 17, name: "Fish Curry 6", price: 6000, cat: "Fish", img: "fish/Fish-6.jpg" },
 ];
 
-export default function Menu({ onLogout }) {
+export default function Menu({ user, onLogout }) {
 
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -105,7 +106,7 @@ export default function Menu({ onLogout }) {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE}/order`, {
+      const res = await axios.post(`${API_BASE}`, {
         table: tableNumber,
         type: orderType,
         items: cart,
@@ -137,37 +138,55 @@ export default function Menu({ onLogout }) {
     }
   };// <--- confirmOrder ပိတ်တာ
 
-  return (
+return (
     <div className="menu-container">
-      <div className="menu-header">
-  
+      {/* --- Header Section --- */}
+      <div className="menu-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px' }}>
+        
+        <button className="logout-btn-simple" onClick={onLogout}>
+          🚪 Logout
+        </button>
 
-  <button className="logout-btn-simple" onClick={onLogout}>
-    🚪 Logout
-  </button>
-</div>
+        {/* User Info ပေါ်မယ့်အပိုင်း */}
+        <div className="user-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'white' }}>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{user ? user.name : "Staff"}</div>
+            <div style={{ fontSize: '11px', opacity: 0.8 }}>{user ? user.role.toUpperCase() : "WAITER"}</div>
+          </div>
+          <div className="avatar" style={{ 
+            background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)', 
+            width: '40px', height: '40px', borderRadius: '50%', 
+            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+            fontWeight: 'bold', border: '2px solid rgba(255,255,255,0.2)' 
+          }}>
+            {user ? user.name[0].toUpperCase() : "W"}
+          </div>
+        </div>
+      </div>
+
+      {/* --- Title --- */}
       <h1 className="title" style={{ 
-  fontSize: '2.8rem',      // စာသားကို အကြီးကြီးနဲ့ လန်းအောင်လုပ်တာ
-  marginBottom: '40px',    // Search bar နဲ့ ဝေးဝေးခွာထားမယ်
-  fontWeight: '800',
-  letterSpacing: '2px'
-}}>
-  RESTAURANT MENU
-</h1>
+        fontSize: '2.8rem', 
+        textAlign: 'center',
+        margin: '20px 0 40px 0', 
+        fontWeight: '800',
+        letterSpacing: '2px',
+        color: '#fff'
+      }}>
+        RESTAURANT MENU
+      </h1>
 
       {/* Success Animation Modal */}
       {showSuccess && (
-  <div className="success-overlay">
-    <div className="success-card">
-      <div className="check-icon">✓</div>
-      <h2>Order Successful!</h2>
-      {/* ဒီနေရာမှာ currentOrderId ကို သုံးပါ */}
-      <p>Your Order ID: {currentOrderId}</p> 
-      <p>မီးဖိုချောင်သို့ Order ပို့ပြီးပါပြီ။</p>
-    </div>
-  </div>
-)}
-
+        <div className="success-overlay">
+          <div className="success-card">
+            <div className="check-icon">✓</div>
+            <h2>Order Successful!</h2>
+            <p>Your Order ID: {currentOrderId}</p> 
+            <p>မီးဖိုချောင်သို့ Order ပို့ပြီးပါပြီ။</p>
+          </div>
+        </div>
+      )}
       <input className="search-bar" placeholder="Search dishes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
       <div className="category-tabs">
@@ -274,5 +293,6 @@ export default function Menu({ onLogout }) {
         </div>
       )}
     </div>
-  )
+  );
 }
+

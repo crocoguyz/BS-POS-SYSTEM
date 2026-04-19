@@ -3,10 +3,16 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
 
-const API_BASE = "http://localhost:5000";
-const socket = io(API_BASE);
+const SERVER_URL = "http://localhost:5000"; // Socket အတွက်
+const API_BASE = "http://localhost:5000/api"; // Axios (Database) အတွက်
 
-export default function Kitchen({ onLogout }) {
+const socket = io(SERVER_URL, {
+  transports: ["websocket", "polling"] // Connection ပိုမြဲအောင် ဒါလေး ထည့်ပေးပါ
+});
+
+export default function Kitchen({ user: propUser, onLogout }) {
+  // Prop ကနေမလာရင် localStorage ကနေ ရှာမယ်
+  const user = propUser || JSON.parse(localStorage.getItem("user"));
   const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState("all");
   const [newOrderNoti, setNewOrderNoti] = useState(null);
@@ -62,9 +68,9 @@ export default function Kitchen({ onLogout }) {
     });
 
     // updateOrder event လာရင်လည်း အလုပ်လုပ်အောင် orderUpdate ဆီ ပြန်ပို့ပေးလိုက်တာပါ
-    // socket.on("updateOrder", (data) => {
-    //   socket.emit("orderUpdate", data); 
-    // });
+    socket.on("updateOrder", (data) => {
+      socket.emit("orderUpdate", data); 
+    });
 
     return () => {
       clearInterval(timerInterval);
@@ -84,7 +90,7 @@ export default function Kitchen({ onLogout }) {
   };
 
   const showNotification = (order) => {
-    setNewOrderNoti(`New Order: #${order.id} (Table ${order.table})`);
+    setNewOrderNoti(`New Order: #${order.Id} (Table ${order.table})`);
     if (audioPlayer.current) {
       audioPlayer.current.play().catch(() => console.warn("Autoplay blocked"));
     }
@@ -103,12 +109,11 @@ export default function Kitchen({ onLogout }) {
     console.log("Updating Status for ID:", id); 
 
     try {
-      const res = await axios.post(`${API_BASE}/order/status`, { id, status });
+      const res = await axios.post(`${API_BASE}/orders/status`, { id, status });
       
       if (res.data.success) {
         // ၁။ Server ကနေတဆင့် Admin နဲ့ တခြား page တွေကို အချက်ပေးမယ်
-        socket.emit("updateOrder", { id, status });
-
+        socket.emit("updateOrder", res.data.updatedOrder || { orderId: id, status });
         // ၂။ ကိုယ့် screen မှာတင် list ထဲကနေ တန်းပြောင်းသွားအောင် (သို့) ပျောက်သွားအောင် လုပ်မယ်
         setOrders((prev) => 
           prev.map((o) => {
@@ -162,23 +167,73 @@ const getWaitingTime = (order) => {
     .filter(o => o.status === "paid")
     .reduce((sum, o) => sum + (Number(o.total) || 0), 0);
 
-  return (
+return (
     <div className="kitchen-page">
       <audio ref={audioPlayer} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" />
-      
-      <div className={`status-indicator ${isConnected ? 'online' : 'offline'}`}>
-        {isConnected ? "● Connected" : "● Disconnected"}
-      </div>
 
       <header className="kitchen-central-header">
         <h1>KITCHEN DASHBOARD</h1>
-        <div className="stats-row">
-          <div className="active-chip">Pending Orders: <span>{activeOrders.length}</span></div>
-          <button className="kitchen-logout-btn" onClick={onLogout}>
-      🚪 Logout
-    </button>
-        </div>
+        
+        <div className="stats-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+          {/* Pending Orders Chip */}
+          <div className="active-chip">
+            Pending Orders: <span>{activeOrders.length}</span>
+          </div>
 
+          <div className="header-right-stack" style={{ 
+    position: 'absolute', 
+    top: '20px', 
+    right: '20px', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'flex-end', 
+    gap: '10px' 
+    
+  }}>
+      {/* ၁။ Connected Status */}
+    <div className={`status-indicator-inline ${isConnected ? 'online' : 'offline'}`} style={{
+      fontSize: '12px',
+      fontWeight: 'bold',
+      padding: '4px 10px',
+      borderRadius: '15px',
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: '20px',
+      gap: '5px',
+      background: 'rgba(0, 0, 0, 0.4)',
+      color: isConnected ? '#3fc988' : '#ff4b2b',
+      border: `1px solid ${isConnected ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 75, 43, 0.3)'}`
+    }}>
+      <span>●</span> {isConnected ? "Connected" : "Disconnected"}
+    </div>
+     {/* ၃။ Logout Button */}
+    <button className="kitchen-logout-btn" onClick={onLogout}>
+          🚪 Logout
+        </button>
+    
+  
+
+    {/* ၂။ User Profile Block */}
+    <div className="user-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ textAlign: 'right' }}>
+        <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>{user ? user.name : "Chef"}</div>
+        <div style={{ fontSize: '11px', color: '#00f2fe', fontWeight: 'bold' }}>{user ? user.role.toUpperCase() : "KITCHEN"}</div>
+      </div>
+      <div className="avatar" style={{ 
+        background: 'linear-gradient(135deg, #00f2fe 0%, #f093fb 100%)', 
+        width: '35px', height: '35px', borderRadius: '50%', 
+        display: 'flex', alignItems: 'center', justifyContent: 'center', 
+        fontWeight: 'bold', color: 'black', border: '1px solid rgba(255,255,255,0.2)' 
+      }}>
+        {user ? user.name[0].toUpperCase() : "K"}
+      </div>
+    </div>
+
+   
+  </div>
+  </div>
+
+        {/* Summary Pills */}
         {getSummary().length > 0 && (
           <div className="summary-pills">
             {getSummary().map(([name, qty]) => (
@@ -187,6 +242,7 @@ const getWaitingTime = (order) => {
           </div>
         )}
 
+        {/* Tab Groups */}
         <div className="tab-group-center">
           {["all", "eat", "takeaway", "delivery"].map((t) => (
             <button key={t} className={tab === t ? "active" : ""} onClick={() => setTab(t)}>
@@ -201,38 +257,40 @@ const getWaitingTime = (order) => {
           <h2 className="col-title">🔥 Active Orders</h2>
           <div className="order-scroll-area">
   {activeOrders.map((order) => {
-    // ၁။ တွက်ချက်တဲ့အပိုင်း (order တစ်ခုလုံးကို ပို့ပေးပါ)
-    const wait = getWaitingTime(order); 
+  const wait = getWaitingTime(order); 
 
-    return (
-    
-      <div className={`modern-card ${order.status} ${wait.isLate ? 'warning' : ''}`} key={order.id}>
-        <div className="m-card-header">
-          <span className="m-order-id">#{order.id}</span>
-          {/* ၂။ Timer ပြတဲ့အပိုင်း (wait ထဲက mins နဲ့ secs ကို ပြန်ယူသုံးပါ) */}
-          <div className={`wait-timer ${wait.isLate ? 'danger' : ''}`}>
-            ⏳ {wait.mins}m {wait.secs}s
-          </div>
-          
-          
-          <span className={`m-type ${order.type?.toLowerCase() || 'eat'}`}>
-            {order.type?.toUpperCase() || 'EAT'}
-          </span>
-          <span className="m-table">Table-{order.table}</span>
+  return (
+    // ၁။ key မှာ orderId (i-အသေး၊ d-အသေး) ကို သုံးပါ
+    <div className={`modern-card ${order.status} ${wait.isLate ? 'warning' : ''}`} key={order.orderId}>
+      <div className="m-card-header">
+        {/* ၂။ Display ပြတဲ့နေရာမှာ order.orderId လို့ ပြင်ပါ */}
+        <span className="m-order-id">#{order.orderId}</span>
+        
+        <div className={`wait-timer ${wait.isLate ? 'danger' : ''}`}>
+          ⏳ {wait.mins}m {wait.secs}s
         </div>
-                  <div className="m-items">
-                    {order.items?.map((i, idx) => (
-                      <div key={idx} className="m-item-row"><b>{i.qty}x</b> {i.name}</div>
-                    ))}
-                  </div>
-                  <div className="m-footer">
-              <button onClick={() => updateStatus(order.id, "cooking")}>Start Cooking</button>
-        <button className="cancel" onClick={() => updateStatus(order._id || order.id, "cancel")}>Cancel Order</button>
-                    <button className="finish" onClick={() => updateStatus(order._id || order.id, "done")}>Finish</button>
-                  </div>
-                </div>
-              );
-            })}
+        
+        <span className={`m-type ${order.type?.toLowerCase() || 'eat'}`}>
+          {order.type?.toUpperCase() || 'EAT'}
+        </span>
+        <span className="m-table">Table-{order.table}</span>
+      </div>
+
+      <div className="m-items">
+        {order.items?.map((i, idx) => (
+          <div key={idx} className="m-item-row"><b>{i.qty}x</b> {i.name}</div>
+        ))}
+      </div>
+
+      <div className="m-footer">
+        {/* ၃။ Button တွေမှာ ပို့မယ့် ID ကို order.orderId လို့ ပြောင်းပါ */}
+        <button onClick={() => updateStatus(order.orderId, "cooking")}>Start Cooking</button>
+        <button className="cancel" onClick={() => updateStatus(order.orderId, "cancel")}>Cancel Order</button>
+        <button className="finish" onClick={() => updateStatus(order.orderId, "done")}>Finish</button>
+      </div>
+    </div>
+  );
+})}
           </div>
         </section>
 
@@ -240,9 +298,9 @@ const getWaitingTime = (order) => {
           <h2 className="col-title">✅ Completed</h2>
           <div className="order-scroll-area">
             {completedOrders.map((order) => (
-              <div className="modern-card mini done" key={order.id}>
+              <div className="modern-card mini done" key={order.Id}>
                 <div className="m-card-header">
-                  <span>#{order.id} (T-{order.table})</span>
+                  <span>#{order.Id} (T-{order.table})</span>
                   <span className="m-price">{Number(order.total).toLocaleString()} MMK</span>
                 </div>
               </div>
