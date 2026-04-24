@@ -55,7 +55,7 @@ function App() {
     const savedUser = JSON.parse(localStorage.getItem("user"));
 
     if (savedUser?.name) {
-      await fetch("https://bs-pos-system-1.onrender.com/api/logout", {
+      await fetch("https://bs-pos-system.onrender.com/api/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -3,7 +3,7 @@ import axios from "axios";
 import "./menu.css";
 import { io } from "socket.io-client";
 
-const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system-1.onrender.com";
+const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
 const API_BASE = `${SERVER_URL}/api/orders`
 const socket = io(SERVER_URL);
 
@@ -237,7 +237,7 @@ return (
 >
   <div className="img-container">
     <img
-      src={`https://bs-pos-system-1.onrender.com${item.image}`}
+      src={`https://bs-pos-system.onrender.com${item.image}`}
       alt={item.name}
       style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "10px" }}
       onError={(e) => {

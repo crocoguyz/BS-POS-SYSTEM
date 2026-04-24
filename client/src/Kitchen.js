@@ -3,10 +3,10 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
 
-const SERVER_URL = "https://bs-pos-system-1.onrender.com"; // Socket အတွက်
-const API_BASE = "https://bs-pos-system-1.onrender.com/api"; // Axios (Database) အတွက်
+const SERVER_URL = "https://bs-pos-system.onrender.com"; // Socket အတွက်
+const API_BASE = "https://bs-pos-system.onrender.com/api"; // Axios (Database) အတွက်
 
-const socket = io("https://bs-pos-system-1.onrender.com", {
+const socket = io("https://bs-pos-system.onrender.com", {
   transports: ["polling", "websocket"],
   reconnection: true,
 });

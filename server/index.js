@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // 3. MongoDB Connection
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = "process.env.MONGO_URI;"
 
 mongoose.connect(mongoURI)
   .then(() => console.log("✅ MongoDB Connected"))
