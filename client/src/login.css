@@ -121,6 +121,92 @@
 .error-text {
   font-size: 13px;
   margin-bottom: 10px;
-  color: #ff6b6b;
+  color: #2c2121;
 }
 
+/* ===== LOGIN MOBILE FIX ===== */
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+
+  .login-page {
+    width: 100%;
+    min-height: 100dvh;
+    padding: 24px 16px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-box,
+  .login-card,
+  .login-container {
+    width: min(92vw, 420px) !important;
+    max-width: 420px !important;
+    min-width: 0 !important;
+    padding: 34px 24px !important;
+    box-sizing: border-box;
+    border-radius: 28px !important;
+  }
+
+  .login-box h1,
+  .login-card h1,
+  .login-container h1 {
+    font-size: 34px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .login-box h2,
+  .login-card h2,
+  .login-container h2,
+  .login-subtitle {
+    font-size: 20px !important;
+    text-align: center;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* ✅ stop mobile zoom */
+  }
+
+  .input-group,
+  .login-input,
+  .login-field {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .login-btn,
+  .login-button,
+  button[type="submit"] {
+    width: 100% !important;
+    min-height: 56px;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .login-box,
+  .login-card,
+  .login-container {
+    width: 94vw !important;
+    padding: 28px 18px !important;
+  }
+
+  .login-box h1,
+  .login-card h1,
+  .login-container h1 {
+    font-size: 30px !important;
+  }
+}

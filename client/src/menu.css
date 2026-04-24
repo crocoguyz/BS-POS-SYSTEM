@@ -491,22 +491,17 @@ body {
     padding: 12px;
   }
 
-  .menu-card {
-    width: 100%;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  .menu-card h4 {
+   .menu-card h4 {
     font-size: 16px;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    line-height: 1.25;
 
-  .menu-card p {
-    font-size: 17px;
+    /* title အပြည့်ပေါ်အောင် */
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+
+    min-height: 44px;
+    margin: 12px 0 6px;
   }
 
   .img-container img {
@@ -519,13 +514,38 @@ body {
     min-width: 48px;
   }
 
-  .bottom-bar {
-    position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: calc(14px + env(safe-area-inset-bottom));
-    z-index: 2000;
-    border-radius: 18px;
+    .bottom-bar {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+
+    width: auto !important;
+    max-width: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px;
+
+    padding: 14px 16px !important;
+    border-radius: 20px;
+    z-index: 9999;
+  }
+
+  .bottom-bar div {
+    flex: 1;
+    min-width: 0;
+    font-size: 17px;
+    white-space: nowrap;
+  }
+
+  .view-order-btn {
+    min-width: 145px;
+    padding: 12px 20px !important;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 800;
   }
 
   .title {
