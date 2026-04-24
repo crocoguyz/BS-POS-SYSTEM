@@ -5,6 +5,7 @@ import Login from "./Login";
 import Admin from "./Admin";
 import Menu from "./Menu";
 import Kitchen from "./Kitchen";
+import { LanguageProvider } from "./LanguageContext";
 
 
 // ... (imports တွေက အတူတူပဲ)
@@ -49,10 +50,26 @@ function App() {
   };
 
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+  const handleLogout = async () => {
+  try {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (savedUser?.name) {
+      await fetch("https://bs-pos-system-1.onrender.com/api/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name: savedUser.name })
+      });
+    }
+  } catch (err) {
+    console.error("Logout API error:", err);
+  }
+
+  localStorage.removeItem("user");
+  setUser(null);
+};
 
   if (loading) return <div>Loading...</div>;
 
@@ -91,6 +108,7 @@ function App() {
 };
 
   return (
+     <LanguageProvider>
     <Router>
       <Routes>
         <Route
@@ -130,8 +148,10 @@ function App() {
         <Route path="*" element={<Navigate to={getHome()} />} />
       </Routes>
     </Router>
+    </LanguageProvider>
   );
 }
+
 
 export default App;
 

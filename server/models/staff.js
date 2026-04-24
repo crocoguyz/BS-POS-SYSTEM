@@ -17,7 +17,7 @@ const StaffManagement = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/staff', staffData);
+            const response = await axios.post('https://bs-pos-system-1.onrender.com/api/staff', staffData);
             if(response.status === 201) {
                 alert("Staff saved to Database! 🎉");
                 setStaffName(""); // သိမ်းပြီးရင် စာသား ပြန်ဖျက်မယ်

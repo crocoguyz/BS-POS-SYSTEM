@@ -3,8 +3,8 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
 
-const SERVER_URL = "http://localhost:5000"; // Socket အတွက်
-const API_BASE = "http://localhost:5000/api"; // Axios (Database) အတွက်
+const SERVER_URL = "https://bs-pos-system-1.onrender.com"; // Socket အတွက်
+const API_BASE = "https://bs-pos-system-1.onrender.com/api"; // Axios (Database) အတွက်
 
 const socket = io(SERVER_URL, {
   transports: ["websocket", "polling"] // Connection ပိုမြဲအောင် ဒါလေး ထည့်ပေးပါ
@@ -68,9 +68,7 @@ export default function Kitchen({ user: propUser, onLogout }) {
     });
 
     // updateOrder event လာရင်လည်း အလုပ်လုပ်အောင် orderUpdate ဆီ ပြန်ပို့ပေးလိုက်တာပါ
-    socket.on("updateOrder", (data) => {
-      socket.emit("orderUpdate", data); 
-    });
+    
 
     return () => {
       clearInterval(timerInterval);
@@ -97,36 +95,27 @@ export default function Kitchen({ user: propUser, onLogout }) {
     setTimeout(() => setNewOrderNoti(null), 5000);
   };
 
-  const getWaitTime = (timestamp) => {
-    const diff = Math.floor((currentTime - new Date(timestamp).getTime()) / 1000);
-    const mins = Math.floor(diff / 60);
-    const secs = diff % 60;
-    return { mins, secs, isLate: mins >= 15 };
-  };
+  
 
  const updateStatus = async (id, status) => {
-    // id ဆိုတာ MongoDB ရဲ့ _id ဖြစ်နေနိုင်သလို menuData ရဲ့ id လည်း ဖြစ်နေနိုင်လို့ နှစ်ခုလုံးကို handle လုပ်တာပါ
-    console.log("Updating Status for ID:", id); 
+  console.log("Updating Status for ID:", id);
 
-    try {
-      const res = await axios.post(`${API_BASE}/orders/status`, { id, status });
-      
-      if (res.data.success) {
-        // ၁။ Server ကနေတဆင့် Admin နဲ့ တခြား page တွေကို အချက်ပေးမယ်
-        socket.emit("updateOrder", res.data.updatedOrder || { orderId: id, status });
-        // ၂။ ကိုယ့် screen မှာတင် list ထဲကနေ တန်းပြောင်းသွားအောင် (သို့) ပျောက်သွားအောင် လုပ်မယ်
-        setOrders((prev) => 
-          prev.map((o) => {
-            const currentOrderId = o._id || o.id; // ID အမျိုးအစား နှစ်ခုလုံးကို စစ်တယ်
-            return currentOrderId === id ? { ...o, status } : o;
-          })
-        );
-      }
-    } catch (err) {
-      console.error("Update status error:", err);
-      alert("Status ပြောင်းလို့ မရပါဘူး Bro။ Console မှာ error တစ်ချက်စစ်ပေးပါ။");
+  try {
+    const res = await axios.post(`${API_BASE}/orders/status`, { id, status });
+
+    if (res.data.success) {
+      setOrders((prev) =>
+        prev.map((o) => {
+          const currentOrderId = o.orderId || o._id || o.id;
+          return currentOrderId === id ? { ...o, status } : o;
+        })
+      );
     }
-  };
+  } catch (err) {
+    console.error("Update status error:", err);
+    alert("Status ပြောင်းလို့ မရပါဘူး Bro။");
+  }
+};
 
   // Quantity Summary
   const getSummary = () => {
@@ -163,9 +152,7 @@ const getWaitingTime = (order) => {
     return { mins, secs, isLate: mins >= 15 };
   };
 
-  const totalRevenue = orders
-    .filter(o => o.status === "paid")
-    .reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+ 
 
 return (
     <div className="kitchen-page">
@@ -264,7 +251,7 @@ return (
     <div className={`modern-card ${order.status} ${wait.isLate ? 'warning' : ''}`} key={order.orderId}>
       <div className="m-card-header">
         {/* ၂။ Display ပြတဲ့နေရာမှာ order.orderId လို့ ပြင်ပါ */}
-        <span className="m-order-id">#{order.orderId}</span>
+        <span className="m-order-id">{order.orderId}</span>
         
         <div className={`wait-timer ${wait.isLate ? 'danger' : ''}`}>
           ⏳ {wait.mins}m {wait.secs}s

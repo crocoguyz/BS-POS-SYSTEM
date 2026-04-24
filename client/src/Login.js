@@ -3,6 +3,7 @@ import { Lock, User, LogIn } from "lucide-react";
 import axios from "axios"; // axios ကို သုံးမယ်
 import "./login.css";
  
+const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function Login({ onLogin }) {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
@@ -15,7 +16,7 @@ const handleSubmit = async (e) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/login", credentials);
+      const response = await axios.post(`${API_BASE}/api/login`, credentials);
       
       console.log("Response from Backend:", response.data); // ဒါကို Console မှာ ကြည့်ပါ
 
@@ -26,7 +27,7 @@ const handleSubmit = async (e) => {
         console.log("Saving User Data:", userData);
         
         // LocalStorage ထဲ သိမ်းမယ်
-        localStorage.setItem("user", JSON.stringify(userData)); 
+        
         
         // App.js ကို လှမ်းပြောမယ်
         onLogin(userData); 

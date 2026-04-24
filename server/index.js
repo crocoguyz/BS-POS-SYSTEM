@@ -1,8 +1,12 @@
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const MenuModel = require('./models/Menu');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
@@ -19,8 +23,16 @@ const io = new Server(server, {
   }
 });
 
+const storage = multer.diskStorage({
+  destination: './uploads/',
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
 // 3. MongoDB Connection
-const mongoURI = "mongodb://posadmin:sV40yXs4kN5JEekA@ac-spcflji-shard-00-00.rrt3ykx.mongodb.net:27017,ac-spcflji-shard-00-01.rrt3ykx.mongodb.net:27017,ac-spcflji-shard-00-02.rrt3ykx.mongodb.net:27017/POS_DB?ssl=true&replicaSet=atlas-w8bnsa-shard-0&authSource=admin&appName=Cluster0";
+const mongoURI = process.env.MONGO_URI;
 
 mongoose.connect(mongoURI)
   .then(() => console.log("✅ MongoDB Connected"))
@@ -31,12 +43,35 @@ const staffSchema = new mongoose.Schema({
   name: String,
   role: String,
   password: { type: String, default: "123456" },
-  status: { type: String, default: "Active" },
+  status: { type: String, default: "Offline" },
   createdAt: { type: Date, default: Date.now }
 });
 const Staff = mongoose.model("Staff", staffSchema);
 
+// 
+// index.js (Backend)
+app.get('/api/menu', async (req, res) => {
+  try {
+    const menus = await MenuModel.find(); // Database က data ဆွဲတာ
+    res.json(menus);
+  } catch (err) {
+    console.error("MENU ERROR:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // --- Staff API များ ---
+
+app.post("/api/staff/reset-status", async (req, res) => {
+  try {
+    await Staff.updateMany({}, { status: "Offline" });
+    io.emit("staffUpdate");
+    res.json({ success: true, message: "All staff set to Offline" });
+  } catch (err) {
+    console.error("Reset status error:", err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // 1. Staff အသစ် သိမ်းဆည်းရန် (POST)
 app.post("/api/staff", async (req, res) => {
@@ -48,7 +83,7 @@ app.post("/api/staff", async (req, res) => {
             name, 
             role, 
             password: password || "123456", 
-            status: status || "Active" 
+            status: status || "Offline" 
         });
         
         await newStaff.save();
@@ -188,54 +223,135 @@ app.post("/api/orders/status", async (req, res) => {
 
 // 5. Login API
 app.post("/api/login", async (req, res) => {
-    const { username, password } = req.body;
-    
-    // Debug လုပ်ဖို့ Terminal မှာ ပြခိုင်းမယ်
-    console.log("Login Request incoming:", { username, password });
+  const { username, password } = req.body;
 
-    try {
-        // 1. အရင်ဆုံး Database ထဲမှာ ရှာမယ်
-        const user = await Staff.findOne({ name: username, password: password });
-        
-        if (user) {
-            console.log("✅ Match found in Database!");
-            return res.json({ 
-                success: true, 
-                user: { name: user.name, role: user.role } 
-            });
-        } 
+  console.log("Login Request incoming:", { username, password });
 
-        // 2. Database မှာ မရှိရင် Backup Admin နဲ့ စစ်မယ်
-        // 🔥 အရေးကြီး: စာလုံးပေါင်း သေချာပါစေ (posadmin / 123456)
-        if (username === "posadmin" && password === "123456") {
-            console.log("✅ Backup Admin Login Success!");
-            return res.json({ 
-                success: true, 
-                user: { name: "System Admin", role: "owner" } 
-            });
-        }
+  try {
+    const user = await Staff.findOne({ name: username, password: password });
 
-        // 3. နှစ်ခုလုံး မကိုက်ရင် 401 ပေးမယ်
-        console.log("❌ Login Failed: Credentials do not match.");
-        return res.status(401).json({ 
-            success: false, 
-            message: "Username သို့မဟုတ် Password မှားနေသည်" 
-        });
+    if (user) {
+      user.status = "Active";
+      await user.save();
 
-    } catch (err) {
-        console.error("❌ Server Error:", err.message);
-        return res.status(500).json({ success: false, error: err.message });
+      io.emit("staffUpdate");
+
+      console.log("✅ Match found in Database!");
+      return res.json({
+        success: true,
+        user: { name: user.name, role: user.role }
+      });
     }
+
+    if (username === "posadmin" && password === "123456") {
+      console.log("✅ Backup Admin Login Success!");
+      return res.json({
+        success: true,
+        user: { name: "System Admin", role: "owner" }
+      });
+    }
+
+    console.log("❌ Login Failed: Credentials do not match.");
+    return res.status(401).json({
+      success: false,
+      message: "Username သို့မဟုတ် Password မှားနေသည်"
+    });
+
+  } catch (err) {
+    console.error("❌ Server Error:", err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/logout", async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const user = await Staff.findOne({ name });
+
+    if (user) {
+      user.status = "Offline";
+      await user.save();
+      io.emit("staffUpdate");
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Logout error:", err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.use('/uploads', express.static('uploads'));
+
+// API Route (Add New Dish)
+app.post('/api/menu', upload.single('image'), async (req, res) => {
+  try {
+    const { name, price, category } = req.body;
+    const newItem = new MenuModel({
+      name,
+      price: Number(price),
+      category,
+      image: req.file ? `/uploads/${req.file.filename}` : "" 
+    });
+    await newItem.save();
+    res.json({ success: true, data: newItem });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.put("/api/menu/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // 🔥 ဒီ line မရှိလို့ မင်း bug ဖြစ်နေတာ
+    const { name, price, category, available } = req.body;
+
+    const updatedMenu = await MenuModel.findByIdAndUpdate(
+      id,
+      {
+        ...(name && { name }),
+        ...(price && { price }),
+        ...(category && { category }), // 🔥 cat မဟုတ်တော့ဘူး
+        ...(available !== undefined && { available })
+      },
+      { new: true }
+    );
+
+    
+
+    if (!updatedMenu) {
+      return res.status(404).json({ message: "Menu not found" });
+    }
+
+    res.json({ success: true, data: updatedMenu });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // 6. Socket.io Logic
 io.on("connection", (socket) => {
   console.log("⚓ A user connected:", socket.id);
-  socket.on("disconnect", () => console.log("👋 User disconnected"));
+
+  socket.on("disconnect", () => {
+    console.log("👋 User disconnected");
+  });
 });
 
+// 👉 GLOBAL EVENT (IMPORTANT)
+const emitMenuUpdate = () => {
+  io.emit("menuUpdate"); // everyone gets update
+};
+
+module.exports = { io, emitMenuUpdate };
+
 // 7. Server Start (app.listen မဟုတ်ဘဲ server.listen သုံးရမယ်)
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
