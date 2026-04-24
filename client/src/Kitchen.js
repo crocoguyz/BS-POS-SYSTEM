@@ -6,9 +6,7 @@ import "./kitchen.css";
 const SERVER_URL = "https://bs-pos-system-1.onrender.com"; // Socket အတွက်
 const API_BASE = "https://bs-pos-system-1.onrender.com/api"; // Axios (Database) အတွက်
 
-const socket = io(SERVER_URL, {
-  transports: ["websocket", "polling"] // Connection ပိုမြဲအောင် ဒါလေး ထည့်ပေးပါ
-});
+const socket = io(SERVER_URL), 
 
 export default function Kitchen({ user: propUser, onLogout }) {
   // Prop ကနေမလာရင် localStorage ကနေ ရှာမယ်
