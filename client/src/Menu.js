@@ -31,7 +31,7 @@ export default function Menu({ user, onLogout }) {
       try {
         const res = await axios.get(`${SERVER_URL}/api/menu`)
         console.log("MENU DATA:", res.data);
-        fetchMenu();
+        
 
         setDishes(res.data);
 
@@ -52,6 +52,7 @@ export default function Menu({ user, onLogout }) {
 
     socket.on("menuUpdate", () => {
     console.log("Menu updated from admin...");
+    fetchMenu();
     
   });
 
