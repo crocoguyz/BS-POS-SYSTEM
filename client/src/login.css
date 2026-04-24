@@ -124,89 +124,68 @@
   color: #2c2121;
 }
 
-/* ===== LOGIN MOBILE FIX ===== */
+/* ===== LOGIN MOBILE SAFE FIX ===== */
 @media (max-width: 768px) {
   html,
   body,
   #root {
     width: 100%;
     min-height: 100%;
+    margin: 0;
     overflow-x: hidden;
   }
 
-  .login-page {
-    width: 100%;
-    min-height: 100dvh;
-    padding: 24px 16px;
-    box-sizing: border-box;
-    overflow-x: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .login-box,
-  .login-card,
+  /* page wrapper only */
   .login-container {
-    width: min(92vw, 420px) !important;
-    max-width: 420px !important;
+    width: 100vw !important;
+    min-height: 100dvh !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* actual glass card */
+  .login-box {
+    width: 100% !important;
+    max-width: 390px !important;
     min-width: 0 !important;
-    padding: 34px 24px !important;
-    box-sizing: border-box;
+    padding: 36px 22px !important;
+    box-sizing: border-box !important;
     border-radius: 28px !important;
   }
 
-  .login-box h1,
-  .login-card h1,
-  .login-container h1 {
+  .login-box h1 {
     font-size: 34px !important;
     line-height: 1.1 !important;
-    white-space: nowrap;
-    text-align: center;
+    text-align: center !important;
+    white-space: normal !important;
   }
 
-  .login-box h2,
-  .login-card h2,
-  .login-container h2,
-  .login-subtitle {
-    font-size: 20px !important;
-    text-align: center;
+  .login-box p,
+  .login-box h2 {
+    font-size: 18px !important;
+    text-align: center !important;
   }
 
-  input,
-  select,
-  textarea {
-    font-size: 16px !important; /* ✅ stop mobile zoom */
-  }
-
-  .input-group,
-  .login-input,
-  .login-field {
+  .input-box,
+  .input-group {
     width: 100% !important;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
   }
 
-  .login-btn,
-  .login-button,
-  button[type="submit"] {
-    width: 100% !important;
-    min-height: 56px;
+  .input-box input,
+  .input-group input,
+  input {
     font-size: 16px !important;
   }
-}
 
-@media (max-width: 380px) {
-  .login-box,
-  .login-card,
-  .login-container {
-    width: 94vw !important;
-    padding: 28px 18px !important;
-  }
-
-  .login-box h1,
-  .login-card h1,
-  .login-container h1 {
-    font-size: 30px !important;
+  .login-btn {
+    width: 100% !important;
+    min-height: 56px !important;
+    font-size: 16px !important;
   }
 }
