@@ -3,7 +3,7 @@ import { Lock, User, LogIn } from "lucide-react";
 import axios from "axios"; // axios ကို သုံးမယ်
 import "./login.css";
  
-const API_BASE = process.env.REACT_APP_API_URL;
+const API_BASE = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
 
 export default function Login({ onLogin }) {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
