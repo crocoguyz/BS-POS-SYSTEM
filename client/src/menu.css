@@ -573,7 +573,7 @@ body {
     transform: scale(0.9);
     transform-origin: right center;
   }
-}
+
 
 @media (max-width: 360px) {
   .menu-grid {
