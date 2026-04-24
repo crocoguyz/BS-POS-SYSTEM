@@ -40,13 +40,13 @@ export default function Kitchen({ user: propUser, onLogout }) {
       console.log("📩 Socket Data Received:", data); // Browser Console မှာ ဒါလေးပေါ်လားကြည့်ပါ
 
       // data ထဲမှာ id မပါရင် ဘာမှမလုပ်ဘဲ ကျော်သွားမယ် (Error မတက်အောင်)
-      if (!data || (!data.id && !data._id)) return;
+      if (!data || (!data.orderId && !data.id && !data._id)) return;
 
-      const orderId = data.id || data._id; // MongoDB ID နဲ့ Regular ID နှစ်မျိုးလုံးကို စစ်ပေးတာပါ
+const orderId = data.orderId || data.id || data._id; // MongoDB ID နဲ့ Regular ID နှစ်မျိုးလုံးကို စစ်ပေးတာပါ
 
       setOrders((prev) => {
         if (data.status === "cancel") {
-          return prev.filter(o => (o.id || o._id) !== orderId);
+          return prev.filter(o => (o.orderId || o.id || o._id) !== orderId);
         }
         // ၁။ ငွေရှင်းပြီးသားဆိုရင် ဖယ်မယ်
         if (data.status === "paid") {
@@ -54,10 +54,10 @@ export default function Kitchen({ user: propUser, onLogout }) {
         }
 
         // ၂။ ရှိပြီးသား အော်ဒါဆိုရင် Update လုပ်မယ်
-        const exists = prev.find(o => (o.id || o._id) === orderId);
+        const exists = prev.find(o => (o.orderId || o.id || o._id) === orderId);
         if (exists) {
           console.log("🔄 Updating existing order:", orderId);
-          return prev.map(o => (o.id || o._id) === orderId ? { ...o, ...data } : o);
+          return prev.map(o => (o.orderId || o.id || o._id) === orderId ? { ...o, ...data } : o);
         }
 
         // ၃။ အော်ဒါအသစ်ဆိုရင် အပေါ်ဆုံးက ထည့်မယ်
@@ -88,7 +88,7 @@ export default function Kitchen({ user: propUser, onLogout }) {
   };
 
   const showNotification = (order) => {
-    setNewOrderNoti(`New Order: #${order.Id} (Table ${order.table})`);
+    setNewOrderNoti(`New Order: ${order.orderId} (Table ${order.table})`);
     if (audioPlayer.current) {
       audioPlayer.current.play().catch(() => console.warn("Autoplay blocked"));
     }
