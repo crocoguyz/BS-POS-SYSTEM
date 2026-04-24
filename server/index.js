@@ -32,11 +32,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // 3. MongoDB Connection
-const mongoURI = "process.env.MONGO_URI;"
+const mongoURI = (process.env.MONGO_URI || "").trim();
+
+console.log("MONGO URI START =", mongoURI.slice(0, 15));
 
 mongoose.connect(mongoURI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.log("❌ Mongo Error:", err));
+
+
 
 // 4. Staff Model (API အပေါ်မှာ ရှိရမယ်)
 const staffSchema = new mongoose.Schema({
