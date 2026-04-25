@@ -40,7 +40,13 @@ export const translations = {
     date: "Date",
     dishName: "Dish Name",
     price: "Price",
-    saveDish: "Save Dish"
+    saveDish: "Save Dish",
+    searchDishes: "Search dishes...",
+    all: "All",
+    breakfast: "Breakfast",
+    drinks: "Drinks",
+    lunch: "Lunch",
+    viewOrder: "View Order",
   },
   mm: {
     dashboard: "ဒက်ရှ်ဘုတ်",
@@ -83,7 +89,14 @@ export const translations = {
     date: "နေ့စွဲ",
     dishName: "ဟင်းအမည်",
     price: "စျေးနှုန်း",
-    saveDish: "သိမ်းမည်"
+    saveDish: "သိမ်းမည်",
+    restaurantMenu: "စားသောက်ဆိုင် မီနူး",
+    searchDishes: "ဟင်းလျာရှာရန်...",
+    all: "အားလုံး",
+    breakfast: "မနက်စာ",
+    drinks: "အချိုရည်",
+    lunch: "နေ့လယ်စာ",
+    viewOrder: "အော်ဒါကြည့်မည်",
 
   }
 };

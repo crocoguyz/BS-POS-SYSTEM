@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./menu.css";
 import { io } from "socket.io-client";
+import { translations } from "./lang";
 
 const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
 const API_BASE = `${SERVER_URL}/api/orders`
@@ -10,7 +11,7 @@ const socket = io(SERVER_URL);
 
 
 export default function Menu({ user, onLogout }) {
-
+  const { t, lang, setLang } = useLang();
   const [dishes, setDishes] = useState([]);
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -177,6 +178,21 @@ return (
         </button>
 
         {/* User Info ပေါ်မယ့်အပိုင်း */}
+        <div className="lang-switch">
+  <button 
+    className={lang === "en" ? "active" : ""}
+    onClick={() => setLang("en")}
+  >
+    EN
+  </button>
+
+  <button 
+    className={lang === "mm" ? "active" : ""}
+    onClick={() => setLang("mm")}
+  >
+    MM
+  </button>
+</div>
         <div className="user-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'white' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{user ? user.name : "Staff"}</div>
