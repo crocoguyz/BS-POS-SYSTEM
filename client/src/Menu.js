@@ -40,8 +40,18 @@ export default function Menu({ user, onLogout }) {
 
         setDishes(res.data);
 
-        const uniqueCats = ["All", ...new Set(res.data.map(item => item.category))];
-        setCategories(uniqueCats);
+        const uniqueCats = [
+  "All",
+  ...new Set(
+    res.data.map((item) =>
+      lang === "mm"
+        ? item.category_mm || item.category
+        : item.category_en || item.category
+    )
+  ),
+];
+
+setCategories(uniqueCats);
          // Database က data တွေကို dishes ထဲ ထည့်လိုက်ပြီ
  
         } catch (err) {
