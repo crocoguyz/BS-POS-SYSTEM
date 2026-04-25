@@ -1222,20 +1222,19 @@ td {
 /* ===== MOBILE FIX CLEAN VERSION ===== */
 @media (max-width: 768px) {
 
-   .admin-container {
+  .admin-container {
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: hidden !important;
   }
-}
 
-  .admin-sidebar,
-.admin-main {
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  overflow-x: hidden !important;
-}
-
+  .admin-sidebar {
+    width: 100%;
+    padding: 14px 12px 18px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
 
   .admin-nav {
     margin-top: 115px !important;
@@ -1248,11 +1247,6 @@ td {
     justify-content: center;
   }
 
-  .admin-main {
-    padding: 10px;
-  }
-
-
   .admin-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1261,18 +1255,15 @@ td {
 
   /* ===== TOP UI FIX ===== */
 
-  /* EN / MM */
-.lang-switch {
-  position: absolute !important;
-  top: 14px !important;
-  left: 12px !important;
-  z-index: 20 !important;
+  .lang-switch {
+    position: absolute !important;
+    top: 14px !important;
+    left: 12px !important;
+    z-index: 20 !important;
+    transform: scale(0.9);
+    transform-origin: top left;
+  }
 
-  transform: scale(0.9);      /* optional: size သေးသွားစေချင်ရင် */
-  transform-origin: top left;
-}
-
-  /* LOGOUT */
   .menu-logout-style-btn,
   .logout-btn-simple {
     position: absolute !important;
@@ -1287,15 +1278,14 @@ td {
     z-index: 10 !important;
   }
 
-  /* USER INFO */
   .admin-user-info,
   .user-profile-block {
     position: absolute !important;
     top: 66px !important;
     right: 12px !important;
     width: auto !important;
-    transform: scale(0.82) !important;
-    transform-origin: top right !important;
+    transform: scale(0.82);
+    transform-origin: top right;
     z-index: 10 !important;
   }
 
@@ -1317,4 +1307,5 @@ td {
   .action-btns {
     flex-direction: column;
   }
+
 }
