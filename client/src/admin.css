@@ -1265,7 +1265,7 @@ html, body {
   .lang-switch {
     position:absolute !important;
     top: 14px;
-    left: -80px;
+    left: -200px;
     z-index: 20 !important;
   }
 
