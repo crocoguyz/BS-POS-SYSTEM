@@ -1219,11 +1219,13 @@ td {
   }
 }
 
-/* Mobile */
+//* ===== MOBILE FIX CLEAN VERSION ===== */
 @media (max-width: 768px) {
 
   .admin-container {
     flex-direction: column;
+    position: relative;
+    padding-top: 100px !important; /* top space for fixed buttons */
   }
 
   .admin-sidebar {
@@ -1253,10 +1255,53 @@ td {
     gap: 10px;
   }
 
-  .admin-user-info {
-    align-items: flex-start;
-    width: 100%;
+  /* ===== TOP UI FIX ===== */
+
+  /* EN / MM */
+  .lang-switch {
+    position: fixed !important;
+    top: 16px;
+    left: 16px;
+    z-index: 99999;
   }
+
+  /* LOGOUT */
+  .menu-logout-style-btn,
+  .logout-btn-simple {
+    position: fixed !important;
+    top: 16px;
+    right: 16px;
+
+    width: auto !important;
+    min-width: 90px;
+    max-width: 120px;
+    height: 42px;
+
+    padding: 8px 14px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+  }
+
+  /* USER INFO */
+  .admin-user-info,
+  .user-profile-block {
+    position: fixed !important;
+    top: 70px;
+    right: 16px;
+
+    width: auto !important;
+    transform: scale(0.85);
+    transform-origin: top right;
+
+    z-index: 99998;
+  }
+
+  /* ===== GRID FIX ===== */
 
   .stat-grid {
     grid-template-columns: 1fr;
@@ -1287,8 +1332,4 @@ td {
     flex-direction: column;
   }
 
-  .menu-logout-style-btn {
-    width: 100%;
-    justify-content: center;
-  }
 }
