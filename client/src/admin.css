@@ -1221,7 +1221,12 @@ td {
 
 /* ===== MOBILE FIX CLEAN VERSION ===== */
 @media (max-width: 768px) {
-
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden !important;
+  width: 100%;
+}
   .admin-container {
     width: 100% !important;
     max-width: 100% !important;
@@ -1266,27 +1271,37 @@ td {
 
   .menu-logout-style-btn,
   .logout-btn-simple {
-    position: absolute !important;
-    top: 14px !important;
-    right: 12px !important;
+    position: fixed !important;
+    top: 16px;
+    right: 16px;
+
     width: auto !important;
-    min-width: 92px !important;
-    max-width: 110px !important;
-    height: 42px !important;
-    padding: 8px 12px !important;
-    border-radius: 12px !important;
-    z-index: 10 !important;
+    min-width: 90px;
+    max-width: 120px;
+    height: 42px;
+
+    padding: 8px 14px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
   }
 
+  /* USER INFO */
   .admin-user-info,
   .user-profile-block {
-    position: absolute !important;
-    top: 66px !important;
-    right: 12px !important;
+    position: fixed !important;
+    top: 70px;
+    right: 16px;
+
     width: auto !important;
-    transform: scale(0.82) !important;
-    transform-origin: top right !important;
-    z-index: 10 !important;
+    transform: scale(0.85);
+    transform-origin: top right;
+
+    z-index: 99998;
   }
 
   /* ===== GRID FIX ===== */
