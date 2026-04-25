@@ -1228,13 +1228,13 @@ td {
     overflow-x: hidden !important;
   }
 
-  .admin-sidebar {
-    width: 100%;
-    padding: 14px 12px 18px !important;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
+.admin-sidebar,
+.admin-main {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
 
   .admin-nav {
     margin-top: 115px !important;
@@ -1284,8 +1284,8 @@ td {
     top: 66px !important;
     right: 12px !important;
     width: auto !important;
-    transform: scale(0.82);
-    transform-origin: top right;
+    transform: scale(0.82) !important;
+    transform-origin: top right !important;
     z-index: 10 !important;
   }
 
