@@ -442,3 +442,13 @@ body {
   80% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
+
+@media (max-width: 768px) {
+  .search-bar {
+    width: calc(100vw - 64px) !important;
+    max-width: none !important;
+    margin: 0 auto 26px auto !important;
+    box-sizing: border-box !important;
+    display: block !important;
+  }
+}
