@@ -1263,8 +1263,10 @@ html, body {
   /* ===== TOP UI FIX ===== */
 
   .lang-switch {
-    top: 70px;
-    left: 70px;
+    position:absolute !important;
+    top: 14px;
+    left: -80px;
+    z-index: 20 !important;
   }
 
   .menu-logout-style-btn,
