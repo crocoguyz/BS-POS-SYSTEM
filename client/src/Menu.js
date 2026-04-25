@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./menu.css";
 import { io } from "socket.io-client";
-import { translations } from "./lang";
+import { useLang } from "./LanguageContext";
 
 const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
 const API_BASE = `${SERVER_URL}/api/orders`
@@ -11,7 +11,7 @@ const socket = io(SERVER_URL);
 
 
 export default function Menu({ user, onLogout }) {
-  const { t, setlang, } = useLang();
+  const { t, lang, setLang } = useLang();
   const [dishes, setDishes] = useState([]);
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
