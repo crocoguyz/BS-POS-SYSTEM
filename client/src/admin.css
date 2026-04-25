@@ -1219,7 +1219,7 @@ td {
   }
 }
 
-//* ===== MOBILE FIX CLEAN VERSION ===== */
+/* ===== MOBILE FIX CLEAN VERSION ===== */
 @media (max-width: 768px) {
 
   .admin-container {
