@@ -1233,12 +1233,14 @@ html, body {
     overflow-x: hidden !important;
   }
 
-.admin-sidebar,
-.admin-main {
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  overflow-x: hidden !important;
-}
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+.admin-main { padding: 10px; }
 
 
   .admin-nav {
