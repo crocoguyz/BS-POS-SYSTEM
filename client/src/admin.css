@@ -1262,17 +1262,7 @@ html, body {
 
   /* ===== TOP UI FIX ===== */
 
-  .lang-switch {
-   position: fixed !important;
-    top: 70px;
-    left: 16px;
-
-    width: auto !important;
-    transform: scale(0.85);
-    transform-origin: top left;
-
-    z-index: 99998;
-  }
+ 
 
   .menu-logout-style-btn,
   .logout-btn-simple {
