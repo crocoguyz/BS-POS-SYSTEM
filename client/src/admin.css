@@ -1262,7 +1262,9 @@ html, body {
 
   /* ===== TOP UI FIX ===== */
 
- 
+  .lang-switch {
+    top: 70px;
+    left: 16px;
 
   .menu-logout-style-btn,
   .logout-btn-simple {
