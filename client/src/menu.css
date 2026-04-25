@@ -108,7 +108,6 @@ body {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
-
 .img-container {
   position: relative;
   overflow: hidden;
@@ -441,4 +440,3 @@ body {
   80% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
-
