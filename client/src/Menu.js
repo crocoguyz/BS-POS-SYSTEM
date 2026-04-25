@@ -26,6 +26,10 @@ export default function Menu({ user, onLogout }) {
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
+  setCategory("All");
+}, [lang]);
+
+  useEffect(() => {
     document.title = "Restaurant Menu";
 
     const fetchMenu = async () => {
@@ -174,7 +178,7 @@ return (
       <div className="menu-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px' }}>
         
         <button className="logout-btn-simple" onClick={onLogout}>
-          🚪 {t("Logout")}
+          🚪 {t("logout")}
         </button>
 
         {/* User Info ပေါ်မယ့်အပိုင်း */}
@@ -243,7 +247,14 @@ return (
 <div className="menu-grid">
   {dishes.length > 0 ? (
     dishes
-      .filter((f) => (category === "All" ? true : f.category === category))
+      .filter((f) => {
+  const itemCat =
+    lang === "mm"
+      ? f.category_mm || f.category
+      : f.category_en || f.category;
+
+  return category === "All" ? true : itemCat === category;
+})
       .filter((f) => f.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .map((item) => (
         
@@ -273,7 +284,7 @@ return (
   </div>
 
   <div className="card-info">
-    <h4>{item.name}</h4>
+    <h4>{lang === "mm" ? item.name_mm || item.name : item.name_en || item.name}</h4>
     <p>{Number(item.price).toLocaleString()} MMK</p>
 
     <button
