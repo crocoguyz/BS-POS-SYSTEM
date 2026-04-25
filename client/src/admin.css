@@ -1272,6 +1272,7 @@ html, body {
     transform-origin: top left;
 
     z-index: 99998;
+  }
 
   .menu-logout-style-btn,
   .logout-btn-simple {
