@@ -174,7 +174,7 @@ return (
       <div className="menu-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px' }}>
         
         <button className="logout-btn-simple" onClick={onLogout}>
-          🚪 Logout
+          🚪 {t("Logout")}
         </button>
 
         {/* User Info ပေါ်မယ့်အပိုင်း */}
@@ -232,7 +232,7 @@ return (
           </div>
         </div>
       )}
-      <input className="search-bar" placeholder="Search dishes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+      <input className="search-bar" placeholder={t("searchDishes")} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
       <div className="category-tabs">
         {categories.map((c) => (
