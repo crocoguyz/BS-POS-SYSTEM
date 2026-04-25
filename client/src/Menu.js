@@ -11,7 +11,7 @@ const socket = io(SERVER_URL);
 
 
 export default function Menu({ user, onLogout }) {
-  const { t, lang, } = useLang();
+  const { t, setlang, } = useLang();
   const [dishes, setDishes] = useState([]);
   const [cart, setCart] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
