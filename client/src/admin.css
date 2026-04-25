@@ -1224,18 +1224,19 @@ td {
 
   .admin-container {
     flex-direction: column;
-    position: relative;
-    padding-top: 100px !important; /* top space for fixed buttons */
+    padding-top: 0 !important;
   }
 
   .admin-sidebar {
     width: 100%;
+    padding: 14px 12px 18px !important;
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 10px;
+    align-items: stretch;
   }
 
   .admin-nav {
+    margin-top: 115px !important;
     flex-direction: column;
     width: 100%;
   }
@@ -1249,6 +1250,7 @@ td {
     padding: 10px;
   }
 
+
   .admin-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1258,63 +1260,48 @@ td {
   /* ===== TOP UI FIX ===== */
 
   /* EN / MM */
-  .lang-switch {
-    position: fixed !important;
-    top: 16px;
-    left: 16px;
-    z-index: 99999;
-  }
+.lang-switch {
+  position: absolute !important;
+  top: 14px !important;
+  left: 12px !important;
+  z-index: 20 !important;
+
+  transform: scale(0.9);      /* optional: size သေးသွားစေချင်ရင် */
+  transform-origin: top left;
+}
 
   /* LOGOUT */
   .menu-logout-style-btn,
   .logout-btn-simple {
-    position: fixed !important;
-    top: 16px;
-    right: 16px;
-
+    position: absolute !important;
+    top: 14px !important;
+    right: 12px !important;
     width: auto !important;
-    min-width: 90px;
-    max-width: 120px;
-    height: 42px;
-
-    padding: 8px 14px;
-    border-radius: 12px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    z-index: 99999;
+    min-width: 92px !important;
+    max-width: 110px !important;
+    height: 42px !important;
+    padding: 8px 12px !important;
+    border-radius: 12px !important;
+    z-index: 10 !important;
   }
 
   /* USER INFO */
   .admin-user-info,
   .user-profile-block {
-    position: fixed !important;
-    top: 70px;
-    right: 16px;
-
+    position: absolute !important;
+    top: 66px !important;
+    right: 12px !important;
     width: auto !important;
-    transform: scale(0.85);
-    transform-origin: top right;
-
-    z-index: 99998;
+    transform: scale(0.82) !important;
+    transform-origin: top right !important;
+    z-index: 10 !important;
   }
 
   /* ===== GRID FIX ===== */
 
-  .stat-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .cashier-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .staff-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .stat-grid,
+  .cashier-grid,
+  .staff-grid,
   .table-visual-grid {
     grid-template-columns: 1fr;
   }
@@ -1324,12 +1311,8 @@ td {
     overflow-x: auto;
   }
 
-  .bill-actions {
-    flex-direction: column;
-  }
-
+  .bill-actions,
   .action-btns {
     flex-direction: column;
   }
-
 }
