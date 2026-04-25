@@ -107,7 +107,7 @@ setCategories(uniqueCats);
     
 
    
-  }, []); // <--- ဒီနေရာမှာ ပိုနေတဲ့ကွင်း ရှိ၊ မရှိ သေချာကြည့်ပါ (Line 65)
+  }, [lang]); // <--- ဒီနေရာမှာ ပိုနေတဲ့ကွင်း ရှိ၊ မရှိ သေချာကြည့်ပါ (Line 65)
 
   const handleOpenPopup = async () => {
     try {
@@ -232,7 +232,7 @@ return (
         letterSpacing: '2px',
         color: '#fff'
       }}>
-        RESTAURANT MENU
+        {t("restaurantMenu")}
       </h1>
 
       {/* Success Animation Modal */}
@@ -249,16 +249,16 @@ return (
       <input className="search-bar" placeholder={t("searchDishes")} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
       <div className="category-tabs">
-        {categories.map((c) => (
-          <button
-  key={c}
-  className={category === c ? "active" : ""}
-  onClick={() => setCategory(c)}
->
-  {c === "All" ? t.all : c}
-</button>
-        ))}
-      </div>
+  {categories.map((c) => (
+    <button
+      key={c}
+      className={category === c ? "active" : ""}
+      onClick={() => setCategory(c)}
+    >
+      {c === "All" ? t("all") : c}
+    </button>
+  ))}
+</div>
 
 <div className="menu-grid">
   {dishes.length > 0 ? (
