@@ -250,7 +250,13 @@ return (
 
       <div className="category-tabs">
         {categories.map((c) => (
-          <button key={c} className={category === c ? "active" : ""} onClick={() => setCategory(c)}>{c}</button>
+          <button
+  key={c}
+  className={category === c ? "active" : ""}
+  onClick={() => setCategory(c)}
+>
+  {c === "All" ? t.all : c}
+</button>
         ))}
       </div>
 
