@@ -390,8 +390,8 @@
   .kitchen-logout-btn {
     position: absolute !important;
     padding: 4px 12px !important;
-    top: 20px !important;
-    right: 225px !important;
+    top: 10px !important;
+    right: 240px !important;
 
     transform: none !important;   /* ❌ center မလိုတော့ဘူး */
     
