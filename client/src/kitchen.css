@@ -379,7 +379,7 @@
 
   .status-indicator-inline {
     position: absolute !important;
-    top: -40px !important;
+    top: -50px !important;
     right: 225px !important;
 
     transform: none !important;   /* ❌ center မလိုတော့ဘူး */
@@ -389,8 +389,8 @@
 
   .kitchen-logout-btn {
     position: absolute !important;
-    padding: 6px 12px !important;
-    top: -40px !important;
+    padding: 4px 12px !important;
+    top: -50px !important;
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
