@@ -380,7 +380,7 @@
   .status-indicator-inline {
     position: absolute !important;
     top: 14px !important;
-    left: -80px !important;
+    left: -150px !important;
 
     transform: none !important;   /* ❌ center မလိုတော့ဘူး */
     
