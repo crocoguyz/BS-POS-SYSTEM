@@ -390,7 +390,7 @@
   .kitchen-logout-btn {
     position: absolute !important;
     padding: 4px 12px !important;
-    top: -80px !important;
+    top: -30px !important;
     right: 225px !important;
 
     transform: none !important;   /* ❌ center မလိုတော့ဘူး */
@@ -400,7 +400,7 @@
 
   .kitchen-title,
 .kitchen-central-header {
-  margin-top: 60px;   /* 🔥 value ကို adjust လုပ်နိုင် */
+  margin-top: 40px;   /* 🔥 value ကို adjust လုပ်နိုင် */
 }
 
 }
