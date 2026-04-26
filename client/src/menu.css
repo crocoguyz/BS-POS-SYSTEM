@@ -452,3 +452,43 @@ body {
     display: block !important;
   }
 }
+
+  .user-profile-block {
+    position: fixed !important;
+    top: 40px;
+    right: 2px;
+
+    width: auto !important;
+    transform: translateY(26px) scale(0.85) !important;
+    transform-origin: top right;
+
+    z-index: 99998;
+  }
+
+   .lang-switch {
+    position:absolute !important;
+    top: -20px;
+    left: -450px;
+    z-index: 20 !important;
+  }
+
+  .menu-logout-style-btn,
+  .logout-btn-simple {
+    position: fixed !important;
+    top: -20px;
+    right: 10px;
+
+    width: auto !important;
+    min-width: 90px;
+    max-width: 120px;
+    height: 42px;
+
+    padding: 8px 14px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+  }
