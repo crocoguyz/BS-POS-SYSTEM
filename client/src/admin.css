@@ -1295,7 +1295,7 @@ html, body {
   .user-profile-block {
     position: fixed !important;
     top: 70px;
-    right: -30px;
+    right: -10px;
 
     width: auto !important;
     transform: scale(0.85);
