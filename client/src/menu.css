@@ -453,9 +453,9 @@ body {
   }
 
 
-    .menu-container {
-    padding-top: 110px !important;
-  }
+  .menu-container {
+  padding-top: 40px !important;
+}
 
   /* 🔥 header must be relative */
   .menu-header {
@@ -490,9 +490,13 @@ body {
 
   /* 🔥 TITLE spacing */
   .title {
-  text-align: center;
-  width: 100%;
-  margin-top: 30px;
+  font-size: clamp(2rem, 9vw, 3rem) !important;
+  line-height: 1.05 !important;
+  text-align: center !important;
+  width: 100% !important;
+  margin: 105px auto 32px auto !important;
+  letter-spacing: 4px !important;
+  overflow-wrap: break-word !important;
 }
 
   /* 🔥 GRID FIX */
