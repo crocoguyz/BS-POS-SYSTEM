@@ -1234,23 +1234,17 @@ html, body {
   }
 
   .admin-sidebar {
-    padding-top: 150px !important;
-    padding-bottom: 18px !important;
-    min-height: auto !important;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
   }
-
-  .sidebar-title,
-  .admin-title,
-  .admin-logo {
-    margin-bottom: 24px !important;
-  }
-
 
 .admin-main { padding: 10px; }
 
 
   .admin-nav {
-    margin-top: 50px !important;
+    margin-top: 28px !important;
     flex-direction: column;
     width: 100%;
   }
