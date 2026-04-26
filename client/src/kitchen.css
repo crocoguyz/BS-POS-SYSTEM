@@ -396,4 +396,10 @@
     transform: translateX(-50%) !important;
     z-index: 6 !important;
   }
+
+  .kitchen-title,
+.kitchen-header h1 {
+  margin-top: 40px;   /* 🔥 value ကို adjust လုပ်နိုင် */
+}
+
 }
