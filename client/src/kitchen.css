@@ -377,17 +377,21 @@
 
 @media (max-width: 768px) {
 
-.connection-status {
-  position: absolute;
-  top: 64px;   /* 14px ကနေ 64px ပြောင်း */
-  left: 12px;
-  z-index: 5;
-}
+ .status-indicator-inline {
+    position: absolute !important;
+    top: 120px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin-right: 0 !important;
+    z-index: 5 !important;
+  }
 
-.logout-btn {
-  position: absolute;
-  top: 64px;   /* 14px ကနေ 64px ပြောင်း */
-  right: 12px;
-  z-index: 6;
-}
+  .kitchen-logout-btn {
+    position: absolute !important;
+    top: 165px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 6 !important;
+  }
 }
