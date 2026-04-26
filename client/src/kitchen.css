@@ -379,8 +379,8 @@
 
   .status-indicator-inline {
     position: absolute !important;
-    top: 14px !important;
-    right: 200px !important;
+    top: 5px !important;
+    right: 230px !important;
 
     transform: none !important;   /* ❌ center မလိုတော့ဘူး */
     
