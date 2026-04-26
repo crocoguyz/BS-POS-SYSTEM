@@ -390,11 +390,12 @@
   .kitchen-logout-btn {
     position: absolute !important;
     padding: 4px 12px !important;
-    top: -70px !important;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
-    z-index: 6 !important;
+    top: -80px !important;
+    right: 225px !important;
+
+    transform: none !important;   /* ❌ center မလိုတော့ဘူး */
+    
+    z-index: 10 !important;
   }
 
   .kitchen-title,
