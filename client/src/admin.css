@@ -1271,7 +1271,7 @@ html, body {
 
   /* ===== TOP UI FIX ===== */
 
-  .lang-switch {
+  .admin-header.lang-switch {
     position:absolute !important;
     top: -20px;
     left: -450px;
