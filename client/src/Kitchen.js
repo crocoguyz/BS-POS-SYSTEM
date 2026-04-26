@@ -195,7 +195,7 @@ return (
     </div>
      {/* ၃။ Logout Button */}
     <button className="kitchen-logout-btn" onClick={onLogout}>
-          🚪 Logout
+           Logout
         </button>
     
   
