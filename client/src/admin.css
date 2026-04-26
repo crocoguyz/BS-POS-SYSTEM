@@ -1302,10 +1302,15 @@ html, body {
   /* USER INFO */
   .admin-user-info,
   .user-profile-block {
-    position: absolute;  
-  border-left: 1px solid #444;
-  padding-left: 15px;
-  top: 10px;
+    position: fixed !important;
+    top: 40px;
+    right: 2px;
+
+    width: auto !important;
+    transform: scale(0.85);
+    transform-origin: top right;
+
+    z-index: 99998;
   }
 
   /* ===== GRID FIX ===== */
