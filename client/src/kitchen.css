@@ -383,8 +383,7 @@
     left: 12px !important;
 
     transform: none !important;   /* ❌ center မလိုတော့ဘူး */
-    margin-right: 0 !important;
-
+    
     z-index: 10 !important;
   }
 
