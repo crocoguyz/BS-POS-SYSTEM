@@ -399,6 +399,7 @@
   }
 
   .kitchen-user-info {
+  position: absolute;  
   border-left: 1px solid #444;
   padding-left: 15px;
   top: 16px;
