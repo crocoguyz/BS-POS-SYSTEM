@@ -1264,7 +1264,7 @@ html, body {
 
   .lang-switch {
     position:absolute !important;
-    top: -20px;
+    top: -40px;
     left: -450px;
     z-index: 20 !important;
   }
@@ -1272,8 +1272,8 @@ html, body {
   .menu-logout-style-btn,
   .logout-btn-simple {
     position: fixed !important;
-    top: -20px;
-    right: 16px;
+    top: -40px;
+    right: 10px;
 
     width: auto !important;
     min-width: 90px;
