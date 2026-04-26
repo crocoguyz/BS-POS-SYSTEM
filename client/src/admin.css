@@ -1303,7 +1303,7 @@ html, body {
   .admin-user-info,
   .user-profile-block {
     position: fixed !important;
-    top: 60px;
+    top: 100px;
     right: 2px;
 
     width: auto !important;
