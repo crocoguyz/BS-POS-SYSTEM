@@ -1271,12 +1271,12 @@ html, body {
 
   /* ===== TOP UI FIX ===== */
 
-  .admin-header.lang-switch {
-    position:absolute !important;
-    top: -20px;
-    left: -450px;
-    z-index: 20 !important;
-  }
+ .admin-header .lang-switch {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  z-index: 99999 !important;
+}
 
   .menu-logout-style-btn,
   .logout-btn-simple {
