@@ -369,7 +369,6 @@
 .kitchen-user-info {
   border-left: 1px solid #444;
   padding-left: 15px;
-  top: -10px;
 }
 
 .kitchen-avatar {
@@ -399,8 +398,18 @@
     z-index: 10 !important;
   }
 
+  .kitchen-user-info {
+  border-left: 1px solid #444;
+  padding-left: 15px;
+  top: 16px;
+}
+
+  .kitchen-avatar {
+  box-shadow: 0 0 10px rgba(245, 87, 108, 0.4);
+}
+
   .kitchen-title,
-.kitchen-central-header {
+  .kitchen-central-header {
   margin-top: 40px;   /* 🔥 value ကို adjust လုပ်နိုင် */
 }
 
