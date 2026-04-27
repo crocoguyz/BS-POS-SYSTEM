@@ -486,7 +486,7 @@ body {
   .menu-header
   .logout-btn-simple {
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: 5px;
     z-index: 10;
     padding: 6px 10px;   /* 🔥 size fix */
@@ -499,7 +499,7 @@ body {
     position: absolute !important;
     right: -10px !important;
 
-    transform: translateY(-25px) scale(0.75)  !important;
+    transform: translateY(-20px) scale(0.75)  !important;
     margin: 0 !important;
     z-index: 10;
   }
