@@ -201,7 +201,7 @@ return (
   
 
     {/* ၂။ User Profile Block */}
-    <div className="kitchen-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div className="kitchen-profile-block">
       <div style={{ textAlign: 'right' }}>
         <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>{user ? user.name : "Chef"}</div>
         <div style={{ fontSize: '11px', color: '#00f2fe', fontWeight: 'bold' }}>{user ? user.role.toUpperCase() : "KITCHEN"}</div>
