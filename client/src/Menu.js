@@ -156,6 +156,7 @@ setCategories(uniqueCats);
         type: orderType,
         items: cart,
         total: total,
+        note: orderNote,
         orderId: nextOrderId // Popup မှာ မြင်နေရတဲ့ #000x ကို ပို့မယ်
       });
 

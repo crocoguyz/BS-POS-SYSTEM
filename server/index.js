@@ -149,6 +149,7 @@ app.post("/api/orders", async (req, res) => {
 
         const newOrder = new Order({
             ...req.body,
+            note: req.body.note || "",  
             orderId: formattedId
         });
 
