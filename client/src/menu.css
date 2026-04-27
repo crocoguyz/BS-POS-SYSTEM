@@ -487,7 +487,7 @@ body {
   .logout-btn-simple {
     position: absolute;
     top: 20px;
-    right: 10px;
+    right: 5px;
     z-index: 10;
     padding: 6px 10px;   /* 🔥 size fix */
     height: auto;
@@ -497,7 +497,7 @@ body {
   .menu-header
   .menu-profile-block {
     position: absolute !important;
-    top: 20px !important;
+    top: 1px !important;
     right: -10px !important;
 
     transform: translateY(-20px) scale(0.75)  !important;
