@@ -51,6 +51,7 @@
   border-radius: 20px;
   font-weight: bold;
   backdrop-filter: blur(10px);
+  transform: translateX(-50px); 
 }
 .status-indicator.online { 
   color: var(--success); 
@@ -352,6 +353,7 @@
   transition: all 0.2s ease;
   margin-right: 15px;
   box-shadow: 0 4px 6px rgba(255, 77, 77, 0.1);
+  transform: translateX(-50px); 
 }
 
 .kitchen-logout-btn:hover {
