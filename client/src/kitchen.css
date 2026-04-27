@@ -399,10 +399,14 @@
   }
 
   .kitchen-profile-block {
-  position: relative;  
-  border-left: 1px solid #444;
-  padding-left: 15px;
-  top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.6);
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid #334155;
+  backdrop-filter: blur(10px);
 }
 
   .avatar {
