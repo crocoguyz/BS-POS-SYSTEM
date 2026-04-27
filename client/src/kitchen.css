@@ -405,14 +405,15 @@
   }
 
   .kitchen-profile-block {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(30, 41, 59, 0.6);
-  padding: 6px 16px;
-  border-radius: 50px;
-  border: 1px solid #334155;
-  backdrop-filter: blur(10px);
+   position: fixed !important;
+    top: 20px;
+    right: 2px;
+
+    width: auto !important;
+    transform: translateY(26px) scale(0.85) !important;
+    transform-origin: top right;
+
+    z-index: 99998;
 }
 
   .avatar {
