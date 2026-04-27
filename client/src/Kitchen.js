@@ -268,6 +268,11 @@ return (
           <div key={idx} className="m-item-row"><b>{i.qty}x</b> {i.name}</div>
         ))}
       </div>
+      {order.note && (
+  <div className="order-note">
+    📝 {order.note}
+  </div>
+)}
 
       <div className="m-footer">
         {/* ၃။ Button တွေမှာ ပို့မယ့် ID ကို order.orderId လို့ ပြောင်းပါ */}

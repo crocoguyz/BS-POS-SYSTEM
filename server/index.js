@@ -128,6 +128,7 @@ const orderSchema = new mongoose.Schema({
     orderId: String, // e.g., #0001
     table: String,
     items: Array,
+    note: String, 
     total: Number,
     status: { type: String, default: "pending" },
     type: String, // EAT, TAKEAWAY, DELIVERY
