@@ -390,7 +390,7 @@ return (
   <textarea
     value={orderNote}
     onChange={(e) => setOrderNote(e.target.value)}
-    placeholder="ဥပမာ - အစပ်လျော့၊ ဆီနည်း၊ ကြက်သွန်မထည့်..."
+    placeholder="Discription..."
   />
 </div>
       <div className="final-total-row">
