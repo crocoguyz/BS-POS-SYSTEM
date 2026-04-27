@@ -24,6 +24,7 @@ export default function Menu({ user, onLogout }) {
   const [categories, setCategories] = useState([]);;
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [orderNote, setOrderNote] = useState("");
 
   useEffect(() => {
   setCategory("All");
@@ -384,7 +385,14 @@ return (
           </div>
         ))}
       </div>
-
+       <div className="order-note-box">
+  <label>Special Note</label>
+  <textarea
+    value={orderNote}
+    onChange={(e) => setOrderNote(e.target.value)}
+    placeholder="ဥပမာ - အစပ်လျော့၊ ဆီနည်း၊ ကြက်သွန်မထည့်..."
+  />
+</div>
       <div className="final-total-row">
         <span>Total:</span>
         <span style={{color: '#ffffff'}}>{total} MMK</span>
