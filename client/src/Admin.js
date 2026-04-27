@@ -831,7 +831,7 @@ const filteredRevenue = filteredPaidOrders.reduce(
   }}
 >
   
-      🚪 {t("logout")}
+       {t("logout")}
     </button>
            <div className="admin-profile-block">
   <div className="user-text">
