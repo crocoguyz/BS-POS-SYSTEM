@@ -332,7 +332,7 @@ return (
 {showPopup && (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h3 style={{margin: '0 0 10px 0'}}>Your Order #{nextOrderId} </h3>
+      <h3 style={{margin: '0 0 10px 0'}}>Your Order {nextOrderId} </h3>
 
       {orderType === "eat" && (
         <div className="table-selector-box" style={{ marginBottom: '15px' }}>
