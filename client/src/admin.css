@@ -1281,7 +1281,7 @@ html, body {
 
   .menu-logout-style-btn,
   .logout-btn-simple {
-    position: fixed !important;
+    position: absolute !important;
     top: -20px;
     right: 10px;
 
@@ -1303,7 +1303,7 @@ html, body {
   /* USER INFO */
   .admin-user-info,
   .admin-profile-block {
-    position: fixed !important;
+    position: absolute !important;
     top: 20px;
     right: 2px;
 

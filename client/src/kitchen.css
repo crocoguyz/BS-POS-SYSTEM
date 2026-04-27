@@ -371,7 +371,7 @@
   align-items: center;
   gap: 12px;
   background: rgba(30, 41, 59, 0.6);
-  padding: 6px 16px;
+  padding: 6px 12px;
   border-radius: 50px;
   border: 1px solid #334155;
   backdrop-filter: blur(10px);
@@ -405,7 +405,7 @@
   }
 
   .kitchen-profile-block {
-   position: fixed !important;
+   position: absolute !important;
     top: 20px;
     right: 2px;
 
