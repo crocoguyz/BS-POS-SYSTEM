@@ -37,6 +37,7 @@
 /* Ensure all content sits above the overlay */
 .status-indicator, .kitchen-central-header, .summary-pills, .tab-group-center, .kitchen-split-view {
   position: relative;
+  top: 10px;
   z-index: 1;
 }
 
