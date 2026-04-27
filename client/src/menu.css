@@ -499,7 +499,7 @@ body {
     position: absolute !important;
     right: -10px !important;
 
-    transform: translateY(-20px) scale(0.75)  !important;
+    transform: translateY(-15px) scale(0.75)  !important;
     margin: 0 !important;
     z-index: 10;
   }
