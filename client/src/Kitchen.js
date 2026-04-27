@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
+import { useLang } from "./LanguageContext";
 
 const SERVER_URL = "https://bs-pos-system.onrender.com"; // Socket အတွက်
 const API_BASE = "https://bs-pos-system.onrender.com/api"; // Axios (Database) အတွက်
@@ -12,6 +13,7 @@ const socket = io("https://bs-pos-system.onrender.com", {
 });
 export default function Kitchen({ user: propUser, onLogout }) {
   // Prop ကနေမလာရင် localStorage ကနေ ရှာမယ်
+  const { t, lang, setLang } = useLang();
   const user = propUser || JSON.parse(localStorage.getItem("user"));
   const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState("all");
@@ -202,6 +204,21 @@ return (
 
     {/* ၂။ User Profile Block */}
     <div className="kitchen-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="kit-lang-switch">
+  <button 
+    className={lang === "en" ? "active" : ""}
+    onClick={() => setLang("en")}
+  >
+    EN
+  </button>
+
+  <button 
+    className={lang === "mm" ? "active" : ""}
+    onClick={() => setLang("mm")}
+  >
+    MM
+  </button>
+</div>
       <div style={{ textAlign: 'right' }}>
         <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>{user ? user.name : "Chef"}</div>
         <div style={{ fontSize: '11px', color: '#00f2fe', fontWeight: 'bold' }}>{user ? user.role.toUpperCase() : "KITCHEN"}</div>
