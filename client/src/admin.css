@@ -115,7 +115,7 @@
 }
 
 /* Profile Block ကို အရင်အတိုင်း ထားပါမယ် */
-.user-profile-block {
+.admin-profile-block {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1302,7 +1302,7 @@ html, body {
 
   /* USER INFO */
   .admin-user-info,
-  .user-profile-block {
+  .admin-profile-block {
     position: fixed !important;
     top: 40px;
     right: 2px;

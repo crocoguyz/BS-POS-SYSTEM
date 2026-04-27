@@ -833,7 +833,7 @@ const filteredRevenue = filteredPaidOrders.reduce(
   
       🚪 {t("logout")}
     </button>
-           <div className="user-profile-block">
+           <div className="admin-profile-block">
   <div className="user-text">
     {/* Login ဝင်လာတဲ့ user ရဲ့ နာမည်ပေါ်အောင် ပြင်မယ် */}
     <span className="user-name">{user ? user.name : "Unknown User"}</span> 
