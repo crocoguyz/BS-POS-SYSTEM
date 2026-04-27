@@ -1304,7 +1304,7 @@ html, body {
   .admin-user-info,
   .admin-profile-block {
     position: fixed !important;
-    top: 40px;
+    top: 20px;
     right: 2px;
 
     width: auto !important;
