@@ -207,7 +207,7 @@ return (
     MM
   </button>
 </div>
-        <div className="user-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'white' }}>
+        <div className="menu-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'white' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{user ? user.name : "Staff"}</div>
             <div style={{ fontSize: '11px', opacity: 0.8 }}>{user ? user.role.toUpperCase() : "WAITER"}</div>

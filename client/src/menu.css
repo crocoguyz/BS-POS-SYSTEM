@@ -88,6 +88,17 @@ body {
   box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
 }
 
+.menu-profile-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.6);
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid #334155;
+  backdrop-filter: blur(10px);
+}
+
 /* ===== MENU GRID & CARDS ===== */
 .menu-grid {
   display: grid; 
@@ -484,7 +495,7 @@ body {
 
   /* 🔥 USER PROFILE (UNDER LOGOUT) */
   .menu-header
-  .user-profile-block {
+  .menu-profile-block {
     position: absolute !important;
     top: 48px !important;
     right: 10px !important;
