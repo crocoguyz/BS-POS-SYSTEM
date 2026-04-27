@@ -497,10 +497,9 @@ body {
   .menu-header
   .menu-profile-block {
     position: absolute !important;
-    top: 1px !important;
     right: -10px !important;
 
-    transform: translateY(-20px) scale(0.75)  !important;
+    transform: translateY(-40px) scale(0.75)  !important;
     margin: 0 !important;
     z-index: 10;
   }
