@@ -406,8 +406,8 @@
 
   .kitchen-profile-block {
    position: absolute !important;
-    top: -30px;
-    right: -20px;
+    top: -50px;
+    right: -30px;
 
     width: auto !important;
     transform: translateY(5px) scale(0.85) !important;
