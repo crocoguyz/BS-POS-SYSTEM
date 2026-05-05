@@ -6,7 +6,10 @@ import { useLang } from "./LanguageContext";
 
 const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
 const API_BASE = `${SERVER_URL}/api/orders`
-const socket = io(SERVER_URL);
+const socket = io(SERVER_URL, {
+  transports: ["polling", "websocket"],
+  reconnection: true,
+});;
 
 
 
@@ -66,11 +69,37 @@ setCategories(uniqueCats);
     console.log("Connected to Socket Server ID:", socket.id);
   });
 
-    socket.on("menuUpdate", () => {
-    console.log("Menu updated from admin...");
-    fetchMenu();
-    
-  });
+const handleMenuUpdate = (updatedItem) => {
+  console.log("Menu updated from admin:", updatedItem);
+
+  // ✅ Add / Edit / Out of Stock
+  if (updatedItem && updatedItem._id) {
+    setDishes((prev) => {
+      const exists = prev.some(
+        (item) => String(item._id) === String(updatedItem._id)
+      );
+
+      // ✅ Existing item ဆို update/replace
+      if (exists) {
+        return prev.map((item) =>
+          String(item._id) === String(updatedItem._id)
+            ? { ...item, ...updatedItem }
+            : item
+        );
+      }
+
+      // ✅ New dish ဆို list ထဲကို တန်းထည့်
+      return [...prev, updatedItem];
+    });
+
+    return;
+  }
+
+  // ✅ Delete event လို data မပါတာဆို အကုန်ပြန် fetch
+  fetchMenu();
+};
+
+socket.on("menuUpdate", handleMenuUpdate);
 
   
 
@@ -102,7 +131,7 @@ setCategories(uniqueCats);
   return () => {
     socket.off("connect");
     socket.off("newOrder");
-    socket.off("menuUpdate");
+    socket.off("menuUpdate", handleMenuUpdate);
   };
 
     
@@ -124,13 +153,17 @@ setCategories(uniqueCats);
     }
   };
 
-  const addToCart = (item) => {
+const addToCart = (item) => {
   setCart((prev) => {
-    const exist = prev.find((x) => String(x._id) === String(item._id));
+    const itemId = item._id || item.id;
+
+    const exist = prev.find(
+      (x) => String(x._id || x.id) === String(itemId)
+    );
 
     if (exist) {
       return prev.map((x) =>
-        String(x.id) === String(item.id)
+        String(x._id || x.id) === String(itemId)
           ? { ...x, qty: x.qty + 1 }
           : x
       );
@@ -141,8 +174,16 @@ setCategories(uniqueCats);
 };
 
   const updateQty = (id, delta) => {
-    setCart((prev) => prev.map((x) => (x._id === id ? { ...x, qty: x.qty + delta } : x)).filter((x) => x.qty > 0));
-  };
+  setCart((prev) =>
+    prev
+      .map((x) =>
+        String(x._id || x.id) === String(id)
+          ? { ...x, qty: x.qty + delta }
+          : x
+      )
+      .filter((x) => x.qty > 0)
+  );
+};
 
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -212,7 +253,7 @@ return (
         <div className="menu-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'white' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{user ? user.name : "Staff"}</div>
-            <div style={{ fontSize: '11px', opacity: 0.8 }}>{user ? user.role.toUpperCase() : "WAITER"}</div>
+            <div style={{ fontSize: '11px', opacity: 0.8 }}>{user?.role ? user.role.toUpperCase() : "WAITER"}</div>
           </div>
           <div className="avatar" style={{ 
             background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)', 
@@ -220,7 +261,7 @@ return (
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
             fontWeight: 'bold', border: '2px solid rgba(255,255,255,0.2)' 
           }}>
-            {user ? user.name[0].toUpperCase() : "W"}
+            {user?.name ? user.name.charAt(0).toUpperCase() : "W"}
           </div>
         </div>
       </div>
@@ -283,7 +324,7 @@ return (
 >
   <div className="img-container">
     <img
-      src={`https://bs-pos-system.onrender.com${item.image}`}
+      src={`${SERVER_URL}${item.image}`}
       alt={item.name}
       style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "10px" }}
       onError={(e) => {

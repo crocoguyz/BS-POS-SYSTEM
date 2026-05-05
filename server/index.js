@@ -1,3 +1,4 @@
+require("dotenv").config();
 
 const express = require("express");
 const http = require("http");
@@ -301,6 +302,7 @@ app.post('/api/menu', upload.single('image'), async (req, res) => {
       image: req.file ? `/uploads/${req.file.filename}` : "" 
     });
     await newItem.save();
+    io.emit("menuUpdate", newItem);
     res.json({ success: true, data: newItem });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -330,6 +332,8 @@ app.put("/api/menu/:id", async (req, res) => {
     if (!updatedMenu) {
       return res.status(404).json({ message: "Menu not found" });
     }
+    
+    io.emit("menuUpdate", updatedMenu);
 
     res.json({ success: true, data: updatedMenu });
 
@@ -338,6 +342,36 @@ app.put("/api/menu/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+   app.delete("/api/menu/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedMenu = await MenuModel.findByIdAndDelete(id);
+
+    if (!deletedMenu) {
+      return res.status(404).json({
+        success: false,
+        message: "Menu item not found",
+      });
+    }
+
+    io.emit("menuUpdate");
+
+    res.json({
+      success: true,
+      message: "Menu item deleted successfully",
+      data: deletedMenu,
+    });
+  } catch (err) {
+    console.error("❌ Menu Delete Error:", err.message);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});   
 
 // 6. Socket.io Logic
 io.on("connection", (socket) => {

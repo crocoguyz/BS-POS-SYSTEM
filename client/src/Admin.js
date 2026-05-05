@@ -39,8 +39,15 @@ import { useLang } from "./LanguageContext";
 
 
 // --- ၁။ API_BASE ကို Render Link သို့ ပြောင်းလိုက်ပါ ---
-const API_BASE = "https://bs-pos-system.onrender.com/api";
-const socket = io("https://bs-pos-system.onrender.com");
+const SERVER_URL =
+  process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
+
+const API_BASE = `${SERVER_URL}/api`;
+
+const socket = io(SERVER_URL, {
+  transports: ["polling", "websocket"],
+  reconnection: true,
+});
 
 function MenuEditTab({ menuItems, onUpdate, openAddDishModal, setOpenAddDishModal }) {
   const { t } = useLang();
@@ -66,7 +73,7 @@ function MenuEditTab({ menuItems, onUpdate, openAddDishModal, setOpenAddDishModa
 
 const loadMenuItems = async () => {
   try {
-    const res = await axios.get("https://bs-pos-system.onrender.com/api/menu");
+    const res = await axios.get(`${API_BASE}/menu`);
 
     const data = Array.isArray(res.data)
       ? res.data
@@ -88,7 +95,7 @@ const handleAddDish = async () => {
 
    try {
       // 1. Backend ကို Data လှမ်းပို့တယ်
-      const res = await axios.post("https://bs-pos-system.onrender.com/api/menu", formData);
+      const res = await axios.post(`${API_BASE}/menu`, formData);
 
       // 2. ပို့တာ အောင်မြင်သွားရင် (Success ဖြစ်ရင်)
       if (res.data.success) {
@@ -117,11 +124,9 @@ const handleAddDish = async () => {
 
   const toggleStock = async (id, currentStatus) => {
   try {
-    const res = await axios.put(
-      `https://bs-pos-system.onrender.com/api/menu/${id}`,
-      { available: !currentStatus }
-    );
-
+    const res = await axios.put(`${API_BASE}/menu/${id}`, {
+  available: !currentStatus,
+});
     const updatedItem = res.data.data;
 
     const updated = items.map((item) =>
@@ -141,7 +146,7 @@ const handleDelete = async (id) => {
   if (!ok) return;
 
   try {
-    await axios.delete(`https://bs-pos-system.onrender.com/api/menu/${id}`);
+    await axios.delete(`${API_BASE}/menu/${id}`);
 
     const updated = items.filter((item) => item._id !== id);
     setItems(updated);
@@ -385,7 +390,7 @@ useEffect(() => {
   const loadStaffs = async () => {
     try {
       // API_BASE က https://bs-pos-system-1.onrender.com/api/staff ဖြစ်ရမယ်နော်
-      const res = await axios.get("https://bs-pos-system.onrender.com/api/staff");
+      const res = await axios.get(`${API_BASE}/staff`);
       console.log("STAFF DATA =", res.data); 
       setStaffList(res.data);
     } catch (err) {
@@ -422,11 +427,11 @@ loadOrders(); // ✅ ဒါလေးပါမှ history ထဲ ချက်ခ�
   if (!newStaff.password) return alert("Password ထည့်ပါ");
 
   try {
-    const res = await axios.post("https://bs-pos-system.onrender.com/api/staff", {
-      name: newStaff.name,
-      role: newStaff.role,
-      password: newStaff.password
-    });
+    const res = await axios.post(`${API_BASE}/staff`, {
+  name: newStaff.name,
+  role: newStaff.role,
+  password: newStaff.password,
+});
 
     if (res.data.success) {
       setStaffList([...staffList, res.data.data]);
@@ -491,12 +496,14 @@ const salesData = getSalesData();
 // ၁။ အမှာများဆုံး Item တွေကို တွက်ချက်ခြင်း
 const itemCounts = {};
 
-orders.forEach(order => {
-  order.items.forEach(item => {
+orders.forEach((order) => {
+  (order.items || []).forEach((item) => {
+    if (!item?.name) return;
+
     if (itemCounts[item.name]) {
-      itemCounts[item.name] += (item.qty || 1);
+      itemCounts[item.name] += item.qty || 1;
     } else {
-      itemCounts[item.name] = (item.qty || 1);
+      itemCounts[item.name] = item.qty || 1;
     }
   });
 });
@@ -756,8 +763,9 @@ const filteredRevenue = filteredPaidOrders.reduce(
   return (
     <div className="admin-container">
       <aside className="admin-sidebar">
-        <div class="admin-logo"> <h2> RESTAURANT<span>POS</span></h2>
-    <span class="sub-title">Management System</span>
+      <div className="admin-logo">
+  <h2> RESTAURANT<span>POS</span></h2>
+  <span className="sub-title">Management System</span>
 </div>
 {loading && (
       <div className="loading-spinner" style={{ color: 'yellow', textAlign: 'center', padding: '10px' }}>
@@ -839,12 +847,12 @@ const filteredRevenue = filteredPaidOrders.reduce(
     <span className="user-name">{user ? user.name : "Unknown User"}</span> 
     
     {/* ရာထူးကိုလည်း dynamic ပြမယ် (ဥပမာ- ADMIN သို့မဟုတ် WAITER) */}
-    <span className="user-role">{user ? user.role.toUpperCase() : "STAFF"}</span>
+    <span className="user-role">{user?.role ? user.role.toUpperCase() : "STAFF"}</span>
   </div>
   
   <div className="avatar">
     {/* နာမည်ရဲ့ ပထမဆုံး စာလုံးကိုပဲ avatar မှာ ပြမယ် */}
-    {user ? user.name[0].toUpperCase() : "U"}
+    {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
   </div>
 </div>
   </div>
@@ -944,7 +952,7 @@ const filteredRevenue = filteredPaidOrders.reduce(
           {orders.slice(0, 5).map(o => (
             <div key={o._id} className="recent-item">
               <span>{o.orderId}</span>
-              <span>{o.total.toLocaleString()} MMK</span>
+              <span>{Number(o.total || 0).toLocaleString()} MMK</span>
               <span className={`status ${o.status}`}>{o.status}</span>
             </div>
           ))}
@@ -1111,7 +1119,8 @@ const filteredRevenue = filteredPaidOrders.reduce(
               <div className="staff-grid">
                 {staffList.map(staff => (
                   <div key={staff._id} className="staff-card">
-                    <div className="staff-avatar">{staff.name[0]}</div>
+                    <div className="staff-avatar">
+  {staff?.name ? staff.name.charAt(0).toUpperCase() : "S"}</div>
                     <div className="staff-info">
                       <h4>{staff.name}</h4>
                       <p>{staff.role}</p>

@@ -353,7 +353,7 @@
   transition: all 0.2s ease;
   margin-right: 15px;
   box-shadow: 0 4px 6px rgba(255, 77, 77, 0.1);
-  transform: translateX(-50px); 
+  transform: none; 
 }
 
 .kitchen-logout-btn:hover {
@@ -464,4 +464,82 @@
 .kit-lang-switch button.active {
   background: linear-gradient(135deg, #00f2fe, #4facfe);
   color: #00111a;
+}
+
+/* =========================================================
+   KITCHEN TOP LEFT CONTROL STACK FIX
+   Put this at VERY BOTTOM of kitchen.css
+========================================================= */
+
+/* =========================================================
+   KITCHEN HEADER SPLIT FIX
+   LEFT: EN/MM + PROFILE
+   RIGHT: STATUS + LOGOUT
+   Put this at VERY BOTTOM of kitchen.css
+========================================================= */
+
+.header-left-stack {
+  position: absolute !important;
+  top: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  z-index: 99999 !important;
+}
+
+.header-right-stack {
+  position: absolute !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  z-index: 99999 !important;
+}
+
+.header-left-stack .kit-lang-switch,
+.header-left-stack .kitchen-profile-block,
+.header-right-stack .status-indicator-inline,
+.header-right-stack .kitchen-logout-btn {
+  position: static !important;
+  margin-right: 0 !important;
+  transform: none !important;
+}
+
+.header-left-stack .kitchen-profile-block {
+  width: fit-content !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .header-left-stack {
+    top: 12px !important;
+    left: 12px !important;
+    gap: 8px !important;
+  }
+
+  .header-right-stack {
+    top: 12px !important;
+    right: 12px !important;
+    gap: 8px !important;
+  }
+
+  .header-left-stack .kitchen-profile-block {
+    transform: scale(0.9) !important;
+    transform-origin: top left !important;
+  }
+
+  .header-right-stack .status-indicator-inline,
+  .header-right-stack .kitchen-logout-btn {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
 }

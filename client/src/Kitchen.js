@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import "./kitchen.css";
 import { useLang } from "./LanguageContext";
 
-const SERVER_URL = "https://bs-pos-system.onrender.com"; // Socket အတွက်
-const API_BASE = "https://bs-pos-system.onrender.com/api"; // Axios (Database) အတွက်
+const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com"; //For Socket//
+const API_BASE = `${SERVER_URL}/api`; //For database//
 
-const socket = io("https://bs-pos-system.onrender.com", {
+const socket = io(SERVER_URL, {
   transports: ["polling", "websocket"],
   reconnection: true,
 });
@@ -22,8 +22,32 @@ export default function Kitchen({ user: propUser, onLogout }) {
   const [currentTime, setCurrentTime] = useState(Date.now());
   const audioPlayer = useRef(null);
 
+  const loadOrders = useCallback(async () => {
+  try {
+    const res = await axios.get(`${API_BASE}/orders`);
+    setOrders((res.data || []).filter((o) => o.status !== "paid"));
+  } catch (err) {
+    console.error("Load error:", err);
+  }
+}, []);
+
+const showNotification = useCallback(
+  (order) => {
+    setNewOrderNoti(
+      `${t("newOrder")}: ${order.orderId} (${t("tableText")} ${order.table})`
+    );
+
+    if (audioPlayer.current) {
+      audioPlayer.current.play().catch(() => console.warn("Autoplay blocked"));
+    }
+
+    setTimeout(() => setNewOrderNoti(null), 5000);
+  },
+  [t]
+);
+
   useEffect(() => {
-    document.title = "Kitchen Dashboard";
+    document.title = t("kitchenDashboard");
     loadOrders();
     
     const timerInterval = setInterval(() => {
@@ -79,25 +103,8 @@ const orderId = data.orderId || data.id || data._id; // MongoDB ID နဲ့ Reg
       socket.off("orderUpdate");
       socket.off("updateOrder");
     };
-  }, []);
+  }, [t, loadOrders, showNotification]);
 
-  const loadOrders = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/orders`);
-      // Initial load မှာတင် paid ဖြစ်ပြီးသားတွေကို ဖယ်ထားမယ်
-      setOrders(res.data.filter(o => o.status !== "paid"));
-    } catch (err) { console.error("Load error"); }
-  };
-
-  const showNotification = (order) => {
-    setNewOrderNoti(`New Order: ${order.orderId} (Table ${order.table})`);
-    if (audioPlayer.current) {
-      audioPlayer.current.play().catch(() => console.warn("Autoplay blocked"));
-    }
-    setTimeout(() => setNewOrderNoti(null), 5000);
-  };
-
-  
 
  const updateStatus = async (id, status) => {
   console.log("Updating Status for ID:", id);
@@ -115,18 +122,19 @@ const orderId = data.orderId || data.id || data._id; // MongoDB ID နဲ့ Reg
     }
   } catch (err) {
     console.error("Update status error:", err);
-    alert("Status ပြောင်းလို့ မရပါဘူး Bro။");
+    alert(t("statusUpdateFailed"));
   }
 };
 
   // Quantity Summary
   const getSummary = () => {
     const summary = {};
-    activeOrders.forEach(order => {
-      order.items.forEach(item => {
-        summary[item.name] = (summary[item.name] || 0) + item.qty;
-      });
-    });
+    activeOrders.forEach((order) => {
+  (order.items || []).forEach((item) => {
+    if (!item?.name) return;
+    summary[item.name] = (summary[item.name] || 0) + (item.qty || 1);
+  });
+});
     return Object.entries(summary);
   };
 
@@ -161,71 +169,92 @@ return (
       <audio ref={audioPlayer} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" />
 
       <header className="kitchen-central-header">
-        <h1>KITCHEN DASHBOARD</h1>
+        <h1>{t("kitchenDashboard")}</h1>
         
         <div className="stats-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
           {/* Pending Orders Chip */}
           <div className="active-chip">
-            Pending Orders: <span>{activeOrders.length}</span>
+            {t("pendingOrders")}: <span>{activeOrders.length}</span>
           </div>
 
-          <div className="header-right-stack" style={{ 
-    position: 'absolute', 
-    top: '20px', 
-    right: '20px', 
-    display: 'flex', 
-    flexDirection: 'column', 
-    alignItems: 'flex-end', 
-    gap: '10px' 
-    
-  }}>
-      {/* ၁။ Connected Status */}
-    <div className={`status-indicator-inline ${isConnected ? 'online' : 'offline'}`} style={{
-      fontSize: '12px',
-      fontWeight: 'bold',
-      padding: '4px 10px',
-      borderRadius: '15px',
-      display: 'flex',
-      alignItems: 'center',
-      marginRight: '20px',
-      gap: '5px',
-      background: 'rgba(0, 0, 0, 0.4)',
-      color: isConnected ? '#3fc988' : '#ff4b2b',
-      border: `1px solid ${isConnected ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 75, 43, 0.3)'}`
-    }}>
-      <span>●</span> {isConnected ? "Connected" : "Disconnected"}
-    </div>
+       {/* LEFT SIDE: EN/MM + USER PROFILE */}
+<div className="header-left-stack">
+  <div className="kit-lang-switch">
+    <button
+      className={lang === "en" ? "active" : ""}
+      onClick={() => setLang("en")}
+    >
+      EN
+    </button>
 
-   <div className="kit-lang-switch">
-  <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>EN</button>
-  <button className={lang === "mm" ? "active" : ""} onClick={() => setLang("mm")}>MM</button>
-</div>
-     {/* ၃။ Logout Button */}
-    <button className="kitchen-logout-btn" onClick={onLogout}>
-           Logout
-        </button>
-    
-  
-
-    {/* ၂။ User Profile Block */}
-    <div className="kitchen-profile-block" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-   
-      <div style={{ textAlign: 'right' }}>
-        <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>{user ? user.name : "Chef"}</div>
-        <div style={{ fontSize: '11px', color: '#00f2fe', fontWeight: 'bold' }}>{user ? user.role.toUpperCase() : "KITCHEN"}</div>
-      </div>
-      <div className="avatar" style={{ 
-        background: 'linear-gradient(135deg, #00f2fe 0%, #f093fb 100%)', 
-        width: '35px', height: '35px', borderRadius: '50%', 
-        display: 'flex', alignItems: 'center', justifyContent: 'center', 
-        fontWeight: 'bold', color: 'black', border: '1px solid rgba(255,255,255,0.2)' 
-      }}>
-        {user ? user.name[0].toUpperCase() : "K"}
-      </div>
-    </div>
-
-   
+    <button
+      className={lang === "mm" ? "active" : ""}
+      onClick={() => setLang("mm")}
+    >
+      MM
+    </button>
   </div>
+
+  <div className="kitchen-profile-block">
+    <div style={{ textAlign: "right" }}>
+      <div style={{ fontWeight: "bold", fontSize: "14px", color: "#fff" }}>
+        {user?.name || t("chef")}
+      </div>
+
+      <div style={{ fontSize: "11px", color: "#00f2fe", fontWeight: "bold" }}>
+        {user?.role ? user.role.toUpperCase() : t("chef").toUpperCase()}
+      </div>
+    </div>
+
+    <div
+      className="avatar"
+      style={{
+        background: "linear-gradient(135deg, #00f2fe 0%, #f093fb 100%)",
+        width: "35px",
+        height: "35px",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: "bold",
+        color: "black",
+        border: "1px solid rgba(255,255,255,0.2)",
+      }}
+    >
+      {user?.name ? user.name.charAt(0).toUpperCase() : "K"}
+    </div>
+  </div>
+</div>
+
+{/* RIGHT SIDE: CONNECTED + LOGOUT */}
+<div className="header-right-stack">
+  <div
+    className={`status-indicator-inline ${isConnected ? "online" : "offline"}`}
+    style={{
+      fontSize: "12px",
+      fontWeight: "bold",
+      padding: "4px 10px",
+      borderRadius: "15px",
+      display: "flex",
+      alignItems: "center",
+      gap: "5px",
+      background: "rgba(0, 0, 0, 0.4)",
+      color: isConnected ? "#3fc988" : "#ff4b2b",
+      border: `1px solid ${
+        isConnected
+          ? "rgba(0, 255, 136, 0.3)"
+          : "rgba(255, 75, 43, 0.3)"
+      }`,
+    }}
+  >
+    <span>●</span> {isConnected ? t("connected") : t("disconnected")}
+  </div>
+
+  <button className="kitchen-logout-btn" onClick={onLogout}>
+    {t("logout")}
+  </button>
+</div>
+
   </div>
 
         {/* Summary Pills */}
@@ -239,17 +268,21 @@ return (
 
         {/* Tab Groups */}
         <div className="tab-group-center">
-          {["all", "eat", "takeaway", "delivery"].map((t) => (
-            <button key={t} className={tab === t ? "active" : ""} onClick={() => setTab(t)}>
-              {t.toUpperCase()}
-            </button>
-          ))}
-        </div>
+  {["all", "eat", "takeaway", "delivery"].map((type) => (
+    <button
+      key={type}
+      className={tab === type ? "active" : ""}
+      onClick={() => setTab(type)}
+    >
+      {t(type).toUpperCase()}
+    </button>
+  ))}
+</div>
       </header>
 
       <main className="kitchen-split-view">
         <section className="column active-column">
-          <h2 className="col-title">🔥 Active Orders</h2>
+          <h2 className="col-title">🔥 {t("activeOrders")}</h2>
           <div className="order-scroll-area">
   {activeOrders.map((order) => {
   const wait = getWaitingTime(order); 
@@ -265,10 +298,13 @@ return (
           ⏳ {wait.mins}m {wait.secs}s
         </div>
         
-        <span className={`m-type ${order.type?.toLowerCase() || 'eat'}`}>
-          {order.type?.toUpperCase() || 'EAT'}
-        </span>
-        <span className="m-table">Table-{order.table}</span>
+        <span className={`m-type ${order.type?.toLowerCase() || "eat"}`}>
+  {t(order.type || "eat").toUpperCase()}
+</span>
+
+<span className="m-table">
+  {t("tableText")}-{order.table}
+</span>
       </div>
 
       <div className="m-items">
@@ -284,9 +320,17 @@ return (
 
       <div className="m-footer">
         {/* ၃။ Button တွေမှာ ပို့မယ့် ID ကို order.orderId လို့ ပြောင်းပါ */}
-        <button onClick={() => updateStatus(order.orderId, "cooking")}>Start Cooking</button>
-        <button className="cancel" onClick={() => updateStatus(order.orderId, "cancel")}>Cancel Order</button>
-        <button className="finish" onClick={() => updateStatus(order.orderId, "done")}>Finish</button>
+        <button onClick={() => updateStatus(order.orderId, "cooking")}>
+  {t("startCooking")}
+</button>
+
+<button className="cancel" onClick={() => updateStatus(order.orderId, "cancel")}>
+  {t("cancelOrder")}
+</button>
+
+<button className="finish" onClick={() => updateStatus(order.orderId, "done")}>
+  {t("finish")}
+</button>
       </div>
     </div>
   );
@@ -295,12 +339,14 @@ return (
         </section>
 
         <section className="column done-column">
-          <h2 className="col-title">✅ Completed</h2>
+          <h2 className="col-title">✅ {t("completed")}</h2>
           <div className="order-scroll-area">
             {completedOrders.map((order) => (
-              <div className="modern-card mini done" key={order.Id}>
-                <div className="m-card-header">
-                  <span>#{order.Id} (T-{order.table})</span>
+              <div className="modern-card mini done" key={order.orderId || order._id}>
+  <div className="m-card-header">
+    <span>
+      {order.orderId || order._id} ({t("tableText")}-{order.table})
+    </span>
                   <span className="m-price">{Number(order.total).toLocaleString()} MMK</span>
                 </div>
               </div>

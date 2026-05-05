@@ -7,6 +7,11 @@ import Menu from "./Menu";
 import Kitchen from "./Kitchen";
 import { LanguageProvider } from "./LanguageContext";
 
+const SERVER_URL =
+  process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
+
+const API_BASE = `${SERVER_URL}/api`;
+
 
 // ... (imports တွေက အတူတူပဲ)
 
@@ -55,7 +60,7 @@ function App() {
     const savedUser = JSON.parse(localStorage.getItem("user"));
 
     if (savedUser?.name) {
-      await fetch("https://bs-pos-system.onrender.com/api/logout", {
+      await fetch(`${API_BASE}/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
