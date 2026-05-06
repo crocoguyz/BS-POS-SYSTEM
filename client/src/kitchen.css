@@ -515,31 +515,166 @@
   width: fit-content !important;
 }
 
-/* Mobile */
+/* =========================================================
+   MOBILE ONLY - KITCHEN HEADER LAYOUT FIX
+   Put this at VERY BOTTOM of kitchen.css
+========================================================= */
 @media (max-width: 768px) {
-  .header-left-stack {
-    top: 12px !important;
-    left: 12px !important;
-    gap: 8px !important;
+  .kitchen-page {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: 100vh !important;
+    padding: 100px 10px 20px !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
   }
 
+  /* LEFT: EN/MM + PROFILE */
+  .header-left-stack {
+    position: absolute !important;
+    top: -80px !important;
+    left: 8px !important;
+    right: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1px !important;
+    z-index: 99999 !important;
+    transform: none !important;
+  }
+
+  /* RIGHT: CONNECTED + LOGOUT */
   .header-right-stack {
-    top: 12px !important;
-    right: 12px !important;
-    gap: 8px !important;
+    position: absolute !important;
+    top: -80px !important;
+    right: 10px !important;
+    left: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 6px !important;
+    z-index: 99999 !important;
+    transform: none !important;
+  }
+
+  .header-left-stack .kit-lang-switch {
+    transform: scale(0.60) !important;
+    transform-origin: top left !important;
+    margin: 0 !important;
   }
 
   .header-left-stack .kitchen-profile-block {
-    transform: scale(0.9) !important;
+    position: static !important;
+    width: fit-content !important;
+    transform: scale(0.50) !important;
+    transform-origin: top left !important;
+    margin: 0 !important;
+  }
+
+  .header-right-stack .status-indicator-inline {
+    position: static !important;
+    transform: scale(0.70) !important;
+    transform-origin: top right !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .header-right-stack .kitchen-logout-btn {
+    position: static !important;
+    transform: scale(0.70) !important;
+    transform-origin: top right !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Title center below top controls */
+  .kitchen-central-header {
+    position: relative !important;
+    top: auto !important;
+    margin: 0 auto 16px !important;
+    padding-top: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+    z-index: 2 !important;
+  }
+
+  .kitchen-central-header h1 {
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+    margin: 0 0 12px !important;
+    letter-spacing: 1px !important;
+    word-break: keep-all !important;
+  }
+
+  .active-chip {
+    font-size: 12px !important;
+    padding: 8px 14px !important;
+    margin: 0 auto 14px !important;
+    width: fit-content !important;
+  }
+
+  .tab-group-center {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding: 4px 0 10px !important;
+    margin: 0 0 12px !important;
+  }
+
+  .tab-group-center button {
+    flex: 0 0 auto !important;
+    min-width: 72px !important;
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+  }
+
+  .kitchen-split-view {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .order-column {
+    width: 100% !important;
+    min-height: 160px !important;
+    padding: 18px 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .modern-card.mini.done {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* MOBILE - Lang switch + profile close together */
+@media (max-width: 768px) {
+  .header-left-stack {
+    position: absolute !important;
+    top: -80px !important;
+    left: 8px !important;
+    right: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0 !important;
+    z-index: 99999 !important;
+    transform: none !important;
+  }
+
+  .header-left-stack .kit-lang-switch {
+    margin: 0 !important;
+    transform: scale(0.60) !important;
     transform-origin: top left !important;
   }
 
-  .header-right-stack .status-indicator-inline,
-  .header-right-stack .kitchen-logout-btn {
-    position: static !important;
-    top: auto !important;
-    right: auto !important;
-    left: auto !important;
-    transform: none !important;
+  .header-left-stack .kitchen-profile-block {
+    margin-top: -10px !important; /* ✅ Lang switch နားကပ်ချင်ရင် ဒီဟာ adjust */
+    margin-left: 0 !important;
+    transform: scale(0.50) !important;
+    transform-origin: top left !important;
   }
 }
