@@ -552,7 +552,7 @@
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
-    gap: 6px !important;
+    gap: 1px !important;
     z-index: 99999 !important;
     transform: none !important;
   }
@@ -581,7 +581,7 @@
 
   .header-right-stack .kitchen-logout-btn {
     position: static !important;
-    transform: scale(0.70) !important;
+    transform: scale(0.80) !important;
     transform-origin: top right !important;
     margin: 0 !important;
     white-space: nowrap !important;
@@ -667,14 +667,14 @@
 
   .header-left-stack .kit-lang-switch {
     margin: 0 !important;
-    transform: scale(0.60) !important;
+    transform: scale(0.70) !important;
     transform-origin: top left !important;
   }
 
   .header-left-stack .kitchen-profile-block {
-    margin-top: -10px !important; /* ✅ Lang switch နားကပ်ချင်ရင် ဒီဟာ adjust */
+    margin-top: -8px !important; /* ✅ Lang switch နားကပ်ချင်ရင် ဒီဟာ adjust */
     margin-left: 0 !important;
-    transform: scale(0.50) !important;
+    transform: scale(0.70) !important;
     transform-origin: top left !important;
   }
 }
