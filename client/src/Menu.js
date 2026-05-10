@@ -5,6 +5,70 @@ import { io } from "socket.io-client";
 import { useLang } from "./LanguageContext";
 
 const SERVER_URL = process.env.REACT_APP_API_URL || "https://bs-pos-system.onrender.com";
+
+const getMenuImage = (image) => {
+  if (!image || image.trim() === "") {
+    return "/no-image.png";
+  }
+
+  if (image.startsWith("data:image")) {
+    return image;
+  }
+
+  if (image.startsWith("http")) {
+    return image;
+  }
+
+  if (image.startsWith("/uploads")) {
+    return `${SERVER_URL}${image}`;
+  }
+
+  return image;
+};
+
+const categoryNameMM = {
+  Breakfast: "မနက်စာ",
+  Drink: "အအေး",
+  Lunch: "နေ့လယ်စာ",
+
+  // old data normalize
+  Drinks: "အအေး",
+  "အချိုရည်": "အအေး",
+  "အအေး": "အအေး",
+  "မနက်စာ": "မနက်စာ",
+  "နေ့လယ်စာ": "နေ့လယ်စာ",
+};
+
+const getItemCategory = (item, lang) => {
+  const rawCat =
+    item.category_mm ||
+    item.category_en ||
+    item.category ||
+    "";
+
+  if (lang === "mm") {
+    return categoryNameMM[rawCat] || rawCat;
+  }
+
+  // English mode normalize
+  if (rawCat === "Drinks") return "Drink";
+  if (rawCat === "Drink") return "Drink";
+  if (rawCat === "အချိုရည်") return "Drink";
+  if (rawCat === "အအေး") return "Drink";
+  if (rawCat === "မနက်စာ") return "Breakfast";
+  if (rawCat === "နေ့လယ်စာ") return "Lunch";
+
+  return rawCat;
+};
+
+const getItemName = (item, lang) => {
+  if (lang === "mm") {
+    return item.name_mm || item.name || item.name_en || "";
+  }
+
+  return item.name_en || item.name_mm || item.name || "";
+};
+
 const API_BASE = `${SERVER_URL}/api/orders`
 const socket = io(SERVER_URL, {
   transports: ["polling", "websocket"],
@@ -44,15 +108,9 @@ export default function Menu({ user, onLogout }) {
 
         setDishes(res.data);
 
-        const uniqueCats = [
+    const uniqueCats = [
   "All",
-  ...new Set(
-    res.data.map((item) =>
-      lang === "mm"
-        ? item.category_mm || item.category
-        : item.category_en || item.category
-    )
-  ),
+  ...new Set(res.data.map((item) => getItemCategory(item, lang))),
 ];
 
 setCategories(uniqueCats);
@@ -188,42 +246,52 @@ const addToCart = (item) => {
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   const confirmOrder = async () => {
-    if (cart.length === 0) return alert("Please add items first!");
-    setLoading(true);
+  if (cart.length === 0) return alert("Please add items first!");
+  setLoading(true);
 
-    try {
-      const res = await axios.post(`${API_BASE}`, {
-        table: tableNumber,
-        type: orderType,
-        items: cart,
-        total: total,
-        note: orderNote,
-        orderId: nextOrderId // Popup မှာ မြင်နေရတဲ့ #000x ကို ပို့မယ်
-      });
+  try {
+    // ✅ Order ပို့တဲ့အခါ image/base64 မပါအောင် သေးသေးလေး ပြန်ဆောက်မယ်
+    const orderItems = cart.map((item) => ({
+      _id: item._id || item.id,
+      name: getItemName(item, lang),
+      name_mm: item.name_mm || "",
+      name_en: item.name_en || "",
+      price: Number(item.price),
+      qty: Number(item.qty),
+      category: getItemCategory(item, lang),
+    }));
 
-      if (res.data.success) {
-        // 🔥 ဒီအပိုင်းက အရေးကြီးဆုံးပဲ
-        // လက်ရှိတင်လိုက်တဲ့ ID ကို Success Modal မှာ ပြဖို့ သိမ်းထားမယ်
-        setCurrentOrderId(nextOrderId); 
-        
-        setCart([]);
-        setShowPopup(false);
-        setShowSuccess(true);
-        
-        // 🔥 ID ကို တစ်ခု တိုးပေးမယ့် Logic
-        // #0001 ထဲက 1 ကို ယူပြီး 1 ပေါင်းမယ်၊ ပြီးရင် #0002 ပြန်လုပ်မယ်
-        const currentNum = parseInt(nextOrderId.replace('#', '')) || 1;
-        const nextNum = `#${String(currentNum + 1).padStart(4, '0')}`;
-        setNextOrderId(nextNum); 
+    const res = await axios.post(`${API_BASE}`, {
+      table: tableNumber,
+      type: orderType,
+      items: orderItems,
+      total: total,
+      note: orderNote,
+      orderId: nextOrderId, // Popup မှာ မြင်နေရတဲ့ #000x ကို ပို့မယ်
+    });
 
-        setTimeout(() => setShowSuccess(false), 3000);
-      }
-    } catch (err) {
-      alert("Server Error! Check connection.");
-    } finally {
-      setLoading(false);
+    if (res.data.success) {
+      // 🔥 လက်ရှိတင်လိုက်တဲ့ ID ကို Success Modal မှာ ပြဖို့ သိမ်းထားမယ်
+      setCurrentOrderId(nextOrderId);
+
+      setCart([]);
+      setShowPopup(false);
+      setShowSuccess(true);
+
+      // 🔥 ID ကို တစ်ခုတိုးမယ်
+      const currentNum = parseInt(nextOrderId.replace("#", "")) || 1;
+      const nextNum = `#${String(currentNum + 1).padStart(4, "0")}`;
+      setNextOrderId(nextNum);
+
+      setTimeout(() => setShowSuccess(false), 3000);
     }
-  };// <--- confirmOrder ပိတ်တာ
+  } catch (err) {
+    console.error("Confirm order error:", err);
+    alert("Server Error! Check connection.");
+  } finally {
+    setLoading(false);
+  }
+};// <--- confirmOrder ပိတ်တာ
 
 return (
     <div className="menu-container">
@@ -307,14 +375,24 @@ return (
   {dishes.length > 0 ? (
     dishes
       .filter((f) => {
-  const itemCat =
-    lang === "mm"
-      ? f.category_mm || f.category
-      : f.category_en || f.category;
+ const itemCat = getItemCategory(f, lang);
 
-  return category === "All" ? true : itemCat === category;
+return category === "All" ? true : itemCat === category;
 })
-      .filter((f) => f.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      .filter((f) => {
+  const displayName = getItemName(f, lang);
+  const originalName = f.name || "";
+  const mmName = f.name_mm || "";
+  const enName = f.name_en || "";
+  const keyword = searchTerm.toLowerCase();
+
+  return (
+    displayName.toLowerCase().includes(keyword) ||
+    originalName.toLowerCase().includes(keyword) ||
+    mmName.toLowerCase().includes(keyword) ||
+    enName.toLowerCase().includes(keyword)
+  );
+})
       .map((item) => (
         
         // 💡 key ကို item._id လို့ ပြောင်းသုံးပါ
@@ -323,14 +401,21 @@ return (
   key={item._id}
 >
   <div className="img-container">
-    <img
-      src={`${SERVER_URL}${item.image}`}
-      alt={item.name}
-      style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "10px" }}
-      onError={(e) => {
-        e.target.src = "https://via.placeholder.com/200?text=No+Image";
-      }}
-    />
+   <img
+  src={getMenuImage(item.image)}
+  alt={item.name}
+  style={{
+    width: "100%",
+    height: "150px",
+    objectFit: "cover",
+    borderRadius: "10px",
+    display: "block",
+  }}
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = "/no-image.png";
+  }}
+/>
 
     {!item.available && (
       <div className="stock-overlay">
@@ -343,7 +428,7 @@ return (
   </div>
 
   <div className="card-info">
-    <h4>{lang === "mm" ? item.name_mm || item.name : item.name_en || item.name}</h4>
+    <h4>{getItemName(item, lang)}</h4>
     <p>{Number(item.price).toLocaleString()} MMK</p>
 
     <button

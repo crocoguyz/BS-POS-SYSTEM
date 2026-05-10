@@ -1,11 +1,45 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const MenuSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  category: { type: String, required: true },
-  price: { type: Number, required: true },
-  image: { type: String }, // ပုံ Link ထည့်ဖို့
-  available: { type: Boolean, default: true } // ပစ္စည်းပြတ်/မပြတ် စစ်ဖို့
-}, { timestamps: true });
+const menuSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
 
-module.exports = mongoose.model('Menu', MenuSchema);
+    name_mm: {
+      type: String,
+      default: "",
+    },
+
+    name_en: {
+      type: String,
+      default: "",
+    },
+
+    price: {
+      type: Number,
+      required: true,
+    },
+
+    category: {
+      type: String,
+      required: true,
+    },
+
+    image: {
+      type: String,
+      default: "",
+    },
+
+    available: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model("Menu", menuSchema);

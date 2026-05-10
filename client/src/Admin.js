@@ -63,8 +63,14 @@ function MenuEditTab({ menuItems, onUpdate, openAddDishModal, setOpenAddDishModa
     if (setOpenAddDishModal) setOpenAddDishModal(false);
   }
 }, [openAddDishModal, setOpenAddDishModal]);
-  const [newDish, setNewDish] = useState({ name: "", price: "", category: "Breakfast" });
+  const [newDish, setNewDish] = useState({
+  name_mm: "",
+  name_en: "",
+  price: "",
+  category: "Breakfast",
+});
   const [isNewCat, setIsNewCat] = useState(false); 
+  const [customCat, setCustomCat] = useState("");
   const [imageFile, setImageFile] = useState(null);
 
    useEffect(() => {
@@ -87,20 +93,48 @@ const loadMenuItems = async () => {
 };
   
 const handleAddDish = async () => {
-    const formData = new FormData();
-    formData.append('name', newDish.name);
-    formData.append('price', newDish.price);
-    formData.append('category', newDish.category);
-    if (imageFile) formData.append('image', imageFile);
+  const finalCategory = isNewCat ? customCat.trim() : newDish.category;
+
+if (!finalCategory) {
+  alert("Category ထည့်ပါ bro");
+  return;
+}
+   const formData = new FormData();
+
+const finalName = newDish.name_mm || newDish.name_en || newDish.name || "";
+
+formData.append("name", finalName);
+formData.append("name_mm", newDish.name_mm || "");
+formData.append("name_en", newDish.name_en || "");
+formData.append("price", newDish.price);
+formData.append("category", finalCategory);
+
+if (imageFile) {
+  formData.append("image", imageFile);
+}
 
    try {
       // 1. Backend ကို Data လှမ်းပို့တယ်
-      const res = await axios.post(`${API_BASE}/menu`, formData);
+      const res = await axios.post(`${API_BASE}/menu`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
 
       // 2. ပို့တာ အောင်မြင်သွားရင် (Success ဖြစ်ရင်)
       if (res.data.success) {
         alert("Dish added!");
         setShowAddModal(false); // Popup modal ကို ပိတ်လိုက်မယ်
+
+        setNewDish({
+         name_mm: "",
+         name_en: "",
+         price: "",
+         category: "Breakfast",
+        });
+setCustomCat("");
+setIsNewCat(false);
+setImageFile(null);
         
         // 🔥 ဒီနေရာမှာ ထည့်ရမှာပါ
         if (typeof loadMenuItems === "function") {
@@ -208,26 +242,73 @@ const handleSave = async (id) => {
           <div className="modal-content glass-card">
             <h3> {t("addNewDish")} </h3>
             
-            <input type="text" placeholder={t("dishName")} onChange={(e) => setNewDish({...newDish, name: e.target.value})} />
+            <input
+  type="text"
+  placeholder="Dish Name Myanmar / ဟင်းပွဲအမည် မြန်မာ"
+  value={newDish.name_mm}
+  onChange={(e) =>
+    setNewDish({ ...newDish, name_mm: e.target.value })
+  }
+/>
+
+<input
+  type="text"
+  placeholder="Dish Name English / English name optional"
+  value={newDish.name_en}
+  onChange={(e) =>
+    setNewDish({ ...newDish, name_en: e.target.value })
+  }
+/>
             <input type="number" placeholder={t("price")} onChange={(e) => setNewDish({...newDish, price: e.target.value})} />
 
             <div className="cat-section">
-              {!isNewCat ? (
-                <select onChange={(e) => {
-                  if(e.target.value === "ADD_NEW") setIsNewCat(true);
-                  else setNewDish({...newDish, category: e.target.value});
-                }}>
-                  <option value="Breakfast">Breakfast</option>
-                  <option value="Drinks">Drinks</option>
-                  <option value="ADD_NEW">+ Add New Category</option>
-                </select>
-              ) : (
-                <input type="text" placeholder="Enter New Category" onBlur={(e) => {
-                  setNewDish({...newDish, category: e.target.value});
-                  setIsNewCat(false);
-                }} />
-              )}
-            </div>
+  {!isNewCat ? (
+    <select
+      value={newDish.category}
+      onChange={(e) => {
+        if (e.target.value === "ADD_NEW") {
+          setIsNewCat(true);
+          setCustomCat("");
+        } else {
+          setNewDish({ ...newDish, category: e.target.value });
+        }
+      }}
+    >
+      <option value="Breakfast">Breakfast</option>
+      <option value="Drink">Drink</option>
+      <option value="Lunch">Lunch</option>
+      <option value="ADD_NEW">+ Add New Category</option>
+    </select>
+  ) : (
+    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+      <input
+        type="text"
+        placeholder="Enter New Category"
+        value={customCat}
+        onChange={(e) => setCustomCat(e.target.value)}
+        style={{ flex: 1 }}
+      />
+
+      <button
+        type="button"
+        onClick={() => {
+          setIsNewCat(false);
+          setCustomCat("");
+        }}
+        style={{
+          padding: "10px 14px",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,255,255,0.25)",
+          background: "rgba(255,255,255,0.12)",
+          color: "#fff",
+          cursor: "pointer",
+        }}
+      >
+        Cancel
+      </button>
+    </div>
+  )}
+</div>
 
             <div className="upload-section">
               <label htmlFor="file-upload" className="custom-file-upload">

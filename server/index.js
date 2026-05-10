@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const MenuModel = require('./models/Menu');
 const multer = require('multer');
-const path = require('path');
+
 
 const app = express();
 app.use(express.json());
@@ -24,13 +24,23 @@ const io = new Server(server, {
   }
 });
 
-const storage = multer.diskStorage({
-  destination: './uploads/',
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 2 * 1024 * 1024, // 2MB max
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(new Error("Only JPG, PNG, and WEBP images are allowed"));
+    }
+
+    cb(null, true);
+  },
 });
-const upload = multer({ storage });
 
 // 3. MongoDB Connection
 const mongoURI = (process.env.MONGO_URI || "").trim();
@@ -289,23 +299,50 @@ app.post("/api/logout", async (req, res) => {
   }
 });
 
-app.use('/uploads', express.static('uploads'));
+// app.use('/uploads', express.static('uploads'));
 
 // API Route (Add New Dish)
 app.post('/api/menu', upload.single('image'), async (req, res) => {
   try {
-    const { name, price, category } = req.body;
+    const { name, name_mm, name_en, price, category } = req.body;
+
+    console.log("ADD MENU BODY =", req.body);
+
+    let imageData = "";
+
+    if (req.file) {
+      imageData = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+    }
+
+    const finalName = name || name_mm || name_en || "";
+
     const newItem = new MenuModel({
-      name,
+      name: finalName,
+      name_mm: name_mm || "",
+      name_en: name_en || "",
       price: Number(price),
       category,
-      image: req.file ? `/uploads/${req.file.filename}` : "" 
+      image: imageData,
+      available: true,
     });
+
     await newItem.save();
+
+    console.log("✅ SAVED ITEM =", newItem.toObject());
+
     io.emit("menuUpdate", newItem);
-    res.json({ success: true, data: newItem });
+
+    res.json({
+      success: true,
+      data: newItem,
+      item: newItem,
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("❌ Add Menu Error:", err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 });
 
